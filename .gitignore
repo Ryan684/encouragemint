@@ -1,3 +1,4 @@
 encouragemint.iml
 .idea/
 db.sqlite3
+.coverage
