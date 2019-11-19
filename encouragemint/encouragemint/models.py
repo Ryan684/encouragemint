@@ -10,5 +10,5 @@ class Profile(models.Model):
 
 
 class Plant(models.Model):
-    plant_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     plant_name = models.CharField(max_length=25)
