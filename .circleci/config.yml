@@ -18,14 +18,11 @@ jobs:
           name: run pylint
           command: pylint encouragemint/*.py --disable=E0401,C0103
 
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            cd encouragemint
-            mkdir test_results
-            mkdir test_results/nose
-            nosetests encouragemint/tests --with-coverage --cover-package . --with-xunit --xunit-file=../test_results/nose/results.xml
+      test:
+        override:
+          - mkdir -p $CIRCLE_TEST_REPORTS/django
+          - python encouragemint/manage.py test --settings=encouragemint.settings.local --cover-html --with-xunit --xunit-file=$CIRCLE_TEST_REPORTS/django/test_result.xml --cover-html-dir=$CIRCLE_TEST_REPORTS/django
+
       - store_artifacts:
           path: encouragemint/test_results
           destination: test
