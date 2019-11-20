@@ -12,6 +12,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip install -r build/requirements.txt
             pip install -r encouragemint/requirements.txt
             sudo pip install pylint
       - run:
