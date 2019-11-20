@@ -21,9 +21,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            pwd
             mkdir -p test_results
-            python encouragemint/encouragemint/manage.py test --settings=encouragemint.settings.local --cover-html --with-xunit --xunit-file=test_results/test_result.xml
+            python manage.py test --settings=encouragemint.settings.local --cover-html --with-xunit --xunit-file=test_results/test_result.xml
 
       - store_artifacts:
           path: encouragemint/test_results
