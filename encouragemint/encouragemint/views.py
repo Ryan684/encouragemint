@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from encouragemint.models import Profile
+from encouragemint.serializers import ProfileSerializer
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all().order_by("-id")
+    serializer_class = ProfileSerializer
+    lookup_field = "profile_id"
