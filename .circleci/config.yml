@@ -23,12 +23,4 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            mkdir -p test_results
-            python manage.py test --settings=encouragemint.settings.local --cover-html --with-xunit --xunit-file=test_results/test_result.xml
-
-      - store_artifacts:
-          path: encouragemint/test_results
-          destination: test
-
-      - store_test_results:
-          path: encouragemint/test_results
+            python manage.py test --settings=encouragemint.settings.local
