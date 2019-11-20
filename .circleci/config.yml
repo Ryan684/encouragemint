@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.3
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r encouragemint_rest_app/requirements.txt
+            sudo pip install pylint
+      - run:
+          name: run pylint
+          command: pylint encouragemint_rest_app/src/*.py --disable=C0413,E0401,R0903
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            cd encouragemint
+            mkdir test_results
+            mkdir test_results/nose
+            cd src
+            nosetests encouragemint/tests --with-coverage --cover-package . --with-xunit --xunit-file=../test_results/nose/results.xml
+      - store_artifacts:
+          path: encouragemint/test_results
+          destination: test
+
+      - store_test_results:
+          path: encouragemint/test_results
