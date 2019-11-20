@@ -12,11 +12,11 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r encouragemint_rest_app/requirements.txt
+            pip install -r encouragemint/requirements.txt
             sudo pip install pylint
       - run:
           name: run pylint
-          command: pylint encouragemint_rest_app/src/*.py --disable=C0413,E0401,R0903
+          command: pylint encouragemint/src/*.py --disable=C0413,E0401,R0903
 
       - run:
           name: run tests
