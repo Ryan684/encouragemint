@@ -4,7 +4,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from encouragemint.views import ProfileViewSet
+from encouragemint.encouragemint.views import ProfileViewSet
 
 PROFILE_URL = "/profile/"
 
