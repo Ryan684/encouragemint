@@ -25,7 +25,6 @@ jobs:
             cd encouragemint
             mkdir test_results
             mkdir test_results/nose
-            cd src
             nosetests encouragemint/tests --with-coverage --cover-package . --with-xunit --xunit-file=../test_results/nose/results.xml
       - store_artifacts:
           path: encouragemint/test_results
