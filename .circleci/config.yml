@@ -16,7 +16,7 @@ jobs:
             sudo pip install pylint
       - run:
           name: run pylint
-          command: pylint encouragemint/src/*.py --disable=C0413,E0401,R0903
+          command: pylint encouragemint/*.py --disable=C0413,E0401,R0903
 
       - run:
           name: run tests
