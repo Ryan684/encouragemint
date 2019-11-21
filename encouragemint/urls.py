@@ -15,7 +15,7 @@ Including another URLconf
 """
 from rest_framework import routers
 
-from encouragemint.views import ProfileViewSet
+from encouragemint.encouragemint.views import ProfileViewSet
 
 router = routers.SimpleRouter()
 router.register(r'profile', ProfileViewSet)

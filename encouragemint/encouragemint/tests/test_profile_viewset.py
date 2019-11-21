@@ -5,8 +5,30 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.views import ProfileViewSet
+from encouragemint.encouragemint.models import Profile
 
 PROFILE_URL = "/profile/"
+SAMPLE_PROFILE_REQUEST = {
+    "first_name": "Foo",
+    "last_name": "Bar"
+}
+
+
+class TestDelete(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.view = ProfileViewSet.as_view({"del": "destroy"})
+
+    def build_delete_response(self, profile_id):
+        request = self.factory.delete(PROFILE_URL, format="json")
+        response = self.view(request, profile_id=profile_id)
+        return response
+
+    def test_delete_profile(self):
+        profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)
+        profile_id = profile.profile_id
+        response = self.build_delete_response(profile_id)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
 
 class TestPost(TestCase):
@@ -14,10 +36,13 @@ class TestPost(TestCase):
         self.factory = APIRequestFactory()
         self.view = ProfileViewSet.as_view({"post": "create"})
 
-    def test_create_profile(self):
-        payload = {"first_name": "Foo", "last_name": "Bar"}
+    def build_post_response(self, payload):
         request = self.factory.post(PROFILE_URL, payload, format="json")
         response = self.view(request)
+        return response
+
+    def test_create_profile(self):
+        response = self.build_post_response(SAMPLE_PROFILE_REQUEST)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -26,9 +51,7 @@ class TestPost(TestCase):
         self.assertEqual("Bar", model_data.get("last_name"))
 
     def test_invalid_first_name(self):
-        payload = {"first_name": "F00", "last_name": "Bar"}
-        request = self.factory.post(PROFILE_URL, payload, format="json")
-        response = self.view(request)
+        response = self.build_post_response({"first_name": "F00", "last_name": "Bar"})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
         self.assertDictEqual(
@@ -37,9 +60,50 @@ class TestPost(TestCase):
         )
 
     def test_invalid_last_name(self):
-        payload = {"first_name": "Foo", "last_name": "B4r"}
-        request = self.factory.post(PROFILE_URL, payload, format="json")
-        response = self.view(request)
+        response = self.build_post_response({"first_name": "Foo", "last_name": "B4r"})
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        response.render()
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"last_name": ["Your last name can only contain letters."]}
+        )
+
+
+class TestPut(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.view = ProfileViewSet.as_view({"put": "update"})
+
+    def build_put_response(self, update_payload):
+        profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)
+        profile_id = profile.profile_id
+        request = self.factory.put(
+            PROFILE_URL,
+            update_payload,
+            format="json"
+        )
+        response = self.view(request, profile_id=profile_id)
+        return response
+
+    def test_update_profile(self):
+        response = self.build_put_response({"first_name": "Fooupdated", "last_name": "Bar"})
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+        self.assertEqual("Fooupdated", model_data.get("first_name"))
+        self.assertEqual("Bar", model_data.get("last_name"))
+
+    def test_invalid_update_first_name(self):
+        response = self.build_put_response({"first_name": "Foo_updated", "last_name": "Bar"})
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        response.render()
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"first_name": ["Your first name can only contain letters."]}
+        )
+
+    def test_invalid_update_last_name(self):
+        response = self.build_put_response({"first_name": "Foo", "last_name": "Bar_updated"})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
         self.assertDictEqual(

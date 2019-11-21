@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
-from encouragemint.models import Profile
-from encouragemint.serializers import ProfileSerializer
+from encouragemint.encouragemint.models import Profile
+from encouragemint.encouragemint.serializers import ProfileSerializer
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
