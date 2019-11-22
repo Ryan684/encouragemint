@@ -17,7 +17,7 @@ SAMPLE_PROFILE_REQUEST = {
 class TestDelete(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.view = ProfileViewSet.as_view({"del": "destroy"})
+        self.view = ProfileViewSet.as_view({"delete": "destroy"})
 
     def build_delete_response(self, profile_id):
         request = self.factory.delete(PROFILE_URL, format="json")
@@ -28,7 +28,14 @@ class TestDelete(TestCase):
         profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)
         profile_id = profile.profile_id
         response = self.build_delete_response(profile_id)
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        response.render()
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
+    def test_delete_profile_bad_id(self):
+        profile_id = "Foo"
+        response = self.build_delete_response(profile_id)
+        response.render()
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestPost(TestCase):
