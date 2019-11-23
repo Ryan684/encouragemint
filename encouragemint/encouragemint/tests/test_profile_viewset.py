@@ -45,7 +45,10 @@ class TestGet(TestCase):
         self.get_all_view = ProfileViewSet.as_view({"get": "list"})
 
     def build_get_response(self, profile_id):
-        request = self.factory.get(PROFILE_URL, format="json")
+        request = self.factory.get(
+            PROFILE_URL,
+            format="json"
+        )
         response = self.get_by_id_view(request, profile_id)
         return response
 
@@ -87,6 +90,7 @@ class TestOptions(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = ProfileViewSet.as_view({"put": "update"})
+
 
 class TestPatch(TestCase):
     def setUp(self):
@@ -138,7 +142,11 @@ class TestPost(TestCase):
         self.view = ProfileViewSet.as_view({"post": "create"})
 
     def build_post_response(self, payload):
-        request = self.factory.post(PROFILE_URL, payload, format="json")
+        request = self.factory.post(
+            PROFILE_URL,
+            payload,
+            format="json"
+        )
         response = self.view(request)
         return response
 
