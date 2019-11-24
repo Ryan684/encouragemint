@@ -60,12 +60,13 @@ class TestGet(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
+        print(model_data)
         self.assertIn("profile_id", model_data[0])
-        self.assertEqual("Joe", model_data[0].get("first_name"))
-        self.assertEqual("Blogs", model_data[0].get("last_name"))
+        self.assertEqual("Jane", model_data[0].get("first_name"))
+        self.assertEqual("Doe", model_data[0].get("last_name"))
         self.assertIn("profile_id", model_data[1])
-        self.assertEqual("Jane", model_data[1].get("first_name"))
-        self.assertEqual("Doe", model_data[1].get("last_name"))
+        self.assertEqual("Joe", model_data[1].get("first_name"))
+        self.assertEqual("Blogs", model_data[1].get("last_name"))
 
     def test_get_a_profile_by_valid_id(self):
         profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)

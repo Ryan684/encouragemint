@@ -8,7 +8,7 @@ from encouragemint.encouragemint.models import Profile, Plant
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ["profile_id", "first_name", "last_name"]
+        fields = "__all__"
         read_only_fields = ["profile_id"]
 
     @staticmethod
@@ -25,10 +25,15 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class PlantSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(read_only=True)
+    profile_id = serializers.PrimaryKeyRelatedField(
+        queryset=Profile.objects.all(), source='profile', write_only=True)
+
+    print(profile)
     class Meta:
         model = Plant
-        fields = ["profile", "plant_name"]
-        read_only_fields = ["profile"]
+        fields = "__all__"
+        read_only_fields = ["plant_id"]
 
     @staticmethod
     def validate_plant_name(value):
