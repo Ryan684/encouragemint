@@ -47,22 +47,24 @@ class TestGet(TestCase):
         Plant.objects.create(**{"plant_name": "Barflower"}, profile=TEST_PROFILE)
         request = self.factory.get(PLANT_URL, format="json")
         response = self.get_all_view(request)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn("plant_id", model_data[0])
         self.assertEqual("Barflower", model_data[0].get("plant_name"))
         self.assertIn("plant_id", model_data[1])
         self.assertEqual("Fooflower", model_data[1].get("plant_name"))
 
-    def test_get_a_plant_by_valid_id(self):
+    def test_get_plant_by_valid_id(self):
         plant = Plant.objects.create(**SAMPLE_PLANT_REQUEST, profile=TEST_PROFILE)
         plant_id = plant.plant_id
         request = self.factory.get(PLANT_URL, format="json")
         response = self.get_by_id_view(request, plant_id=plant_id)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn("plant_id", model_data)
         self.assertEqual(plant.plant_name, model_data.get("plant_name"))
 
@@ -70,13 +72,8 @@ class TestGet(TestCase):
         plant_id = "Foo"
         request = self.factory.get(PLANT_URL, format="json")
         response = self.get_by_id_view(request, plant_id=plant_id)
+
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
-
-class TestOptions(TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.view = PlantViewSet.as_view({"put": "update"})
 
 
 class TestPatch(TestCase):
@@ -97,24 +94,27 @@ class TestPatch(TestCase):
 
     def test_partial_update_plant(self):
         response = self.build_patch_response({"plant_name": "Fooupdated"})
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn("plant_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("plant_name"))
 
     def test_partial_update_plant_with_profile(self):
         response = self.build_patch_response({"plant_name": "Fooupdated", "profile": str(TEST_PROFILE.profile_id)})
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn("plant_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("plant_name"))
 
     def test_invalid_plant_name_no_profile(self):
         response = self.build_patch_response({"plant_name": "Foo_updated"})
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"plant_name": ["A plant's name can only contain letters."]}
@@ -122,8 +122,9 @@ class TestPatch(TestCase):
 
     def test_invalid_plant_name(self):
         response = self.build_patch_response({"plant_name": "Foo_updated", "profile": str(TEST_PROFILE.profile_id)})
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"plant_name": ["A plant's name can only contain letters."]}
@@ -149,16 +150,18 @@ class TestPost(TestCase):
         payload["profile_id"] = str(TEST_PROFILE.profile_id)
         response = self.build_post_response(payload)
         response.render()
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertIn("plant_id", model_data)
         self.assertIn("profile", model_data)
         self.assertEqual("Foo", model_data.get("plant_name"))
 
     def test_invalid_plant_name_no_profile(self):
         response = self.build_post_response({"plant_name": "F00"})
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"plant_name": ["A plant's name can only contain letters."], "profile_id": ["This field is required."]}
@@ -166,8 +169,9 @@ class TestPost(TestCase):
 
     def test_invalid_plant_name(self):
         response = self.build_post_response({"plant_name": "F00", "profile_id": str(TEST_PROFILE.profile_id)})
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"plant_name": ["A plant's name can only contain letters."]}
@@ -192,16 +196,18 @@ class TestPut(TestCase):
 
     def test_update_plant(self):
         response = self.build_put_response({"plant_name": "Fooupdated", "profile_id": str(TEST_PROFILE.profile_id)})
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn("plant_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("plant_name"))
 
     def test_invalid_plant_name_no_profile(self):
         response = self.build_put_response({"plant_name": "Foo_updated"})
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"plant_name": ["A plant's name can only contain letters."], "profile_id": ["This field is required."]}
@@ -210,8 +216,9 @@ class TestPut(TestCase):
 
     def test_invalid_plant_name(self):
         response = self.build_put_response({"plant_name": "Foo_updated", "profile_id": str(TEST_PROFILE.profile_id)})
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"plant_name": ["A plant's name can only contain letters."]}
