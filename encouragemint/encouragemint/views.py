@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
-from encouragemint.encouragemint.models import Profile, Plant
-from encouragemint.encouragemint.serializers import ProfileSerializer, PlantSerializer
+from encouragemint.encouragemint.models import Profile, Plant, Garden
+from encouragemint.encouragemint.serializers import ProfileSerializer, PlantSerializer, GardenSerializer
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -11,8 +11,15 @@ class ProfileViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
 
+class GardenViewSet(viewsets.ModelViewSet):
+    queryset = Garden.objects.all()
+    serializer_class = GardenSerializer
+    lookup_field = "garden_id"
+    http_method_names = ["get", "post", "put", "patch", "delete"]
+
+
 class PlantViewSet(viewsets.ModelViewSet):
-    queryset = Plant.objects.all().order_by("-id")
+    queryset = Plant.objects.all()
     serializer_class = PlantSerializer
     lookup_field = "plant_id"
     http_method_names = ["get", "post", "put", "patch", "delete"]

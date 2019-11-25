@@ -15,9 +15,10 @@ Including another URLconf
 """
 from rest_framework.routers import DefaultRouter
 
-from encouragemint.encouragemint.views import ProfileViewSet, PlantViewSet
+from encouragemint.encouragemint.views import ProfileViewSet, PlantViewSet, GardenViewSet
 
 router = DefaultRouter()
-router.register(r'profile', ProfileViewSet)
-router.register(r'plant', PlantViewSet)
+router.register(r"profile", ProfileViewSet)
+router.register(r"garden", GardenViewSet)
+router.register(r"plant", PlantViewSet)
 urlpatterns = router.urls

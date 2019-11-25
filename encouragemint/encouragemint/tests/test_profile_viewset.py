@@ -45,7 +45,7 @@ class TestGet(TestCase):
         self.factory = APIRequestFactory()
         self.get_by_id_view = ProfileViewSet.as_view({"get": "retrieve"})
     #
-    #     Failing for some reason? Works if I run in isolation of test_plant_viewset tests? Bad teardowns of tests?
+    #     Failing for some reason? Works if I run in isolation of other VieSset tests? Bad teardowns of tests?
     #
     #     self.get_all_view = ProfileViewSet.as_view({"get": "list"})
     #
