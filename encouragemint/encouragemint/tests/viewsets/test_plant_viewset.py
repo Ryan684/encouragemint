@@ -183,6 +183,25 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data.get("family_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
 
+    def test_create_plant_no_optional_fields(self):
+        payload = {"scientific_name": "Fooplant", "family_name": "Foobaarius", "garden_id": str(TEST_GARDEN.garden_id)}
+        response = self.build_post_response(payload)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        self.assertIn("plant_id", model_data)
+        self.assertEqual("Fooplant", model_data.get("scientific_name"))
+        self.assertFalse(model_data.get("duration"))
+        self.assertFalse(model_data.get("bloom_period"))
+        self.assertFalse(model_data.get("growth_period"))
+        self.assertFalse(model_data.get("growth_rate"))
+        self.assertFalse(model_data.get("shade_tolerance"))
+        self.assertFalse(model_data.get("moisture_use"))
+        self.assertEqual("Foobaarius", model_data.get("family_name"))
+        self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
+
 
 class TestPut(TestCase):
     def setUp(self):
@@ -218,4 +237,23 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data.get("shade_tolerance"))
         self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data.get("moisture_use"))
         self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data.get("family_name"))
+        self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
+
+    def test_update_plant_no_optional_fields(self):
+        payload = {"scientific_name": "Fooplant", "family_name": "Foobaarius", "garden_id": str(TEST_GARDEN.garden_id)}
+        response = self.build_put_response(payload)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        self.assertIn("plant_id", model_data)
+        self.assertEqual("Fooplant", model_data.get("scientific_name"))
+        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data.get("duration"))
+        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual("Foobaarius", model_data.get("family_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
