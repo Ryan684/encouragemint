@@ -17,11 +17,11 @@ class TestValidateScientificName(TestPlantSerializerValidators):
         super(TestValidateScientificName, cls).setUpClass()
 
     def test_valid_scientific_name(self):
-        scientific_name = "Rose"
+        scientific_name = "Roseus. Von-Bush"
         self.assertEqual(scientific_name, self.test_obj.validate_scientific_name(scientific_name))
 
     def test_invalid_scientific_name(self):
-        scientific_name = "Rose_123"
+        scientific_name = "Rose*123"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's scientific name can only contain letters.",
@@ -36,11 +36,11 @@ class TestValidateDuration(TestPlantSerializerValidators):
         super(TestValidateDuration, cls).setUpClass()
 
     def test_valid_duration(self):
-        duration = "TODO"
+        duration = "Perennial"
         self.assertEqual(duration, self.test_obj.validate_duration(duration))
 
     def test_invalid_duration(self):
-        duration = "TODO_123"
+        duration = "Perennial_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's duration can only contain letters.",
@@ -55,11 +55,11 @@ class TestValidateBloomPeriod(TestPlantSerializerValidators):
         super(TestValidateBloomPeriod, cls).setUpClass()
 
     def test_valid_bloom_period(self):
-        bloom_period = "TODO"
+        bloom_period = "Mid summer, Late summer"
         self.assertEqual(bloom_period, self.test_obj.validate_bloom_period(bloom_period))
 
     def test_invalid_bloom_period(self):
-        bloom_period = "TODO_123"
+        bloom_period = "Mid_summer"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's bloom period can only contain letters.",
@@ -74,11 +74,11 @@ class TestValidateGrowthPeriod(TestPlantSerializerValidators):
         super(TestValidateGrowthPeriod, cls).setUpClass()
 
     def test_valid_growth_period(self):
-        growth_period = "TODO"
+        growth_period = "Spring, Summer"
         self.assertEqual(growth_period, self.test_obj.validate_growth_period(growth_period))
 
     def test_invalid_growth_period(self):
-        growth_period = "TODO_123"
+        growth_period = "Spring_Summer"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's growth period can only contain letters.",
@@ -93,11 +93,11 @@ class TestValidateGrowthRate(TestPlantSerializerValidators):
         super(TestValidateGrowthRate, cls).setUpClass()
 
     def test_valid_growth_rate(self):
-        growth_rate = "TODO"
+        growth_rate = "Slow"
         self.assertEqual(growth_rate, self.test_obj.validate_growth_rate(growth_rate))
 
     def test_invalid_growth_rate(self):
-        growth_rate = "TODO_123"
+        growth_rate = "Slow_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's growth rate can only contain letters.",
@@ -112,11 +112,11 @@ class TestValidateShadeTolerance(TestPlantSerializerValidators):
         super(TestValidateShadeTolerance, cls).setUpClass()
 
     def test_valid_shade_tolerance(self):
-        shade_tolerance = "TODO"
+        shade_tolerance = "Intolerant"
         self.assertEqual(shade_tolerance, self.test_obj.validate_shade_tolerance(shade_tolerance))
 
     def test_invalid_shade_tolerance(self):
-        shade_tolerance = "TODO_123"
+        shade_tolerance = "Intolerant_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's shade tolerance can only contain letters.",
@@ -131,11 +131,11 @@ class TestValidateMoistureUse(TestPlantSerializerValidators):
         super(TestValidateMoistureUse, cls).setUpClass()
 
     def test_valid_moisture_use(self):
-        moisture_use = "TODO"
+        moisture_use = "Medium"
         self.assertEqual(moisture_use, self.test_obj.validate_moisture_use(moisture_use))
 
     def test_invalid_moisture_use(self):
-        moisture_use = "TODO_123"
+        moisture_use = "Medium_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's moisture use can only contain letters.",
@@ -150,11 +150,11 @@ class TestValidateFamilyName(TestPlantSerializerValidators):
         super(TestValidateFamilyName, cls).setUpClass()
 
     def test_valid_family_name(self):
-        family_name = "TODO"
+        family_name = "Rose Bushes"
         self.assertEqual(family_name, self.test_obj.validate_family_name(family_name))
 
     def test_invalid_family_name(self):
-        family_name = "TODO_123"
+        family_name = "Rose*Bushes"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A plant's family name can only contain letters.",

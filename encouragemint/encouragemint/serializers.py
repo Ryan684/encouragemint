@@ -53,7 +53,7 @@ class PlantSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_scientific_name(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\-\s.]+$", value) is None:
             raise serializers.ValidationError("A plant's scientific name can only contain letters.")
         return value
 
@@ -65,13 +65,13 @@ class PlantSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_bloom_period(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
             raise serializers.ValidationError("A plant's bloom period can only contain letters.")
         return value
 
     @staticmethod
     def validate_growth_period(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
             raise serializers.ValidationError("A plant's growth period can only contain letters.")
         return value
 
@@ -95,6 +95,6 @@ class PlantSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_family_name(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\-\s]+$", value) is None:
             raise serializers.ValidationError("A plant's family name can only contain letters.")
         return value

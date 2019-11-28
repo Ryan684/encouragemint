@@ -40,7 +40,7 @@ class TestDelete(TestCase):
         response.render()
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_plant_bad_id(self):
+    def test_delete_plant_invalid_id(self):
         plant_id = "Foo"
         response = self.build_delete_response(plant_id)
         response.render()
