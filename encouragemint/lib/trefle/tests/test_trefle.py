@@ -1,7 +1,11 @@
 from django.test import TestCase
 
+from encouragemint.lib.trefle.trefle import TrefleAPI
+
 
 class TestTrefle(TestCase):
+    def setUp(self):
+        self.trefle = TrefleAPI()
 
     def test_lookup_plant_one_match(self):
         self.assertTrue(True)

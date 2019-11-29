@@ -161,3 +161,22 @@ class TestValidateFamilyName(TestPlantSerializerValidators):
             self.test_obj.validate_family_name,
             family_name
         )
+
+
+class TestValidateTrefleID(TestPlantSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidateTrefleID, cls).setUpClass()
+
+    def test_valid_trefle_id(self):
+        trefle_id = 123
+        self.assertEqual(trefle_id, self.test_obj.validate_trefle_id(trefle_id))
+
+    def test_invalid_trefle_id(self):
+        trefle_id = "123"
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            f"A plant's Trefle ID can only contain numbers.",
+            self.test_obj.validate_trefle_id,
+            trefle_id
+        )

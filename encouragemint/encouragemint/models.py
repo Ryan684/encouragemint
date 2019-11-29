@@ -18,6 +18,7 @@ class Garden(models.Model):
 class Plant(models.Model):
     plant_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     garden = models.ForeignKey(Garden, on_delete=models.CASCADE)
+    trefle_id = models.IntegerField(blank=True, null=True)
     scientific_name = models.CharField(max_length=25)
     duration = models.CharField(max_length=25, blank=True, null=True)
     bloom_period = models.CharField(max_length=25, blank=True, null=True)

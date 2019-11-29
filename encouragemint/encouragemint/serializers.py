@@ -98,3 +98,9 @@ class PlantSerializer(serializers.ModelSerializer):
         if re.fullmatch(r"^[a-zA-Z\-\s]+$", value) is None:
             raise serializers.ValidationError("A plant's family name can only contain letters.")
         return value
+
+    @staticmethod
+    def validate_trefle_id(value):
+        if not isinstance(value, int):
+            raise serializers.ValidationError("A plant's Trefle ID can only contain numbers.")
+        return value
