@@ -259,7 +259,7 @@ class TestPut(TestCase):
             "garden_id": str(TEST_GARDEN.garden_id)
 
         }
-        
+
         response = self.build_put_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
