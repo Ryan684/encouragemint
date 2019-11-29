@@ -191,7 +191,12 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_create_plant_no_optional_fields(self):
-        payload = {"scientific_name": "Fooplant", "family_name": "Foobaarius", "garden_id": str(TEST_GARDEN.garden_id)}
+        payload = {
+            "scientific_name": "Fooplant",
+            "family_name": "Foobaarius",
+            "garden_id": str(TEST_GARDEN.garden_id)
+        }
+
         response = self.build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -248,7 +253,13 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_update_plant_no_optional_fields(self):
-        payload = {"scientific_name": "Fooplant", "family_name": "Foobaarius", "garden_id": str(TEST_GARDEN.garden_id)}
+        payload = {
+            "scientific_name": "Fooplant",
+            "family_name": "Foobaarius",
+            "garden_id": str(TEST_GARDEN.garden_id)
+
+        }
+        
         response = self.build_put_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
