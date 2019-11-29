@@ -54,7 +54,7 @@ class TrefleAPI:
         )
         return response
 
-    def _extract_plant_data(self, plant):
+    def _extract_plant_data(self, plant): # pylint: disable=no-self-use
         return {
             "trefle_id": plant.get("id"),
             "common_name": plant.get("common_name"),
