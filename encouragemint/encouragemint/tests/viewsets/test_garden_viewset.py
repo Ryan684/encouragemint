@@ -9,7 +9,7 @@ from encouragemint.encouragemint.views import GardenViewSet
 
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
-SAMPLE_GARDEN_REQUEST = {"garden_name": "Foo"}
+SAMPLE_GARDEN = {"garden_name": "Foo"}
 
 
 class TestDelete(TestCase):
@@ -23,7 +23,7 @@ class TestDelete(TestCase):
         return response
 
     def test_delete_garden(self):
-        garden = Garden.objects.create(**SAMPLE_GARDEN_REQUEST, profile=TEST_PROFILE)
+        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
         garden_id = garden.garden_id
         response = self.build_delete_response(garden_id)
         response.render()
@@ -40,8 +40,6 @@ class TestGet(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
-    #
-    #     Failing for some reason? Works if I run in isolation of other VieSset tests? Bad teardowns of tests?
     #
     #     self.get_all_view = GardenViewSet.as_view({"get": "list"})
     #
@@ -60,7 +58,7 @@ class TestGet(TestCase):
     #     self.assertEqual("Barflower", model_data[1].get("garden_name"))
 
     def test_get_garden_by_valid_id(self):
-        garden = Garden.objects.create(**SAMPLE_GARDEN_REQUEST, profile=TEST_PROFILE)
+        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
         garden_id = garden.garden_id
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_by_id_view(request, garden_id=garden_id)
@@ -85,7 +83,7 @@ class TestPatch(TestCase):
         self.view = GardenViewSet.as_view({"patch": "partial_update"})
 
     def build_patch_response(self, update_payload):
-        garden = Garden.objects.create(**SAMPLE_GARDEN_REQUEST, profile=TEST_PROFILE)
+        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
         garden_id = garden.garden_id
         request = self.factory.patch(
             GARDEN_URL,
@@ -105,7 +103,9 @@ class TestPatch(TestCase):
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
     def test_partial_update_garden_with_profile(self):
-        response = self.build_patch_response({"garden_name": "Fooupdated", "profile": str(TEST_PROFILE.profile_id)})
+        response = self.build_patch_response(
+            {"garden_name": "Fooupdated", "profile": str(TEST_PROFILE.profile_id)})
+
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -124,7 +124,9 @@ class TestPatch(TestCase):
         )
 
     def test_invalid_garden_name(self):
-        response = self.build_patch_response({"garden_name": "Foo_updated", "profile": str(TEST_PROFILE.profile_id)})
+        response = self.build_patch_response(
+            {"garden_name": "Foo_updated", "profile": str(TEST_PROFILE.profile_id)}
+        )
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -149,7 +151,7 @@ class TestPost(TestCase):
         return response
 
     def test_create_garden(self):
-        payload = SAMPLE_GARDEN_REQUEST
+        payload = SAMPLE_GARDEN
         payload["profile_id"] = str(TEST_PROFILE.profile_id)
         response = self.build_post_response(payload)
         response.render()
@@ -167,11 +169,15 @@ class TestPost(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["A garden's name can only contain letters."], "profile_id": ["This field is required."]}
+            {
+                "garden_name": ["A garden's name can only contain letters."],
+                "profile_id": ["This field is required."]
+            }
         )
 
     def test_invalid_garden_name(self):
-        response = self.build_post_response({"garden_name": "F00", "profile_id": str(TEST_PROFILE.profile_id)})
+        response = self.build_post_response(
+            {"garden_name": "F00", "profile_id": str(TEST_PROFILE.profile_id)})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -187,7 +193,7 @@ class TestPut(TestCase):
         self.view = GardenViewSet.as_view({"put": "update"})
 
     def build_put_response(self, update_payload):
-        garden = Garden.objects.create(**SAMPLE_GARDEN_REQUEST, profile=TEST_PROFILE)
+        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
         garden_id = garden.garden_id
         request = self.factory.put(
             GARDEN_URL,
@@ -198,7 +204,8 @@ class TestPut(TestCase):
         return response
 
     def test_update_garden(self):
-        response = self.build_put_response({"garden_name": "Fooupdated", "profile_id": str(TEST_PROFILE.profile_id)})
+        response = self.build_put_response(
+            {"garden_name": "Fooupdated", "profile_id": str(TEST_PROFILE.profile_id)})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -213,12 +220,16 @@ class TestPut(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["A garden's name can only contain letters."], "profile_id": ["This field is required."]}
+            {
+                "garden_name": ["A garden's name can only contain letters."],
+                "profile_id": ["This field is required."]
+            }
 
         )
 
     def test_invalid_garden_name(self):
-        response = self.build_put_response({"garden_name": "Foo_updated", "profile_id": str(TEST_PROFILE.profile_id)})
+        response = self.build_put_response(
+            {"garden_name": "Foo_updated", "profile_id": str(TEST_PROFILE.profile_id)})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)

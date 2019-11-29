@@ -11,7 +11,7 @@ from encouragemint.encouragemint.views import PlantViewSet
 PLANT_URL = "/plant/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
 TEST_GARDEN = Garden.objects.create(**{"garden_name": "Foo", "profile": TEST_PROFILE})
-SAMPLE_PLANT_REQUEST = {
+SAMPLE_PLANT = {
     "scientific_name": "FooBar",
     "duration": "Annual",
     "bloom_period": "Spring",
@@ -35,7 +35,7 @@ class TestDelete(TestCase):
         return response
 
     def test_delete_plant(self):
-        plant = Plant.objects.create(**SAMPLE_PLANT_REQUEST, garden=TEST_GARDEN)
+        plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         response = self.build_delete_response(plant_id)
         response.render()
@@ -55,8 +55,8 @@ class TestGet(TestCase):
         self.get_all_view = PlantViewSet.as_view({"get": "list"})
 
     def test_get_all_plants(self):
-        Plant.objects.create(**SAMPLE_PLANT_REQUEST, garden=TEST_GARDEN)
-        Plant.objects.create(**SAMPLE_PLANT_REQUEST, garden=TEST_GARDEN)
+        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
+        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         request = self.factory.get(PLANT_URL, format="json")
         response = self.get_all_view(request)
         response.render()
@@ -66,31 +66,31 @@ class TestGet(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         self.assertIn("plant_id", model_data[0])
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("scientific_name"), model_data[0].get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data[0].get("duration"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data[0].get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data[0].get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data[0].get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data[0].get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data[0].get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data[0].get("family_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("garden_id"), model_data[0].get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("trefle_id"), model_data[1].get("trefle_id"))
+        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data[0].get("scientific_name"))
+        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data[0].get("duration"))
+        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data[0].get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data[0].get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data[0].get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data[0].get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data[0].get("moisture_use"))
+        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data[0].get("family_name"))
+        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data[0].get("garden_id"))
+        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data[1].get("trefle_id"))
 
         self.assertIn("plant_id", model_data[1])
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("scientific_name"), model_data[1].get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data[1].get("duration"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data[1].get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data[1].get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data[1].get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data[1].get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data[1].get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data[1].get("family_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("garden_id"), model_data[1].get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("trefle_id"), model_data[1].get("trefle_id"))
+        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data[1].get("scientific_name"))
+        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data[1].get("duration"))
+        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data[1].get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data[1].get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data[1].get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data[1].get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data[1].get("moisture_use"))
+        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data[1].get("family_name"))
+        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data[1].get("garden_id"))
+        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data[1].get("trefle_id"))
 
     def test_get_plant_by_valid_id(self):
-        plant = Plant.objects.create(**SAMPLE_PLANT_REQUEST, garden=TEST_GARDEN)
+        plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         request = self.factory.get(PLANT_URL, format="json")
         response = self.get_by_id_view(request, plant_id=plant_id)
@@ -100,16 +100,16 @@ class TestGet(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         self.assertIn("plant_id", model_data)
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("scientific_name"), model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data.get("family_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("garden_id"), model_data.get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("trefle_id"), model_data.get("trefle_id"))
+        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data.get("scientific_name"))
+        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
+        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data.get("family_name"))
+        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
+        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_get_plant_by_invalid_id(self):
         plant_id = "Foo"
@@ -125,7 +125,7 @@ class TestPatch(TestCase):
         self.view = PlantViewSet.as_view({"patch": "partial_update"})
 
     def build_patch_response(self, update_payload):
-        plant = Plant.objects.create(**SAMPLE_PLANT_REQUEST, garden=TEST_GARDEN)
+        plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         request = self.factory.patch(
             PLANT_URL,
@@ -144,15 +144,15 @@ class TestPatch(TestCase):
 
         self.assertIn("plant_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data.get("family_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("garden_id"), model_data.get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("trefle_id"), model_data.get("trefle_id"))
+        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
+        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data.get("family_name"))
+        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
+        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
 
 class TestPost(TestCase):
@@ -170,7 +170,7 @@ class TestPost(TestCase):
         return response
 
     def test_create_plant(self):
-        payload = SAMPLE_PLANT_REQUEST
+        payload = SAMPLE_PLANT
         payload["garden_id"] = str(TEST_GARDEN.garden_id)
         response = self.build_post_response(payload)
         response.render()
@@ -179,16 +179,16 @@ class TestPost(TestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         self.assertIn("plant_id", model_data)
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("scientific_name"), model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data.get("family_name"))
+        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data.get("scientific_name"))
+        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
+        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data.get("family_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("trefle_id"), model_data.get("trefle_id"))
+        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_create_plant_no_optional_fields(self):
         payload = {"scientific_name": "Fooplant", "family_name": "Foobaarius", "garden_id": str(TEST_GARDEN.garden_id)}
@@ -216,7 +216,7 @@ class TestPut(TestCase):
         self.view = PlantViewSet.as_view({"put": "update"})
 
     def build_put_response(self, update_payload):
-        plant = Plant.objects.create(**SAMPLE_PLANT_REQUEST, garden=TEST_GARDEN)
+        plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         request = self.factory.put(
             PLANT_URL,
@@ -227,7 +227,7 @@ class TestPut(TestCase):
         return response
 
     def test_update_plant(self):
-        new_plant_details = SAMPLE_PLANT_REQUEST
+        new_plant_details = SAMPLE_PLANT
         new_plant_details["scientific_name"] = "Fooupdated"
         response = self.build_put_response(new_plant_details)
         response.render()
@@ -237,15 +237,15 @@ class TestPut(TestCase):
 
         self.assertIn("plant_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("family_name"), model_data.get("family_name"))
+        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
+        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data.get("family_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("trefle_id"), model_data.get("trefle_id"))
+        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_update_plant_no_optional_fields(self):
         payload = {"scientific_name": "Fooplant", "family_name": "Foobaarius", "garden_id": str(TEST_GARDEN.garden_id)}
@@ -257,12 +257,12 @@ class TestPut(TestCase):
 
         self.assertIn("plant_id", model_data)
         self.assertEqual("Fooplant", model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
+        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
         self.assertEqual("Foobaarius", model_data.get("family_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
-        self.assertEqual(SAMPLE_PLANT_REQUEST.get("trefle_id"), model_data.get("trefle_id"))
+        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))

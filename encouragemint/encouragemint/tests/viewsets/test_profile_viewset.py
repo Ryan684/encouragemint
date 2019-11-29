@@ -8,7 +8,7 @@ from encouragemint.encouragemint.views import ProfileViewSet
 from encouragemint.encouragemint.models import Profile
 
 PROFILE_URL = "/profile/"
-SAMPLE_PROFILE_REQUEST = {
+SAMPLE_PROFILE = {
     "first_name": "Foo",
     "last_name": "Bar"
 }
@@ -25,7 +25,7 @@ class TestDelete(TestCase):
         return response
 
     def test_delete_profile(self):
-        profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)
+        profile = Profile.objects.create(**SAMPLE_PROFILE)
         profile_id = profile.profile_id
         response = self.build_delete_response(profile_id)
         response.render()
@@ -44,8 +44,6 @@ class TestGet(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.get_by_id_view = ProfileViewSet.as_view({"get": "retrieve"})
-    #
-    #     Failing for some reason? Works if I run in isolation of other VieSset tests? Bad teardowns of tests?
     #
     #     self.get_all_view = ProfileViewSet.as_view({"get": "list"})
     #
@@ -66,7 +64,7 @@ class TestGet(TestCase):
     #     self.assertEqual("Blogs", model_data[1].get("last_name"))
 
     def test_get_a_profile_by_valid_id(self):
-        profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)
+        profile = Profile.objects.create(**SAMPLE_PROFILE)
         profile_id = profile.profile_id
         request = self.factory.get(PROFILE_URL, format="json")
         response = self.get_by_id_view(request, profile_id=profile_id)
@@ -92,7 +90,7 @@ class TestPatch(TestCase):
         self.view = ProfileViewSet.as_view({"patch": "partial_update"})
 
     def build_patch_response(self, update_payload):
-        profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)
+        profile = Profile.objects.create(**SAMPLE_PROFILE)
         profile_id = profile.profile_id
         request = self.factory.patch(
             PROFILE_URL,
@@ -148,7 +146,7 @@ class TestPost(TestCase):
         return response
 
     def test_create_profile(self):
-        response = self.build_post_response(SAMPLE_PROFILE_REQUEST)
+        response = self.build_post_response(SAMPLE_PROFILE)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -184,7 +182,7 @@ class TestPut(TestCase):
         self.view = ProfileViewSet.as_view({"put": "update"})
 
     def build_put_response(self, update_payload):
-        profile = Profile.objects.create(**SAMPLE_PROFILE_REQUEST)
+        profile = Profile.objects.create(**SAMPLE_PROFILE)
         profile_id = profile.profile_id
         request = self.factory.put(
             PROFILE_URL,
