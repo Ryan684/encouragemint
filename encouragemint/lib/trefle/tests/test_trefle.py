@@ -1,7 +1,8 @@
-from unittest.mock import patch
+import json
+from unittest.mock import patch, Mock
 
-from requests.exceptions import ConnectionError
 from django.test import TestCase
+from requests.exceptions import ConnectionError
 
 from encouragemint.lib.trefle.trefle import TrefleAPI
 
@@ -9,6 +10,10 @@ from encouragemint.lib.trefle.trefle import TrefleAPI
 class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
+        with open("encouragemint/lib/trefle/tests/test_responses/name_search_response.json", "r") as name_file:
+            self.name_search = json.load(name_file)
+        with open("encouragemint/lib/trefle/tests/test_responses/id_search_response.json", "r") as id_search_file:
+            self.id_search = json.load(id_search_file)
 
     @patch("requests.get")
     def test_trefle_unreachable(self, mock_get):
@@ -18,13 +23,25 @@ class TestTrefle(TestCase):
             self.trefle.lookup_plants_by_scientific_name, "Fooflower"
         )
 
-    def test_lookup_plant_common_name(self):
+    @patch("requests.get")
+    def test_lookup_plant_common_name(self, mock_get):
+        mock_responses = [Mock(), Mock()]
+        mock_responses[0].json.return_value = self.name_search
+        mock_responses[1].json.return_value = self.id_search
+        mock_get.side_effect = mock_responses
+
         plant_name = "common woolly sunflower"
         response = self.trefle.lookup_plants_by_common_name(plant_name)
 
         self._validate_plant(response)
 
-    def test_lookup_plant_by_scientific_name(self):
+    @patch("requests.get")
+    def test_lookup_plant_by_scientific_name(self, mock_get):
+        mock_responses = [Mock(), Mock()]
+        mock_responses[0].json.return_value = self.name_search
+        mock_responses[1].json.return_value = self.id_search
+        mock_get.side_effect = mock_responses
+
         plant_name = "Eriophyllum lanatum"
         response = self.trefle.lookup_plants_by_scientific_name(plant_name)
 
