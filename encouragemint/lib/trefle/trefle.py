@@ -1,4 +1,4 @@
-from requests import get
+import requests
 
 
 class TrefleAPI:
@@ -52,7 +52,7 @@ class TrefleAPI:
         return url
 
     def _send_trefle_request(self, parameters, url):
-        response = get(
+        response = requests.get(
             url=url,
             headers=self.HEADERS,
             params=parameters,

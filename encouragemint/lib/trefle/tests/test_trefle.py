@@ -1,3 +1,6 @@
+from unittest.mock import patch
+
+from requests.exceptions import ConnectionError
 from django.test import TestCase
 
 from encouragemint.lib.trefle.trefle import TrefleAPI
@@ -6,6 +9,14 @@ from encouragemint.lib.trefle.trefle import TrefleAPI
 class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
+
+    @patch("requests.get")
+    def test_trefle_unreachable(self, mock_get):
+        mock_get.side_effect = ConnectionError
+        self.assertRaises(
+            ConnectionError,
+            self.trefle.lookup_plants_by_scientific_name, "Fooflower"
+        )
 
     def test_lookup_plant_common_name(self):
         plant_name = "common woolly sunflower"
