@@ -7,17 +7,15 @@ class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
 
-    def test_lookup_plant_one_match(self):
-        field = "common_name"
+    def test_lookup_plant_common_name(self):
         plant_name = "common woolly sunflower"
-        response = self.trefle.lookup_plant(field, plant_name)
+        response = self.trefle.lookup_plants_by_common_name(plant_name)
 
         self._validate_plant(response)
 
     def test_lookup_plant_by_scientific_name(self):
-        field = "scientific_name"
         plant_name = "Eriophyllum lanatum"
-        response = self.trefle.lookup_plant(field, plant_name)
+        response = self.trefle.lookup_plants_by_scientific_name(plant_name)
 
         self._validate_plant(response)
 

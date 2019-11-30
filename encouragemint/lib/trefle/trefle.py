@@ -6,7 +6,13 @@ class TrefleAPI:
     HEADERS = {"content-type": "application/json"}
     TOKEN = "aUF2TXNmazZhbENpTCtJWkhqTUIvUT09"
 
-    def lookup_plant(self, name_key, plant_name):
+    def lookup_plants_by_scientific_name(self, plant_name):
+        return self._lookup_plant("scientific_name", plant_name)
+
+    def lookup_plants_by_common_name(self, plant_name):
+        return self._lookup_plant("common_name", plant_name)
+
+    def _lookup_plant(self, name_key, plant_name):
         matched_plants = self._lookup_plants_by_name(name_key, plant_name)
 
         if len(matched_plants) == 1:
@@ -28,14 +34,14 @@ class TrefleAPI:
         ).json()
 
     def _compile_parameters(self, key=None, value=None):
-        params = {
+        parameters = {
             "token": self.TOKEN
         }
 
         if key and value:
-            params[key] = value
+            parameters[key] = value
 
-        return params
+        return parameters
 
     def _compile_url(self, plant_id=None):
         url = self.PLANTS_ENDPOINT
@@ -54,7 +60,7 @@ class TrefleAPI:
         )
         return response
 
-    def _extract_plant_data(self, plant): # pylint: disable=no-self-use
+    def _extract_plant_data(self, plant):  # pylint: disable=no-self-use
         return {
             "trefle_id": plant.get("id"),
             "common_name": plant.get("common_name"),
