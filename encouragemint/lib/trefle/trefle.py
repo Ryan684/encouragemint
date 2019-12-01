@@ -7,25 +7,30 @@ class TrefleAPI:
     TOKEN = "aUF2TXNmazZhbENpTCtJWkhqTUIvUT09"
 
     def lookup_plants_by_scientific_name(self, plant_name):
-        return self._lookup_plant("scientific_name", plant_name)
+        return self._lookup_plants("scientific_name", plant_name)
 
-    def lookup_plants_by_common_name(self, plant_name):
-        return self._lookup_plant("common_name", plant_name)
+    def lookup_plants_by_wildcarded_name(self, plant_name):
+        return self._lookup_plants("q", plant_name)
 
-    def _lookup_plant(self, name_key, plant_name):
-        matched_plants = self._lookup_plants_by_name(name_key, plant_name)
+    def _lookup_plants(self, name_key, plant_name):
+        results = self._lookup_plants_by_name(name_key, plant_name)
 
-        if len(matched_plants) == 1:
-            plant = self._lookup_plant_by_id(matched_plants)
+        if len(results) == 1:
+            plant = self._lookup_plant_by_id(results)
             return self._extract_plant_data(plant)
 
-        return matched_plants
+        return results
 
     def _lookup_plants_by_name(self, name_key, plant_name):
-        return self._send_trefle_request(
+        results = self._send_trefle_request(
             self._compile_parameters(name_key, plant_name),
             self._compile_url()
-        ).json()
+        )
+
+        if isinstance(results, list):
+            return results
+
+        return results.json()
 
     def _lookup_plant_by_id(self, results):
         return self._send_trefle_request(
@@ -52,13 +57,12 @@ class TrefleAPI:
         return url
 
     def _send_trefle_request(self, parameters, url):
-        response = requests.get(
+        return requests.get(
             url=url,
             headers=self.HEADERS,
             params=parameters,
             verify=False
         )
-        return response
 
     def _extract_plant_data(self, plant):  # pylint: disable=no-self-use
         return {

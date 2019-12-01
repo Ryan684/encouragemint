@@ -7,13 +7,20 @@ from requests.exceptions import ConnectionError
 from encouragemint.lib.trefle.trefle import TrefleAPI
 
 
+def get_mock_json_file(file_path):
+    with open(file_path, "r") as file:
+        return json.load(file)
+
+
 class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
-        with open("encouragemint/lib/trefle/tests/test_responses/name_search_response.json", "r") as name_file:
-            self.name_search = json.load(name_file)
-        with open("encouragemint/lib/trefle/tests/test_responses/id_search_response.json", "r") as id_search_file:
-            self.id_search = json.load(id_search_file)
+        self.search_single_match = get_mock_json_file(
+            "encouragemint/lib/trefle/tests/test_responses/plant_search_one_match.json")
+        self.search_many_matches = get_mock_json_file(
+            "encouragemint/lib/trefle/tests/test_responses/plant_search_many_matches.json")
+        self.id_search = get_mock_json_file(
+            "encouragemint/lib/trefle/tests/test_responses/id_search_response.json")
 
     @patch("requests.get")
     def test_trefle_unreachable(self, mock_get):
@@ -24,21 +31,30 @@ class TestTrefle(TestCase):
         )
 
     @patch("requests.get")
-    def test_lookup_plant_common_name(self, mock_get):
+    def test_search_plants_one_result(self, mock_get):
         mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = self.name_search
+        mock_responses[0].json.return_value = self.search_single_match
         mock_responses[1].json.return_value = self.id_search
         mock_get.side_effect = mock_responses
 
         plant_name = "common woolly sunflower"
-        response = self.trefle.lookup_plants_by_common_name(plant_name)
+        response = self.trefle.lookup_plants_by_wildcarded_name(plant_name)
 
         self._validate_plant(response)
 
     @patch("requests.get")
+    def test_search_plants_many_results(self, mock_get):
+        mock_get.return_value = self.search_many_matches
+
+        search_term = "grass"
+        response = self.trefle.lookup_plants_by_wildcarded_name(search_term)
+
+        self.assertEquals(self.search_many_matches, response)
+
+    @patch("requests.get")
     def test_lookup_plant_by_scientific_name(self, mock_get):
         mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = self.name_search
+        mock_responses[0].json.return_value = self.search_single_match
         mock_responses[1].json.return_value = self.id_search
         mock_get.side_effect = mock_responses
 
