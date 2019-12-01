@@ -1,5 +1,4 @@
 import requests
-from requests.exceptions import ConnectionError
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 
@@ -23,7 +22,7 @@ class TrefleAPI:
                 return self._extract_plant_data(plant)
 
             return results
-        except ConnectionError as error:
+        except requests.ConnectionError as error:
             raise TrefleConnectionError(error)
 
     def _lookup_plants_by_name(self, name_key, plant_name):
