@@ -1,8 +1,10 @@
 import requests
+from requests.exceptions import ConnectionError
+from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 
 class TrefleAPI:
-    PLANTS_ENDPOINT = "http://trefle.io/api/plants/"
+    PLANTS_ENDPOINT = "http://treefle.io/api/plants/"
     HEADERS = {"content-type": "application/json"}
     TOKEN = "aUF2TXNmazZhbENpTCtJWkhqTUIvUT09"
 
@@ -13,13 +15,16 @@ class TrefleAPI:
         return self._lookup_plants("q", plant_name)
 
     def _lookup_plants(self, name_key, plant_name):
-        results = self._lookup_plants_by_name(name_key, plant_name)
+        try:
+            results = self._lookup_plants_by_name(name_key, plant_name)
 
-        if len(results) == 1:
-            plant = self._lookup_plant_by_id(results)
-            return self._extract_plant_data(plant)
+            if len(results) == 1:
+                plant = self._lookup_plant_by_id(results)
+                return self._extract_plant_data(plant)
 
-        return results
+            return results
+        except ConnectionError as error:
+            raise TrefleConnectionError(error)
 
     def _lookup_plants_by_name(self, name_key, plant_name):
         results = self._send_trefle_request(
@@ -77,3 +82,7 @@ class TrefleAPI:
             "scientific_name": plant.get("scientific_name"),
             "family_common_name": plant.get("family_common_name")
         }
+
+
+if __name__ == "__main__":
+    print(TrefleAPI().lookup_plants_by_scientific_name("fooo"))

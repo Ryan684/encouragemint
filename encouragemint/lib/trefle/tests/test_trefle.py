@@ -5,6 +5,7 @@ from django.test import TestCase
 from requests.exceptions import ConnectionError
 
 from encouragemint.lib.trefle.trefle import TrefleAPI
+from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 
 def get_mock_json_file(file_path):
@@ -26,7 +27,7 @@ class TestTrefle(TestCase):
     def test_trefle_unreachable(self, mock_get):
         mock_get.side_effect = ConnectionError
         self.assertRaises(
-            ConnectionError,
+            TrefleConnectionError,
             self.trefle.lookup_plants_by_scientific_name, "Fooflower"
         )
 
