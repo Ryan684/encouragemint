@@ -3,7 +3,7 @@ from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 
 class TrefleAPI:
-    PLANTS_ENDPOINT = "http://treefle.io/api/plants/"
+    PLANTS_ENDPOINT = "http://trefle.io/api/plants/"
     HEADERS = {"content-type": "application/json"}
     TOKEN = "aUF2TXNmazZhbENpTCtJWkhqTUIvUT09"
 
@@ -79,9 +79,5 @@ class TrefleAPI:
             "shade_tolerance": plant.get("main_species").get("growth").get("shade_tolerance"),
             "moisture_use": plant.get("main_species").get("growth").get("moisture_use"),
             "scientific_name": plant.get("scientific_name"),
-            "family_common_name": plant.get("family_common_name")
+            "family_common_name": plant.get("family_common_name"),
         }
-
-
-if __name__ == "__main__":
-    print(TrefleAPI().lookup_plants_by_scientific_name("fooo"))

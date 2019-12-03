@@ -75,7 +75,8 @@ class TestTrefle(TestCase):
             "shade_tolerance": None,
             "moisture_use": None,
             "family_common_name": "Aster family",
-            "scientific_name": "Eriophyllum lanatum"
+            "scientific_name": "Eriophyllum lanatum",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Eriophyllum_lanatum_3575.JPG"
         }
 
         self.assertEqual(test_plant.get("trefle_id"), response.get("trefle_id"))
