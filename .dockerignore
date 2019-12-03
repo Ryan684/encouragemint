@@ -1,0 +1,11 @@
+encouragemint.iml
+.idea/
+db.sqlite3
+.coverage
+.coveragerc
+.gitignore
+README.md
+.circleci/
+encouragemint/encouragemint/tests/
+encouragemint/lib/trefle/tests/
+build/
