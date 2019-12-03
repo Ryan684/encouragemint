@@ -10,7 +10,7 @@ class TrefleAPI:
     def lookup_plants_by_scientific_name(self, plant_name):
         return self._lookup_plants("scientific_name", plant_name)
 
-    def lookup_plants_by_wildcarded_name(self, plant_name):
+    def lookup_plants_by_expected_name(self, plant_name):
         return self._lookup_plants("q", plant_name)
 
     def _lookup_plants(self, name_key, plant_name):
