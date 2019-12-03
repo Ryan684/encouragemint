@@ -39,7 +39,7 @@ class TestTrefle(TestCase):
         mock_get.side_effect = mock_responses
 
         plant_name = "common woolly sunflower"
-        response = self.trefle.lookup_plants_by_wildcarded_name(plant_name)
+        response = self.trefle.lookup_plants_by_expected_name(plant_name)
 
         self._validate_plant(response)
 
@@ -48,7 +48,7 @@ class TestTrefle(TestCase):
         mock_get.return_value = self.search_many_matches
 
         search_term = "grass"
-        response = self.trefle.lookup_plants_by_wildcarded_name(search_term)
+        response = self.trefle.lookup_plants_by_expected_name(search_term)
 
         self.assertEquals(self.search_many_matches, response)
 
