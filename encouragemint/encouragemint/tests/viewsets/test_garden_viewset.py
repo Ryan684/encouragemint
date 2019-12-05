@@ -152,7 +152,7 @@ class TestPost(TestCase):
 
     def test_create_garden(self):
         payload = SAMPLE_GARDEN
-        payload["profile_id"] = str(TEST_PROFILE.profile_id)
+        payload["profile"] = str(TEST_PROFILE.profile_id)
         response = self.build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -171,13 +171,13 @@ class TestPost(TestCase):
             json.loads(response.content.decode("utf-8")),
             {
                 "garden_name": ["A garden's name can only contain letters."],
-                "profile_id": ["This field is required."]
+                "profile": ["This field is required."]
             }
         )
 
     def test_invalid_garden_name(self):
         response = self.build_post_response(
-            {"garden_name": "F00", "profile_id": str(TEST_PROFILE.profile_id)})
+            {"garden_name": "F00", "profile": str(TEST_PROFILE.profile_id)})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -193,7 +193,7 @@ class TestPut(TestCase):
         self.view = GardenViewSet.as_view({"put": "update"})
 
     def build_put_response(self, update_payload):
-        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
+        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=str(TEST_PROFILE.profile_id))
         garden_id = garden.garden_id
         request = self.factory.put(
             GARDEN_URL,
@@ -205,10 +205,10 @@ class TestPut(TestCase):
 
     def test_update_garden(self):
         response = self.build_put_response(
-            {"garden_name": "Fooupdated", "profile_id": str(TEST_PROFILE.profile_id)})
+            {"garden_name": "Fooupdated", "profile": str(TEST_PROFILE.profile_id)})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
-
+        print(model_data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
@@ -222,14 +222,14 @@ class TestPut(TestCase):
             json.loads(response.content.decode("utf-8")),
             {
                 "garden_name": ["A garden's name can only contain letters."],
-                "profile_id": ["This field is required."]
+                "profile": ["This field is required."]
             }
 
         )
 
     def test_invalid_garden_name(self):
         response = self.build_put_response(
-            {"garden_name": "Foo_updated", "profile_id": str(TEST_PROFILE.profile_id)})
+            {"garden_name": "Foo_updated", "profile": str(TEST_PROFILE.profile_id)})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)

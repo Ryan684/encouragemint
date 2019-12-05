@@ -171,7 +171,7 @@ class TestPost(TestCase):
 
     def test_create_plant(self):
         payload = SAMPLE_PLANT
-        payload["garden_id"] = str(TEST_GARDEN.garden_id)
+        payload["garden"] = str(TEST_GARDEN.garden_id)
         response = self.build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -187,14 +187,14 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
         self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
         self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data.get("family_name"))
-        self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
+        self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_create_plant_no_optional_fields(self):
         payload = {
             "scientific_name": "Fooplant",
             "family_name": "Foobaarius",
-            "garden_id": str(TEST_GARDEN.garden_id)
+            "garden": str(TEST_GARDEN.garden_id)
         }
 
         response = self.build_post_response(payload)
@@ -212,7 +212,7 @@ class TestPost(TestCase):
         self.assertFalse(model_data.get("shade_tolerance"))
         self.assertFalse(model_data.get("moisture_use"))
         self.assertEqual("Foobaarius", model_data.get("family_name"))
-        self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden").get("garden_id")))
+        self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
 
 
 class TestPut(TestCase):
@@ -256,8 +256,7 @@ class TestPut(TestCase):
         payload = {
             "scientific_name": "Fooplant",
             "family_name": "Foobaarius",
-            "garden_id": str(TEST_GARDEN.garden_id)
-
+            "garden": str(TEST_GARDEN.garden_id)
         }
 
         response = self.build_put_response(payload)

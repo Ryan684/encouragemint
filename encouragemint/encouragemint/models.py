@@ -11,13 +11,13 @@ class Profile(models.Model):
 
 class Garden(models.Model):
     garden_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="gardens")
     garden_name = models.CharField(max_length=25)
 
 
 class Plant(models.Model):
     plant_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    garden = models.ForeignKey(Garden, on_delete=models.CASCADE)
+    garden = models.ForeignKey(Garden, on_delete=models.CASCADE, related_name="plants")
     trefle_id = models.IntegerField(blank=True, null=True)
     scientific_name = models.CharField(max_length=25)
     duration = models.CharField(max_length=25, blank=True, null=True)
