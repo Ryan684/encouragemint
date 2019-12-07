@@ -29,7 +29,7 @@ class TestDelete(TestCase):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"delete": "destroy"})
 
-    def build_delete_response(self, plant_id):
+    def _build_delete_response(self, plant_id):
         request = self.factory.delete(PLANT_URL, format="json")
         response = self.view(request, plant_id=plant_id)
         return response
@@ -37,13 +37,13 @@ class TestDelete(TestCase):
     def test_delete_plant(self):
         plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
-        response = self.build_delete_response(plant_id)
+        response = self._build_delete_response(plant_id)
         response.render()
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_plant_invalid_id(self):
+    def test_delete_plant_by_invalid_id(self):
         plant_id = "Foo"
-        response = self.build_delete_response(plant_id)
+        response = self._build_delete_response(plant_id)
         response.render()
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
@@ -117,7 +117,7 @@ class TestPatch(TestCase):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"patch": "partial_update"})
 
-    def build_patch_response(self, update_payload):
+    def _build_patch_response(self, update_payload):
         plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         request = self.factory.patch(
@@ -129,7 +129,7 @@ class TestPatch(TestCase):
         return response
 
     def test_partial_update_plant(self):
-        response = self.build_patch_response({"scientific_name": "Fooupdated"})
+        response = self._build_patch_response({"scientific_name": "Fooupdated"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -147,13 +147,24 @@ class TestPatch(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
+    def test_partial_update_plant_by_invalid_id(self):
+        request = self.factory.patch(
+            PLANT_URL,
+            {"scientific_name": "Fooupdated"},
+            format="json"
+        )
+        response = self.view(request, plant_id="Foo")
+        response.render()
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
 
 class TestPost(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"post": "create"})
 
-    def build_post_response(self, payload):
+    def _build_post_response(self, payload):
         request = self.factory.post(
             PLANT_URL,
             payload,
@@ -165,7 +176,7 @@ class TestPost(TestCase):
     def test_create_plant(self):
         payload = SAMPLE_PLANT
         payload["garden"] = str(TEST_GARDEN.garden_id)
-        response = self.build_post_response(payload)
+        response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -190,7 +201,7 @@ class TestPost(TestCase):
             "garden": str(TEST_GARDEN.garden_id)
         }
 
-        response = self.build_post_response(payload)
+        response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -213,7 +224,7 @@ class TestPut(TestCase):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"put": "update"})
 
-    def build_put_response(self, update_payload):
+    def _build_put_response(self, update_payload):
         existing_plant = SAMPLE_PLANT
         existing_plant["garden"] = TEST_GARDEN
         plant = Plant.objects.create(**existing_plant)
@@ -230,7 +241,7 @@ class TestPut(TestCase):
         new_plant_details = SAMPLE_PLANT.copy()
         new_plant_details["scientific_name"] = "Fooupdated"
         new_plant_details["garden"] = str(TEST_GARDEN.garden_id)
-        response = self.build_put_response(new_plant_details)
+        response = self._build_put_response(new_plant_details)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -247,3 +258,18 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data.get("family_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
+
+    def test_update_plant_by_invalid_id(self):
+        new_plant_details = SAMPLE_PLANT.copy()
+        new_plant_details["scientific_name"] = "Fooupdated"
+        new_plant_details["garden"] = str(TEST_GARDEN.garden_id)
+
+        request = self.factory.put(
+            PLANT_URL,
+            new_plant_details,
+            format="json"
+        )
+        response = self.view(request, plant_id="Foo")
+        response.render()
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
