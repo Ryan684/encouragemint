@@ -27,12 +27,14 @@ class TestDelete(TestCase):
         garden_id = garden.garden_id
         response = self.build_delete_response(garden_id)
         response.render()
+
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_delete_garden_bad_id(self):
         garden_id = "Foo"
         response = self.build_delete_response(garden_id)
         response.render()
+
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
@@ -99,6 +101,8 @@ class TestPatch(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        self.assertIn("plants", model_data)
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
@@ -110,6 +114,8 @@ class TestPatch(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        self.assertIn("plants", model_data)
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
@@ -118,6 +124,7 @@ class TestPatch(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"garden_name": ["A garden's name can only contain letters."]}
@@ -130,6 +137,7 @@ class TestPatch(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {"garden_name": ["A garden's name can only contain letters."]}
@@ -158,7 +166,9 @@ class TestPost(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
         self.assertIn("garden_id", model_data)
+        self.assertIn("plants", model_data)
         self.assertIn("profile", model_data)
         self.assertEqual("Foo", model_data.get("garden_name"))
 
@@ -167,6 +177,7 @@ class TestPost(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
             {
@@ -193,7 +204,9 @@ class TestPut(TestCase):
         self.view = GardenViewSet.as_view({"put": "update"})
 
     def build_put_response(self, update_payload):
-        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=str(TEST_PROFILE.profile_id))
+        existing_garden = SAMPLE_GARDEN
+        existing_garden["profile"] = TEST_PROFILE
+        garden = Garden.objects.create(**existing_garden)
         garden_id = garden.garden_id
         request = self.factory.put(
             GARDEN_URL,
@@ -204,12 +217,16 @@ class TestPut(TestCase):
         return response
 
     def test_update_garden(self):
-        response = self.build_put_response(
-            {"garden_name": "Fooupdated", "profile": str(TEST_PROFILE.profile_id)})
+        new_garden_details = SAMPLE_GARDEN.copy()
+        new_garden_details["garden_name"] = "Fooupdated"
+        new_garden_details["profile"] = str(TEST_PROFILE.profile_id)
+        response = self.build_put_response(new_garden_details)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
-        print(model_data)
+
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        self.assertIn("plants", model_data)
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
@@ -225,15 +242,4 @@ class TestPut(TestCase):
                 "profile": ["This field is required."]
             }
 
-        )
-
-    def test_invalid_garden_name(self):
-        response = self.build_put_response(
-            {"garden_name": "Foo_updated", "profile": str(TEST_PROFILE.profile_id)})
-        response.render()
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertDictEqual(
-            json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["A garden's name can only contain letters."]}
         )

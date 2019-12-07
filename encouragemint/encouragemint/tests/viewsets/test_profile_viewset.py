@@ -106,6 +106,8 @@ class TestPatch(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        self.assertIn("gardens", model_data)
         self.assertIn("profile_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
@@ -151,6 +153,8 @@ class TestPost(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        self.assertIn("gardens", model_data)
         self.assertIn("profile_id", model_data)
         self.assertEqual("Foo", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
@@ -198,6 +202,8 @@ class TestPut(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        self.assertIn("gardens", model_data)
         self.assertIn("profile_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))

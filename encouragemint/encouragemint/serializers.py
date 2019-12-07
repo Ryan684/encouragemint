@@ -6,8 +6,6 @@ from encouragemint.encouragemint.models import Profile, Plant, Garden
 
 
 class PlantSerializer(serializers.ModelSerializer):
-    # garden_id = serializers.PrimaryKeyRelatedField(
-    #     queryset=Garden.objects.all(), source='garden', write_only=True)
 
     class Meta:
         model = Plant
