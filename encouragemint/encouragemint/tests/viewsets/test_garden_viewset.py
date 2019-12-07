@@ -43,7 +43,7 @@ class TestGetRetrieve(TestCase):
         self.factory = APIRequestFactory()
         self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
 
-    def test_get_garden_by_valid_id(self):
+    def test_get_garden(self):
         garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
         garden_id = garden.garden_id
         request = self.factory.get(GARDEN_URL, format="json")
