@@ -40,28 +40,10 @@ class TestDelete(TestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
-class TestGet(TestCase):
+class TestGetRetrieve(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.get_by_id_view = ProfileViewSet.as_view({"get": "retrieve"})
-    #
-    #     self.get_all_view = ProfileViewSet.as_view({"get": "list"})
-    #
-    # def test_get_all_profiles(self):
-    #     Profile.objects.create(**{"first_name": "Jane", "last_name": "Doe"})
-    #     Profile.objects.create(**{"first_name": "Joe", "last_name": "Blogs"})
-    #     request = self.factory.get(PROFILE_URL, format="json")
-    #     response = self.get_all_view(request)
-    #     response.render()
-    #     model_data = json.loads(response.content.decode("utf-8"))
-    #
-    #     self.assertEqual(status.HTTP_200_OK, response.status_code)
-    #     self.assertIn("profile_id", model_data[0])
-    #     self.assertEqual("Jane", model_data[0].get("first_name"))
-    #     self.assertEqual("Doe", model_data[0].get("last_name"))
-    #     self.assertIn("profile_id", model_data[1])
-    #     self.assertEqual("Joe", model_data[1].get("first_name"))
-    #     self.assertEqual("Blogs", model_data[1].get("last_name"))
 
     def test_get_a_profile_by_valid_id(self):
         profile = Profile.objects.create(**SAMPLE_PROFILE)
@@ -82,6 +64,27 @@ class TestGet(TestCase):
         response = self.get_by_id_view(request, profile_id=profile_id)
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+
+class TestGetList(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.get_all_view = ProfileViewSet.as_view({"get": "list"})
+
+    def test_get_all_profiles(self):
+        Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
+        Profile.objects.create(**{"first_name": "Whizz", "last_name": "Bang"})
+        request = self.factory.get(PROFILE_URL, format="json")
+        response = self.get_all_view(request)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        for plant in model_data:
+            self.assertIn("gardens", plant)
+            self.assertIn("first_name", plant)
+            self.assertIn("last_name", plant)
 
 
 class TestPatch(TestCase):
@@ -207,23 +210,3 @@ class TestPut(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
-
-    def test_invalid_first_name(self):
-        response = self.build_put_response({"first_name": "Foo_updated", "last_name": "Bar"})
-        response.render()
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertDictEqual(
-            json.loads(response.content.decode("utf-8")),
-            {"first_name": ["Your first name can only contain letters."]}
-        )
-
-    def test_invalid_last_name(self):
-        response = self.build_put_response({"first_name": "Foo", "last_name": "Bar_updated"})
-        response.render()
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertDictEqual(
-            json.loads(response.content.decode("utf-8")),
-            {"last_name": ["Your last name can only contain letters."]}
-        )

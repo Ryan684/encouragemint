@@ -48,45 +48,10 @@ class TestDelete(TestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
-class TestGet(TestCase):
+class TestGetRetrieve(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.get_by_id_view = PlantViewSet.as_view({"get": "retrieve"})
-        self.get_all_view = PlantViewSet.as_view({"get": "list"})
-
-    def test_get_all_plants(self):
-        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
-        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
-        request = self.factory.get(PLANT_URL, format="json")
-        response = self.get_all_view(request)
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        self.assertIn("plant_id", model_data[0])
-        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data[0].get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data[0].get("duration"))
-        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data[0].get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data[0].get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data[0].get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data[0].get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data[0].get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data[0].get("family_name"))
-        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data[0].get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data[1].get("trefle_id"))
-
-        self.assertIn("plant_id", model_data[1])
-        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data[1].get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data[1].get("duration"))
-        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data[1].get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data[1].get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data[1].get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data[1].get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data[1].get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT.get("family_name"), model_data[1].get("family_name"))
-        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data[1].get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data[1].get("trefle_id"))
 
     def test_get_plant_by_valid_id(self):
         plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
@@ -116,6 +81,35 @@ class TestGet(TestCase):
         response = self.get_by_id_view(request, plant_id=plant_id)
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+
+class TestGetList(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.get_all_view = PlantViewSet.as_view({"get": "list"})
+
+    def test_get_all_plants(self):
+        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
+        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
+        request = self.factory.get(PLANT_URL, format="json")
+        response = self.get_all_view(request)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        for plant in model_data:
+            self.assertIn("plant_id", plant)
+            self.assertIn("scientific_name", plant)
+            self.assertIn("duration", plant)
+            self.assertIn("bloom_period", plant)
+            self.assertIn("growth_period", plant)
+            self.assertIn("growth_rate", plant)
+            self.assertIn("shade_tolerance", plant)
+            self.assertIn("moisture_use", plant)
+            self.assertIn("family_name", plant)
+            self.assertIn("garden", plant)
+            self.assertIn("trefle_id", plant)
 
 
 class TestPatch(TestCase):
