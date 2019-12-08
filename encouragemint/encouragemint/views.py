@@ -30,7 +30,7 @@ class PlantViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
 
-#  TODO: Find best pratice here
+#  TODO: Find best practice here
 @api_view(["POST"])
 def add_plant(request):
     assert "plant_name" in request.data
