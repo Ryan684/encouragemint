@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework import serializers
 
 from encouragemint.encouragemint.serializers import ProfileSerializer
+from encouragemint.encouragemint.models import Profile
 
 
 class TestProfileSerializerValidators(TestCase):
@@ -9,6 +10,13 @@ class TestProfileSerializerValidators(TestCase):
     def setUpClass(cls):
         super(TestProfileSerializerValidators, cls).setUpClass()
         cls.test_obj = ProfileSerializer()
+
+
+class TestSerializerParameters(TestProfileSerializerValidators):
+    def test_serializer_parameters(self):
+        self.assertEquals(["profile_id", "first_name", "last_name", "gardens"], self.test_obj.Meta.fields)
+        self.assertEquals(["profile_id"], self.test_obj.Meta.read_only_fields)
+        self.assertEquals(Profile, self.test_obj.Meta.model)
 
 
 class TestValidateFirstName(TestProfileSerializerValidators):

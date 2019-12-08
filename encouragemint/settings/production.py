@@ -1,3 +1,3 @@
 from encouragemint.settings.base import *
 
-DEBUG = False
+DEBUG = True

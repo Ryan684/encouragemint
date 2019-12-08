@@ -6,11 +6,14 @@ from encouragemint.encouragemint.models import Profile, Plant, Garden
 
 
 class PlantSerializer(serializers.ModelSerializer):
+    garden = serializers.SlugRelatedField(slug_field="garden_id", queryset=Garden.objects.all())
 
     class Meta:
         model = Plant
-        fields = "__all__"
-        read_only_fields = ["plant_id"]
+        fields = ["plant_id", "garden", "trefle_id", "scientific_name", "duration",
+                  "bloom_period", "growth_period", "growth_rate", "shade_tolerance",
+                  "moisture_use", "family_name"]
+        read_only_fields = ["plant_id", "garden"]
 
     @staticmethod
     def validate_scientific_name(value):
@@ -68,12 +71,13 @@ class PlantSerializer(serializers.ModelSerializer):
 
 
 class GardenSerializer(serializers.ModelSerializer):
+    profile = serializers.SlugRelatedField(slug_field="profile_id", queryset=Profile.objects.all())
     plants = PlantSerializer(many=True, read_only=True)
 
     class Meta:
         model = Garden
-        fields = "__all__"
-        read_only_fields = ["garden_id"]
+        fields = ["garden_id", "garden_name", "plants", "profile"]
+        read_only_fields = ["garden_id", "profile"]
 
     @staticmethod
     def validate_garden_name(value):
@@ -87,7 +91,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = "__all__"
+        fields = ["profile_id", "first_name", "last_name", "gardens"]
         read_only_fields = ["profile_id"]
 
     @staticmethod

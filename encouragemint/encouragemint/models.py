@@ -4,19 +4,19 @@ from django.db import models
 
 
 class Profile(models.Model):
-    profile_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    profile_id = models.UUIDField(default=uuid.uuid4)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
 
 
 class Garden(models.Model):
-    garden_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    garden_id = models.UUIDField(default=uuid.uuid4)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="gardens")
     garden_name = models.CharField(max_length=25)
 
 
 class Plant(models.Model):
-    plant_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    plant_id = models.UUIDField(default=uuid.uuid4)
     garden = models.ForeignKey(Garden, on_delete=models.CASCADE, related_name="plants")
     trefle_id = models.IntegerField(blank=True, null=True)
     scientific_name = models.CharField(max_length=25)

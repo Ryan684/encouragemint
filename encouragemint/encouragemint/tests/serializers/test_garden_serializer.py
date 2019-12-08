@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework import serializers
 
 from encouragemint.encouragemint.serializers import GardenSerializer
+from encouragemint.encouragemint.models import Garden
 
 
 class TestGardenSerializerValidators(TestCase):
@@ -9,6 +10,13 @@ class TestGardenSerializerValidators(TestCase):
     def setUpClass(cls):
         super(TestGardenSerializerValidators, cls).setUpClass()
         cls.test_obj = GardenSerializer()
+
+
+class TestSerializerParameters(TestGardenSerializerValidators):
+    def test_serializer_parameters(self):
+        self.assertEquals(["garden_id", "garden_name", "plants", "profile"], self.test_obj.Meta.fields)
+        self.assertEquals(["garden_id", "profile"], self.test_obj.Meta.read_only_fields)
+        self.assertEquals(Garden, self.test_obj.Meta.model)
 
 
 class TestValidateGardenName(TestGardenSerializerValidators):
