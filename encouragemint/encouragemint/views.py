@@ -1,9 +1,12 @@
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer
 )
+from encouragemint.lib.trefle.trefle import TrefleAPI
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -25,3 +28,13 @@ class PlantViewSet(viewsets.ModelViewSet):
     serializer_class = PlantSerializer
     lookup_field = "plant_id"
     http_method_names = ["get", "post", "put", "patch", "delete"]
+
+
+#  TODO: Find best pratice here
+@api_view(["POST"])
+def add_plant(request):
+    assert "plant_name" in request.data
+    assert "garden" in request.data
+    plant = request.data.get("plant_name")
+    data = TrefleAPI().lookup_plants_by_expected_name(plant)
+    return Response(data=data)
