@@ -23,38 +23,44 @@ class PlantSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_duration(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-            raise serializers.ValidationError("A plant's duration can only contain letters.")
+        if value:
+            if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+                raise serializers.ValidationError("A plant's duration can only contain letters.")
         return value
 
     @staticmethod
     def validate_bloom_period(value):
-        if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
-            raise serializers.ValidationError("A plant's bloom period can only contain letters.")
+        if value:
+            if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
+                raise serializers.ValidationError("A plant's bloom period can only contain letters.")
         return value
 
     @staticmethod
     def validate_growth_period(value):
-        if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
-            raise serializers.ValidationError("A plant's growth period can only contain letters.")
+        if value:
+            if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
+                raise serializers.ValidationError("A plant's growth period can only contain letters.")
         return value
 
     @staticmethod
     def validate_growth_rate(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-            raise serializers.ValidationError("A plant's growth rate can only contain letters.")
+        if value:
+            if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+                raise serializers.ValidationError("A plant's growth rate can only contain letters.")
         return value
 
     @staticmethod
     def validate_shade_tolerance(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-            raise serializers.ValidationError("A plant's shade tolerance can only contain letters.")
+        if value:
+            if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+                raise serializers.ValidationError("A plant's shade tolerance can only contain letters.")
         return value
 
     @staticmethod
     def validate_moisture_use(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-            raise serializers.ValidationError("A plant's moisture use can only contain letters.")
+        if value:
+            if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+                raise serializers.ValidationError("A plant's moisture use can only contain letters.")
         return value
 
     @staticmethod
