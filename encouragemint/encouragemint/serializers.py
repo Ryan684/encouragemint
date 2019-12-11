@@ -10,9 +10,9 @@ class PlantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Plant
-        fields = ["plant_id", "garden", "trefle_id", "scientific_name", "duration",
-                  "bloom_period", "growth_period", "growth_rate", "shade_tolerance",
-                  "moisture_use", "family_common_name"]
+        fields = ["plant_id", "garden", "common_name", "trefle_id", "scientific_name",
+                  "duration", "bloom_period", "growth_period", "growth_rate",
+                  "shade_tolerance", "moisture_use", "family_common_name"]
         read_only_fields = ["plant_id", "garden"]
 
     @staticmethod
@@ -68,6 +68,13 @@ class PlantSerializer(serializers.ModelSerializer):
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
                 raise serializers.ValidationError(
                     "A plant's moisture use can only contain letters.")
+        return value
+
+    @staticmethod
+    def validate_common_name(value):
+        if re.fullmatch(r"^[a-zA-Z\-\s]+$", value) is None:
+            raise serializers.ValidationError(
+                "A plant's common name can only contain letters.")
         return value
 
     @staticmethod

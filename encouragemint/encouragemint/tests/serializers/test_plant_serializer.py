@@ -15,8 +15,8 @@ class TestPlantSerializerValidators(TestCase):
 class TestSerializerParameters(TestPlantSerializerValidators):
     def test_serializer_parameters(self):
         self.assertEquals(
-            ["plant_id", "garden", "trefle_id", "scientific_name", "duration", "bloom_period",
-             "growth_period", "growth_rate", "shade_tolerance", "moisture_use", "family_name"],
+            ["plant_id", "garden", "common_name", "trefle_id", "scientific_name", "duration", "bloom_period",
+             "growth_period", "growth_rate", "shade_tolerance", "moisture_use", "family_common_name"],
             self.test_obj.Meta.fields
         )
         self.assertEquals(["plant_id", "garden"], self.test_obj.Meta.read_only_fields)
@@ -161,16 +161,16 @@ class TestValidateFamilyName(TestPlantSerializerValidators):
     def setUpClass(cls):
         super(TestValidateFamilyName, cls).setUpClass()
 
-    def test_valid_family_name(self):
+    def test_valid_family_common_name(self):
         family_name = "Rose Bushes"
-        self.assertEqual(family_name, self.test_obj.validate_family_name(family_name))
+        self.assertEqual(family_name, self.test_obj.validate_family_common_name(family_name))
 
     def test_invalid_family_name(self):
         family_name = "Rose*Bushes"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's family name can only contain letters.",
-            self.test_obj.validate_family_name,
+            f"A plant's family common name can only contain letters.",
+            self.test_obj.validate_family_common_name,
             family_name
         )
 
@@ -191,4 +191,23 @@ class TestValidateTrefleID(TestPlantSerializerValidators):
             f"A plant's Trefle ID can only contain numbers.",
             self.test_obj.validate_trefle_id,
             trefle_id
+        )
+
+
+class TestValidateCommonName(TestPlantSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidateCommonName, cls).setUpClass()
+
+    def test_valid_common_name(self):
+        common_name = "Rose Bushe"
+        self.assertEqual(common_name, self.test_obj.validate_common_name(common_name))
+
+    def test_invalid_common_name(self):
+        common_name = "Rose*Bush"
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            f"A plant's common name can only contain letters.",
+            self.test_obj.validate_common_name,
+            common_name
         )
