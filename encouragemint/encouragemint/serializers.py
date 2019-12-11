@@ -12,7 +12,7 @@ class PlantSerializer(serializers.ModelSerializer):
         model = Plant
         fields = ["plant_id", "garden", "trefle_id", "scientific_name", "duration",
                   "bloom_period", "growth_period", "growth_rate", "shade_tolerance",
-                  "moisture_use", "family_name"]
+                  "moisture_use", "family_common_name"]
         read_only_fields = ["plant_id", "garden"]
 
     @staticmethod
@@ -64,9 +64,9 @@ class PlantSerializer(serializers.ModelSerializer):
         return value
 
     @staticmethod
-    def validate_family_name(value):
+    def validate_family_common_name(value):
         if re.fullmatch(r"^[a-zA-Z\-\s]+$", value) is None:
-            raise serializers.ValidationError("A plant's family name can only contain letters.")
+            raise serializers.ValidationError("A plant's family common name can only contain letters.")
         return value
 
     @staticmethod

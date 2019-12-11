@@ -31,7 +31,7 @@ class PlantViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
 
-#  TODO: Find best practice here
+#  TODO: Fix tests
 @api_view(["POST"])
 def add_plant(request):
     try:
@@ -45,8 +45,10 @@ def add_plant(request):
 
     plant = request.data.get("plant_name")
     data = TrefleAPI().lookup_plants_by_expected_name(plant)
-    data["garden"] = request.data["garden"]
+    garden = Garden.objects.get(garden_id=request.data["garden"])
+    data["garden"] = garden.garden_id
     serializer = PlantSerializer(data=data)
+
     if serializer.is_valid():
         serializer.save()
         return Response(data=data)
