@@ -34,7 +34,6 @@ class PlantViewSet(viewsets.ModelViewSet):
 #  TODO: Fix tests
 @api_view(["POST"])
 def add_plant(request):
-    
     try:
         assert "plant_name" in request.data
     except AssertionError:

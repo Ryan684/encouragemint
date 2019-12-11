@@ -27,5 +27,3 @@ urlpatterns = router.urls
 urlpatterns += [
     path('add_plant/', add_plant),
 ]
-
-
