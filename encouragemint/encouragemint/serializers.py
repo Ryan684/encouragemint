@@ -18,61 +18,70 @@ class PlantSerializer(serializers.ModelSerializer):
     @staticmethod
     def validate_scientific_name(value):
         if re.fullmatch(r"^[a-zA-Z\-\s.]+$", value) is None:
-            raise serializers.ValidationError("A plant's scientific name can only contain letters.")
+            raise serializers.ValidationError(
+                "A plant's scientific name can only contain letters.")
         return value
 
     @staticmethod
     def validate_duration(value):
         if value:
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-                raise serializers.ValidationError("A plant's duration can only contain letters.")
+                raise serializers.ValidationError(
+                    "A plant's duration can only contain letters.")
         return value
 
     @staticmethod
     def validate_bloom_period(value):
         if value:
             if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
-                raise serializers.ValidationError("A plant's bloom period can only contain letters.")
+                raise serializers.ValidationError(
+                    "A plant's bloom period can only contain letters.")
         return value
 
     @staticmethod
     def validate_growth_period(value):
         if value:
             if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
-                raise serializers.ValidationError("A plant's growth period can only contain letters.")
+                raise serializers.ValidationError(
+                    "A plant's growth period can only contain letters.")
         return value
 
     @staticmethod
     def validate_growth_rate(value):
         if value:
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-                raise serializers.ValidationError("A plant's growth rate can only contain letters.")
+                raise serializers.ValidationError(
+                    "A plant's growth rate can only contain letters.")
         return value
 
     @staticmethod
     def validate_shade_tolerance(value):
         if value:
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-                raise serializers.ValidationError("A plant's shade tolerance can only contain letters.")
+                raise serializers.ValidationError(
+                    "A plant's shade tolerance can only contain letters.")
         return value
 
     @staticmethod
     def validate_moisture_use(value):
         if value:
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-                raise serializers.ValidationError("A plant's moisture use can only contain letters.")
+                raise serializers.ValidationError(
+                    "A plant's moisture use can only contain letters.")
         return value
 
     @staticmethod
     def validate_family_common_name(value):
         if re.fullmatch(r"^[a-zA-Z\-\s]+$", value) is None:
-            raise serializers.ValidationError("A plant's family common name can only contain letters.")
+            raise serializers.ValidationError(
+                "A plant's family common name can only contain letters.")
         return value
 
     @staticmethod
     def validate_trefle_id(value):
         if not isinstance(value, int):
-            raise serializers.ValidationError("A plant's Trefle ID can only contain numbers.")
+            raise serializers.ValidationError(
+                "A plant's Trefle ID can only contain numbers.")
         return value
 
 
@@ -88,7 +97,8 @@ class GardenSerializer(serializers.ModelSerializer):
     @staticmethod
     def validate_garden_name(value):
         if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-            raise serializers.ValidationError("A garden's name can only contain letters.")
+            raise serializers.ValidationError(
+                "A garden's name can only contain letters.")
         return value
 
 
@@ -103,11 +113,13 @@ class ProfileSerializer(serializers.ModelSerializer):
     @staticmethod
     def validate_first_name(value):
         if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-            raise serializers.ValidationError("Your first name can only contain letters.")
+            raise serializers.ValidationError(
+                "Your first name can only contain letters.")
         return value
 
     @staticmethod
     def validate_last_name(value):
         if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
-            raise serializers.ValidationError("Your last name can only contain letters.")
+            raise serializers.ValidationError(
+                "Your last name can only contain letters.")
         return value

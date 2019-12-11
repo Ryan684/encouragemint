@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
@@ -34,14 +34,22 @@ class PlantViewSet(viewsets.ModelViewSet):
 #  TODO: Fix tests
 @api_view(["POST"])
 def add_plant(request):
+    
     try:
         assert "plant_name" in request.data
     except AssertionError:
-        return Response(data={"message": "plant_name is a mandatory field."}, status=HTTP_400_BAD_REQUEST)
+        return Response(
+            data={"message": "plant_name is a mandatory field."},
+            status=HTTP_400_BAD_REQUEST
+        )
+
     try:
         assert "garden" in request.data
     except AssertionError:
-        return Response(data={"message": "garden is a mandatory field."}, status=HTTP_400_BAD_REQUEST)
+        return Response(
+            data={"message": "garden is a mandatory field."},
+            status=HTTP_400_BAD_REQUEST
+        )
 
     plant = request.data.get("plant_name")
     data = TrefleAPI().lookup_plants_by_expected_name(plant)
@@ -50,6 +58,14 @@ def add_plant(request):
     serializer = PlantSerializer(data=data)
 
     if serializer.is_valid():
+
         serializer.save()
-        return Response(data=data)
-    return Response(data={"message": "Invalid Trefle data."}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            data=data,
+            status=HTTP_200_OK
+        )
+
+    return Response(
+        data={"message": "Invalid Trefle data."},
+        status=HTTP_500_INTERNAL_SERVER_ERROR
+    )
