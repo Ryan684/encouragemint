@@ -33,7 +33,7 @@ class PlantViewSet(viewsets.ModelViewSet):
             return NewPlantRequestSerializer
         return PlantSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         new_plant = self._lookup_plant()
         serializer = PlantSerializer(data=new_plant.data)
         serializer.is_valid(raise_exception=True)
@@ -50,4 +50,3 @@ class PlantViewSet(viewsets.ModelViewSet):
             data=data,
             status=HTTP_200_OK
         )
-
