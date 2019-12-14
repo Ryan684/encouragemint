@@ -5,6 +5,18 @@ from rest_framework import serializers
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 
 
+class NewPlantRequestSerializer(serializers.Serializer):
+    plant_name = serializers.CharField(max_length=50)
+    garden = serializers.UUIDField()
+
+    @staticmethod
+    def validate_plant_name(value):
+        if re.fullmatch(r"^[a-zA-Z\-\s']+$", value) is None:
+            raise serializers.ValidationError(
+                "A plant's name can only contain letters.")
+        return value
+
+
 class PlantSerializer(serializers.ModelSerializer):
     garden = serializers.SlugRelatedField(slug_field="garden_id", queryset=Garden.objects.all())
 
@@ -17,7 +29,7 @@ class PlantSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_scientific_name(value):
-        if re.fullmatch(r"^[a-zA-Z\-\s.]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\-\s.']+$", value) is None:
             raise serializers.ValidationError(
                 "A plant's scientific name can only contain letters.")
         return value
@@ -72,14 +84,14 @@ class PlantSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_common_name(value):
-        if re.fullmatch(r"^[a-zA-Z\-\s]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\-\s']+$", value) is None:
             raise serializers.ValidationError(
                 "A plant's common name can only contain letters.")
         return value
 
     @staticmethod
     def validate_family_common_name(value):
-        if re.fullmatch(r"^[a-zA-Z\-\s]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\-\s']+$", value) is None:
             raise serializers.ValidationError(
                 "A plant's family common name can only contain letters.")
         return value

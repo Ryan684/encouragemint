@@ -12,16 +12,19 @@ PLANT_URL = "/plant/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
 TEST_GARDEN = Garden.objects.create(**{"garden_name": "Foo", "profile": TEST_PROFILE})
 SAMPLE_PLANT = {
-    "scientific_name": "FooBar",
-    "common_name": "Barflower",
-    "duration": "Annual",
+    "scientific_name": "Eriophyllum lanatum",
+    "common_name": "common woolly sunflower",
+    "duration": "Annual, Perennial",
     "bloom_period": "Spring",
     "growth_period": "Summer",
     "growth_rate": "Slow",
     "shade_tolerance": "High",
     "moisture_use": "High",
-    "family_common_name": "Fooflower",
-    "trefle_id": 123
+    "family_common_name": "Aster family",
+    "trefle_id": 134845
+}
+SAMPLE_NEW_PLANT_REQUEST = {
+    "plant_name": "common woolly sunflower"
 }
 
 
@@ -115,55 +118,6 @@ class TestGetList(TestCase):
             self.assertIn("trefle_id", plant)
 
 
-class TestPatch(TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.view = PlantViewSet.as_view({"patch": "partial_update"})
-
-    def _build_patch_response(self, update_payload):
-        plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
-        plant_id = plant.plant_id
-        request = self.factory.patch(
-            PLANT_URL,
-            update_payload,
-            format="json"
-        )
-        response = self.view(request, plant_id=plant_id)
-        return response
-
-    def test_partial_update_plant(self):
-        response = self._build_patch_response({"scientific_name": "Fooupdated"})
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
-        print(model_data)
-        print(SAMPLE_PLANT)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        self.assertIn("plant_id", model_data)
-        self.assertEqual("Fooupdated", model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT.get("common_name"), model_data.get("common_name"))
-        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
-        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
-
-    def test_partial_update_plant_by_invalid_id(self):
-        request = self.factory.patch(
-            PLANT_URL,
-            {"scientific_name": "Fooupdated"},
-            format="json"
-        )
-        response = self.view(request, plant_id="Foo")
-        response.render()
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
-
 class TestPost(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -179,12 +133,12 @@ class TestPost(TestCase):
         return response
 
     def test_create_plant(self):
-        payload = SAMPLE_PLANT
+        payload = SAMPLE_NEW_PLANT_REQUEST.copy()
         payload["garden"] = str(TEST_GARDEN.garden_id)
         response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
-
+        print(model_data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         self.assertIn("plant_id", model_data)

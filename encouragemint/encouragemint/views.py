@@ -1,12 +1,11 @@
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK
+from rest_framework.status import HTTP_200_OK
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
-    ProfileSerializer, PlantSerializer, GardenSerializer
-)
+    ProfileSerializer, PlantSerializer, GardenSerializer,
+    NewPlantRequestSerializer)
 from encouragemint.lib.trefle.trefle import TrefleAPI
 
 
@@ -26,45 +25,28 @@ class GardenViewSet(viewsets.ModelViewSet):
 
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()
-    serializer_class = PlantSerializer
     lookup_field = "plant_id"
-    http_method_names = ["get", "post", "put", "patch", "delete"]
+    http_method_names = ["get", "post", "put", "delete"]
 
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return NewPlantRequestSerializer
+        return PlantSerializer
 
-#  TODO: Fix tests
-@api_view(["POST"])
-def add_plant(request):
-    try:
-        assert "plant_name" in request.data
-    except AssertionError:
-        return Response(
-            data={"message": "plant_name is a mandatory field."},
-            status=HTTP_400_BAD_REQUEST
-        )
+    def perform_create(self, serializer):
+        new_plant = self._add_plant()
+        plant_serializer = PlantSerializer(data=new_plant.data)
 
-    try:
-        assert "garden" in request.data
-    except AssertionError:
-        return Response(
-            data={"message": "garden is a mandatory field."},
-            status=HTTP_400_BAD_REQUEST
-        )
+        if plant_serializer.is_valid():
+            plant_serializer.save()
 
-    plant = request.data.get("plant_name")
-    data = TrefleAPI().lookup_plants_by_expected_name(plant)
-    garden = Garden.objects.get(garden_id=request.data["garden"])
-    data["garden"] = garden.garden_id
-    serializer = PlantSerializer(data=data)
-
-    if serializer.is_valid():
-
-        serializer.save()
+    def _add_plant(self):
+        plant = self.request.data.get("plant_name")
+        data = TrefleAPI().lookup_plants_by_expected_name(plant)
+        garden = Garden.objects.get(garden_id=self.request.data["garden"])
+        data["garden"] = garden.garden_id
         return Response(
             data=data,
             status=HTTP_200_OK
         )
 
-    return Response(
-        data={"message": "Invalid Trefle data."},
-        status=HTTP_500_INTERNAL_SERVER_ERROR
-    )
