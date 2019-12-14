@@ -35,18 +35,15 @@ class PlantViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         new_plant = self._lookup_plant()
-        serializer = PlantSerializer(data=new_plant.data)
+        serializer = PlantSerializer(data=new_plant)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
 
     def _lookup_plant(self):
-        plant = self.request.data.get("plant_name")
-        data = TrefleAPI().lookup_plants_by_expected_name(plant)
+        plant_name_query = self.request.data.get("plant_name")
+        matched_plant = TrefleAPI().lookup_plants_by_expected_name(plant_name_query)
         garden = Garden.objects.get(garden_id=self.request.data["garden"])
-        data["garden"] = garden.garden_id
-        return Response(
-            data=data,
-            status=HTTP_200_OK
-        )
+        matched_plant["garden"] = garden.garden_id
+        return matched_plant
