@@ -69,11 +69,11 @@ class TestTrefle(TestCase):
             "trefle_id": 134845,
             "common_name": "common woolly sunflower",
             "duration": "Annual, Perennial",
-            "bloom_period": None,
-            "growth_period": None,
-            "growth_rate": None,
-            "shade_tolerance": None,
-            "moisture_use": None,
+            "bloom_period": "Spring",
+            "growth_period": "Summer",
+            "growth_rate": "Slow",
+            "shade_tolerance": "High",
+            "moisture_use": "High",
             "family_common_name": "Aster family",
             "scientific_name": "Eriophyllum lanatum"
         }

@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
@@ -33,14 +33,15 @@ class PlantViewSet(viewsets.ModelViewSet):
             return NewPlantRequestSerializer
         return PlantSerializer
 
-    def perform_create(self, serializer):
-        new_plant = self._add_plant()
-        plant_serializer = PlantSerializer(data=new_plant.data)
+    def create(self, request, *args, **kwargs):
+        new_plant = self._lookup_plant()
+        serializer = PlantSerializer(data=new_plant.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
 
-        if plant_serializer.is_valid():
-            plant_serializer.save()
-
-    def _add_plant(self):
+    def _lookup_plant(self):
         plant = self.request.data.get("plant_name")
         data = TrefleAPI().lookup_plants_by_expected_name(plant)
         garden = Garden.objects.get(garden_id=self.request.data["garden"])

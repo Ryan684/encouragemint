@@ -1,4 +1,5 @@
 import json
+from unittest.mock import patch, Mock
 from uuid import UUID
 
 from django.test import TestCase
@@ -22,9 +23,6 @@ SAMPLE_PLANT = {
     "moisture_use": "High",
     "family_common_name": "Aster family",
     "trefle_id": 134845
-}
-SAMPLE_NEW_PLANT_REQUEST = {
-    "plant_name": "common woolly sunflower"
 }
 
 
@@ -132,13 +130,24 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    def test_create_plant(self):
-        payload = SAMPLE_NEW_PLANT_REQUEST.copy()
-        payload["garden"] = str(TEST_GARDEN.garden_id)
+    @patch("requests.get")
+    def test_create_plant(self, mock_trefle):
+        stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        with open(f"{stubbed_json_responses_dir}/plant_search_one_match.json", "r") as file:
+            search_single_match = json.load(file)
+        with open(f"{stubbed_json_responses_dir}/id_search_response.json", "r") as file:
+            id_search = json.load(file)
+
+        mock_responses = [Mock(), Mock()]
+        mock_responses[0].json.return_value = search_single_match
+        mock_responses[1].json.return_value = id_search
+        mock_trefle.side_effect = mock_responses
+
+        payload = {"plant_name": "common woolly sunflower", "garden": str(TEST_GARDEN.garden_id)}
         response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
-        print(model_data)
+
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         self.assertIn("plant_id", model_data)

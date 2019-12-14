@@ -37,7 +37,7 @@ class PlantSerializer(serializers.ModelSerializer):
     @staticmethod
     def validate_duration(value):
         if value:
-            if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+            if re.fullmatch(r"^[a-zA-Z,\s]+$", value) is None:
                 raise serializers.ValidationError(
                     "A plant's duration can only contain letters.")
         return value

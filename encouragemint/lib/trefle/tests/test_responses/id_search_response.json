@@ -420,8 +420,8 @@
       "lifespan": null,
       "leaf_retention": null,
       "known_allelopath": null,
-      "growth_rate": null,
-      "growth_period": null,
+      "growth_rate": "Slow",
+      "growth_period": "Summer",
       "growth_habit": null,
       "growth_form": null,
       "fire_resistance": null,
@@ -451,7 +451,7 @@
       "seedling_vigor": null,
       "seed_spread_rate": null,
       "commercial_availability": null,
-      "bloom_period": null
+      "bloom_period": "Spring"
     },
     "scientific_name": "Eriophyllum lanatum",
     "propagation": {
@@ -495,7 +495,7 @@
         "deg_f": null,
         "deg_c": null
       },
-      "shade_tolerance": null,
+      "shade_tolerance": "High",
       "salinity_tolerance": null,
       "root_depth_minimum": {
         "inches": null,
@@ -520,7 +520,7 @@
       },
       "ph_minimum": null,
       "ph_maximum": null,
-      "moisture_use": null,
+      "moisture_use": "High",
       "hedge_tolerance": null,
       "frost_free_days_minimum": null,
       "fire_tolerance": null,
