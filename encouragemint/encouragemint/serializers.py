@@ -115,7 +115,7 @@ class GardenSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_garden_name(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z\-\s']+$", value) is None:
             raise serializers.ValidationError(
                 "A garden's name can only contain letters.")
         return value
