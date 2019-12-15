@@ -77,10 +77,10 @@ class PlantViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
     def _lookup_plant(self, plant_name, query, garden=None):
-        if query == "common_name":
-            result = TrefleAPI().lookup_plants_by_expected_name(plant_name)
-        else:
+        if query == "scientific_name":
             result = TrefleAPI().lookup_plants_by_scientific_name(plant_name)
+        else:
+            result = TrefleAPI().lookup_plants_by_expected_name(plant_name)
 
         if isinstance(result, dict):
             if not garden:
