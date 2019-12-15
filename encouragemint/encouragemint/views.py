@@ -34,8 +34,10 @@ class PlantViewSet(viewsets.ModelViewSet):
         return PlantSerializer
 
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        plant_name_query = request.data["plant_name"]
+
         try:
-            result = self._lookup_plant()
+            result = self._lookup_plant(plant_name_query, "common_name")
         except TrefleConnectionError:
             return Response(
                 {"Message": "Encouragemint can't create plants right now. Try again later."},
@@ -54,12 +56,35 @@ class PlantViewSet(viewsets.ModelViewSet):
             status=status.HTTP_300_MULTIPLE_CHOICES
         )
 
-    def _lookup_plant(self):
-        plant_name_query = self.request.data.get("plant_name")
-        result = TrefleAPI().lookup_plants_by_expected_name(plant_name_query)
+    def update(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        plant_id = kwargs["plant_id"]
+        plant = Plant.objects.get(plant_id=plant_id)
+        garden = plant.garden
+        plant_name_query = plant.scientific_name
+
+        try:
+            result = self._lookup_plant(plant_name_query, "scientific_name", garden)
+        except TrefleConnectionError:
+            return Response(
+                {"Message": "Encouragemint can't update plants right now. Try again later."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        serializer = PlantSerializer(data=result)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+
+    def _lookup_plant(self, plant_name, query, garden=None):
+        if query == "common_name":
+            result = TrefleAPI().lookup_plants_by_expected_name(plant_name)
+        else:
+            result = TrefleAPI().lookup_plants_by_scientific_name(plant_name)
 
         if isinstance(result, dict):
-            garden = Garden.objects.get(garden_id=self.request.data["garden"])
+            if not garden:
+                garden = Garden.objects.get(garden_id=self.request.data["garden"])
             result["garden"] = garden.garden_id
 
         return result

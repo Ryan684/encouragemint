@@ -79,13 +79,6 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
-    def test_get_plant_by_invalid_id(self):
-        plant_id = "Foo"
-        request = self.factory.get(PLANT_URL, format="json")
-        response = self.get_by_id_view(request, plant_id=plant_id)
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
 
 class TestGetList(TestCase):
     def setUp(self):
@@ -148,7 +141,7 @@ class TestPost(TestCase):
         mock_responses[1].json.return_value = id_search
         mock_trefle.side_effect = mock_responses
 
-        payload = self.new_plant_request
+        payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -171,7 +164,7 @@ class TestPost(TestCase):
     @patch("requests.get")
     def test_create_plant_trefle_down(self, mock_trefle):
         mock_trefle.side_effect = requests.ConnectionError
-        payload = self.new_plant_request
+        payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
         response.render()
 
@@ -188,7 +181,7 @@ class TestPost(TestCase):
             search_many_matches = json.load(file)
 
         mock_trefle.return_value = search_many_matches
-        payload = self.new_plant_request
+        payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
         response.render()
 
@@ -204,24 +197,32 @@ class TestPut(TestCase):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"put": "update"})
 
-    def _build_put_response(self, update_payload):
-        existing_plant = SAMPLE_PLANT
+    def _build_put_response(self):
+        existing_plant = SAMPLE_PLANT.copy()
         existing_plant["garden"] = TEST_GARDEN
         plant = Plant.objects.create(**existing_plant)
         plant_id = plant.plant_id
         request = self.factory.put(
             PLANT_URL,
-            update_payload,
             format="json"
         )
-        response = self.view(request, plant_id=plant_id)
-        return response
+        return self.view(request, plant_id=plant_id)
 
-    def test_update_plant(self):
-        new_plant_details = SAMPLE_PLANT.copy()
-        new_plant_details["scientific_name"] = "Fooupdated"
-        new_plant_details["garden"] = str(TEST_GARDEN.garden_id)
-        response = self._build_put_response(new_plant_details)
+    @patch("requests.get")
+    def test_update_plant(self, mock_trefle):
+        stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        with open(f"{stubbed_json_responses_dir}/plant_search_one_match.json", "r") as file:
+            search_single_match = json.load(file)
+        with open(f"{stubbed_json_responses_dir}/id_search_response.json", "r") as file:
+            id_search = json.load(file)
+
+        id_search["scientific_name"] = "Fooupdated"
+        mock_responses = [Mock(), Mock()]
+        mock_responses[0].json.return_value = search_single_match
+        mock_responses[1].json.return_value = id_search
+        mock_trefle.side_effect = mock_responses
+
+        response = self._build_put_response()
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -240,17 +241,14 @@ class TestPut(TestCase):
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
-    def test_update_plant_by_invalid_id(self):
-        new_plant_details = SAMPLE_PLANT.copy()
-        new_plant_details["scientific_name"] = "Fooupdated"
-        new_plant_details["garden"] = str(TEST_GARDEN.garden_id)
-
-        request = self.factory.put(
-            PLANT_URL,
-            new_plant_details,
-            format="json"
-        )
-        response = self.view(request, plant_id="Foo")
+    @patch("requests.get")
+    def test_update_plant_trefle_down(self, mock_trefle):
+        mock_trefle.side_effect = requests.ConnectionError
+        response = self._build_put_response()
         response.render()
 
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
+        self.assertEquals(
+            {"Message": "Encouragemint can't update plants right now. Try again later."},
+            response.data
+        )
