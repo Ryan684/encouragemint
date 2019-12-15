@@ -1,6 +1,5 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_500_INTERNAL_SERVER_ERROR
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
@@ -36,22 +35,31 @@ class PlantViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         try:
-            new_plant = self._lookup_plant()
+            result = self._lookup_plant()
         except TrefleConnectionError:
             return Response(
                 {"Message": "Encouragemint can't create plants right now. Try again later."},
-                status=HTTP_500_INTERNAL_SERVER_ERROR
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-        serializer = PlantSerializer(data=new_plant)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
+        if isinstance(result, dict):
+            serializer = PlantSerializer(data=result)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(
+            data=result,
+            status=status.HTTP_300_MULTIPLE_CHOICES
+        )
 
     def _lookup_plant(self):
         plant_name_query = self.request.data.get("plant_name")
-        matched_plant = TrefleAPI().lookup_plants_by_expected_name(plant_name_query)
-        garden = Garden.objects.get(garden_id=self.request.data["garden"])
-        matched_plant["garden"] = garden.garden_id
-        return matched_plant
+        result = TrefleAPI().lookup_plants_by_expected_name(plant_name_query)
+
+        if isinstance(result, dict):
+            garden = Garden.objects.get(garden_id=self.request.data["garden"])
+            result["garden"] = garden.garden_id
+
+        return result

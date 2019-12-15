@@ -121,6 +121,10 @@ class TestPost(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"post": "create"})
+        self.new_plant_request = {
+            "plant_name": "common woolly sunflower",
+            "garden": str(TEST_GARDEN.garden_id)
+        }
 
     def _build_post_response(self, payload):
         request = self.factory.post(
@@ -144,7 +148,7 @@ class TestPost(TestCase):
         mock_responses[1].json.return_value = id_search
         mock_trefle.side_effect = mock_responses
 
-        payload = {"plant_name": "common woolly sunflower", "garden": str(TEST_GARDEN.garden_id)}
+        payload = self.new_plant_request
         response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -167,13 +171,30 @@ class TestPost(TestCase):
     @patch("requests.get")
     def test_create_plant_trefle_down(self, mock_trefle):
         mock_trefle.side_effect = requests.ConnectionError
-        payload = {"plant_name": "common woolly sunflower", "garden": str(TEST_GARDEN.garden_id)}
+        payload = self.new_plant_request
         response = self._build_post_response(payload)
         response.render()
 
         self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
         self.assertEquals(
             {"Message": "Encouragemint can't create plants right now. Try again later."},
+            response.data
+        )
+
+    @patch("requests.get")
+    def test_create_plant_many_trefle_results(self, mock_trefle):
+        stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        with open(f"{stubbed_json_responses_dir}/plant_search_many_matches.json", "r") as file:
+            search_many_matches = json.load(file)
+
+        mock_trefle.return_value = search_many_matches
+        payload = self.new_plant_request
+        response = self._build_post_response(payload)
+        response.render()
+
+        self.assertEqual(status.HTTP_300_MULTIPLE_CHOICES, response.status_code)
+        self.assertEquals(
+            search_many_matches,
             response.data
         )
 
