@@ -32,13 +32,6 @@ class TestDelete(TestCase):
 
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_profile_by_invalid_id(self):
-        profile_id = "Foo"
-        response = self._build_delete_response(profile_id)
-        response.render()
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
 
 class TestGetRetrieve(TestCase):
     def setUp(self):
@@ -57,13 +50,6 @@ class TestGetRetrieve(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual(profile.first_name, model_data.get("first_name"))
         self.assertEqual(profile.last_name, model_data.get("last_name"))
-
-    def test_get_profile_by_invalid_id(self):
-        profile_id = "Foo"
-        request = self.factory.get(PROFILE_URL, format="json")
-        response = self.get_by_id_view(request, profile_id=profile_id)
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestGetList(TestCase):
@@ -114,17 +100,6 @@ class TestPatch(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
-
-    def test_partial_update_profile_by_invalid_id(self):
-        request = self.factory.patch(
-            PROFILE_URL,
-            {"first_name": "Fooupdated"},
-            format="json"
-        )
-        response = self.view(request, profile_id="Foo")
-        response.render()
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestPost(TestCase):
@@ -181,15 +156,3 @@ class TestPut(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
-
-    def test_update_profile_by_invalid_id(self):
-        request = self.factory.put(
-            PROFILE_URL,
-            SAMPLE_PROFILE,
-            format="json"
-        )
-        response = self.view(request, profile_id="Foo")
-        response.render()
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
