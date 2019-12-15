@@ -2,6 +2,7 @@ import json
 from unittest.mock import patch, Mock
 from uuid import UUID
 
+import requests
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
@@ -116,7 +117,6 @@ class TestGetList(TestCase):
             self.assertIn("trefle_id", plant)
 
 
-# TODO: Test for creating a plant but trefle down.
 class TestPost(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -163,6 +163,19 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
+
+    @patch("requests.get")
+    def test_create_plant_trefle_down(self, mock_trefle):
+        mock_trefle.side_effect = requests.ConnectionError
+        payload = {"plant_name": "common woolly sunflower", "garden": str(TEST_GARDEN.garden_id)}
+        response = self._build_post_response(payload)
+        response.render()
+
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
+        self.assertEquals(
+            {"Message": "Encouragemint can't create plants right now. Try again later."},
+            response.data
+        )
 
 
 class TestPut(TestCase):

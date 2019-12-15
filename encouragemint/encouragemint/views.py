@@ -1,12 +1,13 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
+from rest_framework.status import HTTP_201_CREATED, HTTP_500_INTERNAL_SERVER_ERROR
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
     NewPlantRequestSerializer)
 from encouragemint.lib.trefle.trefle import TrefleAPI
+from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -34,7 +35,14 @@ class PlantViewSet(viewsets.ModelViewSet):
         return PlantSerializer
 
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        new_plant = self._lookup_plant()
+        try:
+            new_plant = self._lookup_plant()
+        except TrefleConnectionError:
+            return Response(
+                {"Message": "Encouragemint can't create plants right now. Try again later."},
+                status=HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
         serializer = PlantSerializer(data=new_plant)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
