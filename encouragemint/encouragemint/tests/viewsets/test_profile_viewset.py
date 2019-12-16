@@ -131,7 +131,11 @@ class TestPatch(TestCase):
             {"first_name": ["Your first name can only contain letters."]}
         )
 
-        # TODO Add bad ID test
+    def test_partial_update_profile_by_invalid_id(self):
+        request = self.factory.patch(PROFILE_URL, {"first_name": "Foo_updated", "last_name": "Bar"}, format="json")
+        response = self.view(request, profile_id="Foo")
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestPost(TestCase):

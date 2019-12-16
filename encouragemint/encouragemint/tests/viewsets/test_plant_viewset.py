@@ -178,10 +178,15 @@ class TestPost(TestCase):
 
     def test_create_plant_invalid_payload(self):
         payload = self.new_plant_request.copy()
-        payload["plant_name"] = "Foo_updated"
+        payload["plant_name"] = "F00"
         response = self._build_post_response(payload)
+        response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"plant_name": ["A plant's name can only contain letters."]}
+        )
 
     @patch("requests.get")
     def test_create_plant_trefle_down(self, mock_trefle):
@@ -212,8 +217,6 @@ class TestPost(TestCase):
             search_many_matches,
             response.data
         )
-
-    # TODO Add bad request body test
 
 
 class TestPut(TestCase):

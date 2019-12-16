@@ -120,7 +120,7 @@ class TestPatch(TestCase):
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
     def test_partial_update_garden_invalid_payload(self):
-        response = self._build_patch_response({"garden_name": "Foou_pdated"})
+        response = self._build_patch_response({"garden_name": "Foo_ppdated"})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -129,7 +129,11 @@ class TestPatch(TestCase):
             {"garden_name": ["A garden's name can only contain letters."]}
         )
 
-    # TODO Add bad ID test
+    def test_partial_update_garden_by_invalid_id(self):
+        request = self.factory.patch(GARDEN_URL, {"garden_name": "Foo_updated"}, format="json")
+        response = self.view(request, garden_id="Foo")
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestPost(TestCase):
@@ -160,7 +164,15 @@ class TestPost(TestCase):
         self.assertIn("profile", model_data)
         self.assertEqual("Foo", model_data.get("garden_name"))
 
-    # TODO Add bad request test
+    def test_create_garden_invalid_payload(self):
+        response = self._build_post_response({"garden_name": "F00", "profile": str(TEST_PROFILE.profile_id)})
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"garden_name": ["A garden's name can only contain letters."]}
+        )
 
 
 class TestPut(TestCase):
