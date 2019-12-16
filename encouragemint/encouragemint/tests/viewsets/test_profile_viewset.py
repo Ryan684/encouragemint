@@ -14,6 +14,8 @@ SAMPLE_PROFILE = {
 }
 
 
+# TODO Add Viewset parameters test
+
 class TestDelete(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -31,6 +33,13 @@ class TestDelete(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
+    def test_delete_profile_bad_id(self):
+        profile_id = "Foo"
+        response = self.build_delete_response(profile_id)
+        response.render()
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestGetRetrieve(TestCase):
@@ -50,6 +59,13 @@ class TestGetRetrieve(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual(profile.first_name, model_data.get("first_name"))
         self.assertEqual(profile.last_name, model_data.get("last_name"))
+
+    def test_get_profile_by_invalid_id(self):
+        profile_id = "Foo"
+        request = self.factory.get(PROFILE_URL, format="json")
+        response = self.get_by_id_view(request, profile_id=profile_id)
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestGetList(TestCase):
@@ -101,6 +117,18 @@ class TestPatch(TestCase):
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
 
+    def test_partial_update_invalid_payload(self):
+        response = self.build_patch_response({"first_name": "Foo_updated", "last_name": "Bar"})
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"first_name": ["Your first name can only contain letters."]}
+        )
+
+        # TODO Add bad ID test
+
 
 class TestPost(TestCase):
     def setUp(self):
@@ -127,6 +155,16 @@ class TestPost(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual("Foo", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
+
+    def test_create_profile_invalid_payload(self):
+        response = self.build_post_response({"first_name": "F00", "last_name": "Bar"})
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"first_name": ["Your first name can only contain letters."]}
+        )
 
 
 class TestPut(TestCase):
@@ -156,3 +194,25 @@ class TestPut(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
+
+    def test_invalid_first_name(self):
+        response = self.build_put_response({"first_name": "Foo_updated", "last_name": "Bar"})
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"first_name": ["Your first name can only contain letters."]}
+        )
+
+    def test_update_plant_invalid_payload(self):
+        response = self.build_put_response({"first_name": "Foo", "last_name": "Bar_updated"})
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"last_name": ["Your last name can only contain letters."]}
+        )
+
+        # TODO Add bad ID test

@@ -27,6 +27,8 @@ SAMPLE_PLANT = {
 }
 
 
+# TODO Add Viewset parameters test
+
 class TestDelete(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -43,6 +45,12 @@ class TestDelete(TestCase):
         response = self._build_delete_response(plant_id)
         response.render()
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
+    def test_delete_plant_by_invalid_id(self):
+        plant_id = "Foo"
+        response = self._build_delete_response(plant_id)
+        response.render()
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestGetRetrieve(TestCase):
@@ -72,6 +80,8 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
         self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
+
+    # TODO Add bad ID test
 
 
 class TestGetList(TestCase):
@@ -155,6 +165,8 @@ class TestPost(TestCase):
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
+    # TODO Add bad request test
+
     @patch("requests.get")
     def test_create_plant_trefle_down(self, mock_trefle):
         mock_trefle.side_effect = requests.ConnectionError
@@ -184,6 +196,8 @@ class TestPost(TestCase):
             search_many_matches,
             response.data
         )
+
+    # TODO Add bad request body test
 
 
 class TestPut(TestCase):
@@ -246,3 +260,21 @@ class TestPut(TestCase):
             {"Message": "Encouragemint can't update plants right now. Try again later."},
             response.data
         )
+
+    # TODO Add bad request body test
+
+    def test_update_plant_by_invalid_id(self):
+        new_plant_details = SAMPLE_PLANT.copy()
+        new_plant_details["scientific_name"] = "Fooupdated"
+        new_plant_details["garden"] = str(TEST_GARDEN.garden_id)
+
+        request = self.factory.put(
+            PLANT_URL,
+            new_plant_details,
+            format="json"
+        )
+        response = self.view(request, plant_id="Foo")
+        response.render()
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+

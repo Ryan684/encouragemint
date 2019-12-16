@@ -12,6 +12,8 @@ TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"
 SAMPLE_GARDEN = {"garden_name": "Foo"}
 
 
+# TODO Add Viewset parameters test
+
 class TestDelete(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -29,6 +31,13 @@ class TestDelete(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
+    def test_delete_garden_bad_id(self):
+        garden_id = "Foo"
+        response = self.build_delete_response(garden_id)
+        response.render()
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestGetRetrieve(TestCase):
@@ -49,6 +58,13 @@ class TestGetRetrieve(TestCase):
         self.assertIn("plants", model_data)
         self.assertIn("garden_id", model_data)
         self.assertEqual(garden.garden_name, model_data.get("garden_name"))
+
+    def test_get_garden_by_invalid_id(self):
+        garden_id = "Foo"
+        request = self.factory.get(GARDEN_URL, format="json")
+        response = self.get_by_id_view(request, garden_id=garden_id)
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestGetList(TestCase):
@@ -99,6 +115,10 @@ class TestPatch(TestCase):
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
+    # TODO Add bad payload request test
+
+    # TODO Add bad ID test
+
 
 class TestPost(TestCase):
     def setUp(self):
@@ -127,6 +147,8 @@ class TestPost(TestCase):
         self.assertIn("garden_id", model_data)
         self.assertIn("profile", model_data)
         self.assertEqual("Foo", model_data.get("garden_name"))
+
+    # TODO Add bad request test
 
 
 class TestPut(TestCase):
@@ -160,3 +182,7 @@ class TestPut(TestCase):
         self.assertIn("plants", model_data)
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
+
+    # TODO Add invalid ID test
+
+    # TODO Add bad request body test
