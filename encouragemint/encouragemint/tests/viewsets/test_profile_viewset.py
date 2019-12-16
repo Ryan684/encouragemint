@@ -6,6 +6,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.views import ProfileViewSet
 from encouragemint.encouragemint.models import Profile
+from encouragemint.encouragemint.serializers import ProfileSerializer
 
 PROFILE_URL = "/profile/"
 SAMPLE_PROFILE = {
@@ -14,7 +15,12 @@ SAMPLE_PROFILE = {
 }
 
 
-# TODO Add Viewset parameters test
+class TestProfileViewsetParameters(TestCase):
+  def test_viewset_parameters(self):
+      self.assertEqual(["get", "post", "put", "patch", "delete"], ProfileViewSet.http_method_names)
+      self.assertEqual("profile_id", ProfileViewSet.lookup_field)
+      self.assertEqual(ProfileSerializer, ProfileViewSet.serializer_class)
+
 
 class TestDelete(TestCase):
     def setUp(self):
@@ -35,8 +41,7 @@ class TestDelete(TestCase):
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_delete_profile_bad_id(self):
-        profile_id = "Foo"
-        response = self.build_delete_response(profile_id)
+        response = self._build_delete_response("Foo")
         response.render()
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
@@ -61,9 +66,8 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(profile.last_name, model_data.get("last_name"))
 
     def test_get_profile_by_invalid_id(self):
-        profile_id = "Foo"
         request = self.factory.get(PROFILE_URL, format="json")
-        response = self.get_by_id_view(request, profile_id=profile_id)
+        response = self.get_by_id_view(request, profile_id="Foo")
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
@@ -117,8 +121,8 @@ class TestPatch(TestCase):
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
 
-    def test_partial_update_invalid_payload(self):
-        response = self.build_patch_response({"first_name": "Foo_updated", "last_name": "Bar"})
+    def test_partial_update_profile_invalid_payload(self):
+        response = self._build_patch_response({"first_name": "Foo_updated", "last_name": "Bar"})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -157,7 +161,7 @@ class TestPost(TestCase):
         self.assertEqual("Bar", model_data.get("last_name"))
 
     def test_create_profile_invalid_payload(self):
-        response = self.build_post_response({"first_name": "F00", "last_name": "Bar"})
+        response = self._build_post_response({"first_name": "F00", "last_name": "Bar"})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -195,8 +199,8 @@ class TestPut(TestCase):
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
 
-    def test_invalid_first_name(self):
-        response = self.build_put_response({"first_name": "Foo_updated", "last_name": "Bar"})
+    def test_update_profile_invalid_payload(self):
+        response = self._build_put_response({"first_name": "Foo_updated", "last_name": "Bar"})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -205,14 +209,12 @@ class TestPut(TestCase):
             {"first_name": ["Your first name can only contain letters."]}
         )
 
-    def test_update_plant_invalid_payload(self):
-        response = self.build_put_response({"first_name": "Foo", "last_name": "Bar_updated"})
-        response.render()
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertDictEqual(
-            json.loads(response.content.decode("utf-8")),
-            {"last_name": ["Your last name can only contain letters."]}
+    def test_update_profile_by_invalid_id(self):
+        request = self.factory.put(
+            PROFILE_URL,
+            {"first_name": "Fooupdated", "last_name": "Bar"},
+            format="json"
         )
+        response = self.view(request, profile_id="Foo")
 
-        # TODO Add bad ID test
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)

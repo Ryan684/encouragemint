@@ -1,12 +1,14 @@
 import json
 from unittest.mock import patch, Mock
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import requests
+from django.core import exceptions
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
+from encouragemint.encouragemint import models
 from encouragemint.encouragemint.models import Plant, Garden, Profile
 from encouragemint.encouragemint.views import PlantViewSet
 
@@ -27,7 +29,13 @@ SAMPLE_PLANT = {
 }
 
 
-# TODO Add Viewset parameters test
+class TestPlantViewsetParameters(TestCase):
+    def test_viewset_parameters(self):
+        plant_viewset = PlantViewSet
+        self.assertEqual(["get", "post", "put", "delete"], plant_viewset.http_method_names)
+        self.assertEqual("plant_id", plant_viewset.lookup_field)
+        self.assertEqual(None, plant_viewset.serializer_class)
+
 
 class TestDelete(TestCase):
     def setUp(self):
@@ -47,8 +55,7 @@ class TestDelete(TestCase):
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_delete_plant_by_invalid_id(self):
-        plant_id = "Foo"
-        response = self._build_delete_response(plant_id)
+        response = self._build_delete_response("Foo")
         response.render()
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
@@ -261,8 +268,6 @@ class TestPut(TestCase):
             response.data
         )
 
-    # TODO Add bad request body test
-
     def test_update_plant_by_invalid_id(self):
         new_plant_details = SAMPLE_PLANT.copy()
         new_plant_details["scientific_name"] = "Fooupdated"
@@ -273,8 +278,6 @@ class TestPut(TestCase):
             new_plant_details,
             format="json"
         )
-        response = self.view(request, plant_id="Foo")
-        response.render()
 
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
+        self.assertRaises(exceptions.ValidationError, self.view, request, plant_id="Foo")
+        self.assertRaises(models.Plant.DoesNotExist, self.view, request, plant_id=uuid4())

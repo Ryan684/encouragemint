@@ -6,13 +6,19 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Garden, Profile
 from encouragemint.encouragemint.views import GardenViewSet
+from encouragemint.encouragemint.serializers import GardenSerializer
 
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
 SAMPLE_GARDEN = {"garden_name": "Foo"}
 
 
-# TODO Add Viewset parameters test
+class TestGardenViewsetParameters(TestCase):
+    def test_viewset_parameters(self):
+        self.assertEqual(["get", "post", "put", "patch", "delete"], GardenViewSet.http_method_names)
+        self.assertEqual("garden_id", GardenViewSet.lookup_field)
+        self.assertEqual(GardenSerializer, GardenViewSet.serializer_class)
+
 
 class TestDelete(TestCase):
     def setUp(self):
@@ -32,9 +38,8 @@ class TestDelete(TestCase):
 
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_garden_bad_id(self):
-        garden_id = "Foo"
-        response = self.build_delete_response(garden_id)
+    def test_delete_garden_invalid_id(self):
+        response = self._build_delete_response("Foo")
         response.render()
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
@@ -60,9 +65,8 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(garden.garden_name, model_data.get("garden_name"))
 
     def test_get_garden_by_invalid_id(self):
-        garden_id = "Foo"
         request = self.factory.get(GARDEN_URL, format="json")
-        response = self.get_by_id_view(request, garden_id=garden_id)
+        response = self.get_by_id_view(request, garden_id="Foo")
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
@@ -115,7 +119,15 @@ class TestPatch(TestCase):
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
-    # TODO Add bad payload request test
+    def test_partial_update_garden_invalid_payload(self):
+        response = self._build_patch_response({"garden_name": "Foou_pdated"})
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"garden_name": ["A garden's name can only contain letters."]}
+        )
 
     # TODO Add bad ID test
 
@@ -183,6 +195,24 @@ class TestPut(TestCase):
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
 
-    # TODO Add invalid ID test
+    def test_update_garden_invalid_payload(self):
+        response = self._build_put_response({"garden_name": "Foo_updated", "profile": str(TEST_PROFILE.profile_id)})
+        response.render()
 
-    # TODO Add bad request body test
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertDictEqual(
+            json.loads(response.content.decode("utf-8")),
+            {"garden_name": ["A garden's name can only contain letters."]}
+        )
+
+    def test_update_garden_by_invalid_id(self):
+        request = self.factory.put(
+            GARDEN_URL,
+            {"garden_name": "Fooupdated", "profile": str(TEST_PROFILE.profile_id)},
+            format="json"
+        )
+        response = self.view(request, garden_id="Foo")
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+
