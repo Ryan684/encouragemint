@@ -34,6 +34,8 @@ class PlantViewSet(viewsets.ModelViewSet):
         return PlantSerializer
 
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        serializer = NewPlantRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         plant_name_query = request.data["plant_name"]
 
         try:

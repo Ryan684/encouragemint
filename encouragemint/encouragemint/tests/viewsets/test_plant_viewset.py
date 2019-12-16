@@ -88,7 +88,11 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
-    # TODO Add bad ID test
+    def test_get_plant_by_invalid_id(self):
+        request = self.factory.get(PLANT_URL, format="json")
+        response = self.get_by_id_view(request, plant_id="Foo")
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
 class TestGetList(TestCase):
@@ -172,7 +176,12 @@ class TestPost(TestCase):
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
-    # TODO Add bad request test
+    def test_create_plant_invalid_payload(self):
+        payload = self.new_plant_request.copy()
+        payload["plant_name"] = "Foo_updated"
+        response = self._build_post_response(payload)
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     @patch("requests.get")
     def test_create_plant_trefle_down(self, mock_trefle):
