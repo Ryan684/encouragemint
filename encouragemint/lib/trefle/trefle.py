@@ -64,8 +64,7 @@ class TrefleAPI:
         return requests.get(
             url=url,
             headers=self.HEADERS,
-            params=parameters,
-            verify=False
+            params=parameters
         )
 
     def _extract_plant_data(self, plant):  # pylint: disable=no-self-use
