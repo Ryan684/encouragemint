@@ -16,6 +16,7 @@ def get_mock_json_file(file_path):
 class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
+        self.trefle.TOKEN = "Foo"
         self.search_single_match = get_mock_json_file(
             "encouragemint/lib/trefle/tests/test_responses/plant_search_one_match.json")
         self.search_many_matches = get_mock_json_file(

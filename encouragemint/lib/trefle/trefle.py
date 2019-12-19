@@ -7,6 +7,7 @@ from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 class TrefleAPI:
     PLANTS_ENDPOINT = "http://trefle.io/api/plants/"
     HEADERS = {"content-type": "application/json"}
+    TOKEN = settings.TREFLE_API_KEY
 
     def lookup_plants_by_scientific_name(self, plant_name):
         return self._lookup_plants("scientific_name", plant_name)
@@ -43,9 +44,9 @@ class TrefleAPI:
             self._compile_url(results[0].get("id"))
         ).json()
 
-    def _compile_parameters(self, key=None, value=None):  # pylint: disable=no-self-use
+    def _compile_parameters(self, key=None, value=None):
         parameters = {
-            "token": settings.TREFLE_API_KEY
+            "token": self.TOKEN
         }
 
         if key and value:
