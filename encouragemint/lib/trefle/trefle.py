@@ -1,11 +1,12 @@
 import requests
+from django.conf import settings
+
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 
 class TrefleAPI:
     PLANTS_ENDPOINT = "http://trefle.io/api/plants/"
     HEADERS = {"content-type": "application/json"}
-    TOKEN = "aUF2TXNmazZhbENpTCtJWkhqTUIvUT09"
 
     def lookup_plants_by_scientific_name(self, plant_name):
         return self._lookup_plants("scientific_name", plant_name)
@@ -22,8 +23,8 @@ class TrefleAPI:
                 return self._extract_plant_data(plant)
 
             return results
-        except requests.ConnectionError as error:
-            raise TrefleConnectionError(error)
+        except requests.ConnectionError:
+            raise TrefleConnectionError()
 
     def _lookup_plants_by_name(self, name_key, plant_name):
         results = self._send_trefle_request(
@@ -44,7 +45,7 @@ class TrefleAPI:
 
     def _compile_parameters(self, key=None, value=None):
         parameters = {
-            "token": self.TOKEN
+            "token": settings.TREFLE_API_KEY
         }
 
         if key and value:

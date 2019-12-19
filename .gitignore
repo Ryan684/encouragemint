@@ -2,3 +2,4 @@ encouragemint.iml
 .idea/
 db.sqlite3
 .coverage
+encouragemint/settings/local_settings.py

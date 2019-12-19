@@ -25,8 +25,14 @@ SECRET_KEY = '=%j0^@01(s-h5g7=rba&3j%&-h=u*ypjqpfth6l8(u+*m-#q^t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Import local_settings file not checked into GIT (I.E, external API keys).
+try:
+    from encouragemint.settings.local_settings import *
+except ImportError:
+    pass  # No local_settings file
+
 ALLOWED_HOSTS = [
-    '0.0.0.0'
+    '127.0.0.1'
 ]
 
 # Application definition
