@@ -1,7 +1,7 @@
 import json
 from unittest.mock import patch, Mock
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from requests.exceptions import ConnectionError
 
 from encouragemint.lib.trefle.trefle import TrefleAPI
@@ -13,6 +13,7 @@ def get_mock_json_file(file_path):
         return json.load(file)
 
 
+@override_settings(TREFLE_API_KEY="Foo")
 class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
@@ -24,9 +25,7 @@ class TestTrefle(TestCase):
             "encouragemint/lib/trefle/tests/test_responses/id_search_response.json")
 
     @patch("requests.get")
-    @patch("encouragemint.lib.trefle.trefle.settings")
-    def test_trefle_unreachable(self, mock_settings, mock_get):
-        mock_settings.TREFLE_API_KEY.return_value = "Foo"
+    def test_trefle_unreachable(self, mock_get):
         mock_get.side_effect = ConnectionError
         self.assertRaises(
             TrefleConnectionError,
@@ -34,9 +33,7 @@ class TestTrefle(TestCase):
         )
 
     @patch("requests.get")
-    @patch("encouragemint.lib.trefle.trefle.settings")
-    def test_search_plants_one_result(self, mock_settings, mock_get):
-        mock_settings.TREFLE_API_KEY.return_value = "Foo"
+    def test_search_plants_one_result(self, mock_get):
         mock_responses = [Mock(), Mock()]
         mock_responses[0].json.return_value = self.search_single_match
         mock_responses[1].json.return_value = self.id_search
@@ -48,9 +45,7 @@ class TestTrefle(TestCase):
         self._validate_plant(response)
 
     @patch("requests.get")
-    @patch("encouragemint.lib.trefle.trefle.settings")
-    def test_search_plants_many_results(self, mock_settings, mock_get):
-        mock_settings.TREFLE_API_KEY.return_value = "Foo"
+    def test_search_plants_many_results(self, mock_get):
         mock_get.return_value = self.search_many_matches
 
         search_term = "grass"
@@ -59,9 +54,7 @@ class TestTrefle(TestCase):
         self.assertEquals(self.search_many_matches, response)
 
     @patch("requests.get")
-    @patch("encouragemint.lib.trefle.trefle.settings")
-    def test_lookup_plant_by_scientific_name(self, mock_settings, mock_get):
-        mock_settings.TREFLE_API_KEY.return_value = "Foo"
+    def test_lookup_plant_by_scientific_name(self, mock_get):
         mock_responses = [Mock(), Mock()]
         mock_responses[0].json.return_value = self.search_single_match
         mock_responses[1].json.return_value = self.id_search
