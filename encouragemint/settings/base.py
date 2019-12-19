@@ -29,7 +29,7 @@ DEBUG = True
 try:
     from encouragemint.settings.local_settings import *
 except ImportError:
-    TREFLE_API_KEY = ""
+    TREFLE_API_KEY = None
 
 ALLOWED_HOSTS = [
     '127.0.0.1'
