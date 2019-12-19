@@ -1,7 +1,8 @@
 import json
 from unittest.mock import patch, Mock
 
-from django.test import TestCase, override_settings
+from django.conf import settings
+from django.test import TestCase
 from requests.exceptions import ConnectionError
 
 from encouragemint.lib.trefle.trefle import TrefleAPI
@@ -13,9 +14,9 @@ def get_mock_json_file(file_path):
         return json.load(file)
 
 
-@override_settings(TREFLE_API_KEY="Foo")
 class TestTrefle(TestCase):
     def setUp(self):
+        settings.TREFLE_API_KEY = "Foo"
         self.trefle = TrefleAPI()
         self.search_single_match = get_mock_json_file(
             "encouragemint/lib/trefle/tests/test_responses/plant_search_one_match.json")
