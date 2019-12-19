@@ -43,7 +43,7 @@ class TrefleAPI:
             self._compile_url(results[0].get("id"))
         ).json()
 
-    def _compile_parameters(self, key=None, value=None):
+    def _compile_parameters(self, key=None, value=None):  # pylint: disable=no-self-use
         parameters = {
             "token": settings.TREFLE_API_KEY
         }
