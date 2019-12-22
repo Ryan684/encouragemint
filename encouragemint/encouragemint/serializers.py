@@ -110,7 +110,7 @@ class GardenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Garden
-        fields = ["garden_id", "garden_name", "plants", "profile"]
+        fields = ["garden_id", "garden_name", "plants", "profile", "direction"]
         read_only_fields = ["garden_id", "profile"]
 
     @staticmethod
@@ -119,6 +119,14 @@ class GardenSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "A garden's name can only contain letters.")
         return value
+
+    @staticmethod
+    def validate_direction(value):
+        direction = value.lower()
+        if direction not in ["north", "east", "south", "west"]:
+            raise serializers.ValidationError(
+                "A garden's direction can only be north, east, south or west.")
+        return direction
 
 
 class ProfileSerializer(serializers.ModelSerializer):

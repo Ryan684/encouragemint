@@ -10,7 +10,7 @@ from encouragemint.encouragemint.serializers import GardenSerializer
 
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
-SAMPLE_GARDEN = {"garden_name": "Foo"}
+SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north"}
 
 
 class TestGardenViewsetParameters(TestCase):
@@ -61,8 +61,10 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         self.assertIn("plants", model_data)
+        self.assertIn("profile", model_data)
         self.assertIn("garden_id", model_data)
         self.assertEqual(garden.garden_name, model_data.get("garden_name"))
+        self.assertEqual(garden.direction, model_data.get("direction"))
 
     def test_get_garden_by_invalid_id(self):
         request = self.factory.get(GARDEN_URL, format="json")
@@ -77,8 +79,8 @@ class TestGetList(TestCase):
         self.get_all_view = GardenViewSet.as_view({"get": "list"})
 
     def test_get_all_gardens(self):
-        Garden.objects.create(**{"garden_name": "Fooflower"}, profile=TEST_PROFILE)
-        Garden.objects.create(**{"garden_name": "Barflower"}, profile=TEST_PROFILE)
+        Garden.objects.create(**{"garden_name": "Fooflower", "direction": "north"}, profile=TEST_PROFILE)
+        Garden.objects.create(**{"garden_name": "Barflower", "direction": "north"}, profile=TEST_PROFILE)
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_all_view(request)
         response.render()
@@ -86,10 +88,12 @@ class TestGetList(TestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-        for plant in model_data:
-            self.assertIn("plants", plant)
-            self.assertIn("garden_id", plant)
-            self.assertIn("garden_name", plant)
+        for garden in model_data:
+            self.assertIn("plants", garden)
+            self.assertIn("profile", garden)
+            self.assertIn("garden_id", garden)
+            self.assertIn("garden_name", garden)
+            self.assertIn("direction", garden)
 
 
 class TestPatch(TestCase):
@@ -109,7 +113,7 @@ class TestPatch(TestCase):
         return response
 
     def test_partial_update_garden(self):
-        response = self._build_patch_response({"garden_name": "Fooupdated"})
+        response = self._build_patch_response({"garden_name": "Fooupdated", "direction": "north"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -117,10 +121,12 @@ class TestPatch(TestCase):
 
         self.assertIn("plants", model_data)
         self.assertIn("garden_id", model_data)
+        self.assertIn("profile", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
+        self.assertEqual("north", model_data.get("direction"))
 
     def test_partial_update_garden_invalid_payload(self):
-        response = self._build_patch_response({"garden_name": "Foo_ppdated"})
+        response = self._build_patch_response({"garden_name": "Foo_updated", "direction": "north"})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -130,7 +136,7 @@ class TestPatch(TestCase):
         )
 
     def test_partial_update_garden_by_invalid_id(self):
-        request = self.factory.patch(GARDEN_URL, {"garden_name": "Foo_updated"}, format="json")
+        request = self.factory.patch(GARDEN_URL, {"garden_name": "Foo_updated", "direction": "north"}, format="json")
         response = self.view(request, garden_id="Foo")
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
@@ -162,10 +168,12 @@ class TestPost(TestCase):
         self.assertIn("plants", model_data)
         self.assertIn("garden_id", model_data)
         self.assertIn("profile", model_data)
-        self.assertEqual("Foo", model_data.get("garden_name"))
+        self.assertEqual(SAMPLE_GARDEN.get("garden_name"), model_data.get("garden_name"))
+        self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
 
     def test_create_garden_invalid_payload(self):
-        response = self._build_post_response({"garden_name": "F00", "profile": str(TEST_PROFILE.profile_id)})
+        response = self._build_post_response(
+            {"garden_name": "F00", "direction": "north", "profile": str(TEST_PROFILE.profile_id)})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -204,11 +212,14 @@ class TestPut(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         self.assertIn("plants", model_data)
+        self.assertIn("profile", model_data)
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
+        self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
 
     def test_update_garden_invalid_payload(self):
-        response = self._build_put_response({"garden_name": "Foo_updated", "profile": str(TEST_PROFILE.profile_id)})
+        response = self._build_put_response(
+            {"garden_name": "Foo_updated", "direction": "north", "profile": str(TEST_PROFILE.profile_id)})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -220,7 +231,7 @@ class TestPut(TestCase):
     def test_update_garden_by_invalid_id(self):
         request = self.factory.put(
             GARDEN_URL,
-            {"garden_name": "Fooupdated", "profile": str(TEST_PROFILE.profile_id)},
+            {"garden_name": "Fooupdated", "direction": "north", "profile": str(TEST_PROFILE.profile_id)},
             format="json"
         )
         response = self.view(request, garden_id="Foo")

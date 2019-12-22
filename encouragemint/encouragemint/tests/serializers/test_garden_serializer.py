@@ -14,7 +14,7 @@ class TestGardenSerializerValidators(TestCase):
 
 class TestSerializerParameters(TestGardenSerializerValidators):
     def test_serializer_parameters(self):
-        self.assertEquals(["garden_id", "garden_name", "plants", "profile"], self.test_obj.Meta.fields)
+        self.assertEquals(["garden_id", "garden_name", "plants", "profile", "direction"], self.test_obj.Meta.fields)
         self.assertEquals(["garden_id", "profile"], self.test_obj.Meta.read_only_fields)
         self.assertEquals(Garden, self.test_obj.Meta.model)
 
@@ -35,4 +35,23 @@ class TestValidateGardenName(TestGardenSerializerValidators):
             f"A garden's name can only contain letters.",
             self.test_obj.validate_garden_name,
             garden_name
+        )
+
+
+class TestValidateFacingDirection(TestGardenSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidateFacingDirection, cls).setUpClass()
+
+    def test_valid_direction(self):
+        direction = "north"
+        self.assertEqual(direction, self.test_obj.validate_direction(direction))
+
+    def test_invalid_direction(self):
+        direction = "down"
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            f"A garden's direction can only be north, east, south or west.",
+            self.test_obj.validate_direction,
+            direction
         )

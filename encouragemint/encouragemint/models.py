@@ -13,6 +13,7 @@ class Garden(models.Model):
     garden_id = models.UUIDField(default=uuid.uuid4)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="gardens")
     garden_name = models.CharField(max_length=25)
+    direction = models.CharField(max_length=5)
 
 
 class Plant(models.Model):
