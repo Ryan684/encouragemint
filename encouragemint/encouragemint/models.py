@@ -15,6 +15,20 @@ class Garden(models.Model):
     garden_name = models.CharField(max_length=25)
     direction = models.CharField(max_length=5)
 
+    # def save(self, *args, **kwargs):
+    #     self.set_sunlight()
+    #     print(self.sunlight)
+    #     super(Garden, self).save(*args, **kwargs)
+
+    @property
+    def sunlight(self):
+        if self.direction == "north":
+            return "low"
+        elif self.direction == "south":
+            return "high"
+        elif self.direction in ["west", "east"]:
+            return "medium"
+
 
 class Plant(models.Model):
     plant_id = models.UUIDField(default=uuid.uuid4)

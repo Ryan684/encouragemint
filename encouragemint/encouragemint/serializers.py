@@ -107,10 +107,11 @@ class PlantSerializer(serializers.ModelSerializer):
 class GardenSerializer(serializers.ModelSerializer):
     profile = serializers.SlugRelatedField(slug_field="profile_id", queryset=Profile.objects.all())
     plants = PlantSerializer(many=True, read_only=True)
+    sunlight = serializers.ReadOnlyField()
 
     class Meta:
         model = Garden
-        fields = ["garden_id", "garden_name", "plants", "profile", "direction"]
+        fields = ["garden_id", "garden_name", "plants", "profile", "direction", "sunlight"]
         read_only_fields = ["garden_id", "profile"]
 
     @staticmethod

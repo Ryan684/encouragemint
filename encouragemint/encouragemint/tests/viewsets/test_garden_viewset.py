@@ -13,6 +13,7 @@ TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"
 SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north"}
 
 
+# TODO check tests for sunlight
 class TestGardenViewsetParameters(TestCase):
     def test_viewset_parameters(self):
         self.assertEqual(["get", "post", "put", "patch", "delete"], GardenViewSet.http_method_names)
