@@ -43,7 +43,7 @@ class PlantViewSet(viewsets.ModelViewSet):
             result = self._lookup_plant(plant_name_query, "common_name")
         except TrefleConnectionError:
             return Response(
-                {"Message": "Encouragemint can't create plants right now. Try again later."},
+                {"Message": "Encouragemint can't add new plants right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

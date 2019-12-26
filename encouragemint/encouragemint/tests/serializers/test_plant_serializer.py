@@ -36,7 +36,7 @@ class TestValidateScientificName(TestPlantSerializerValidators):
         scientific_name = "Rose*123"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's scientific name can only contain letters.",
+            f"Invalid entry for the plant's scientific name.",
             self.test_obj.validate_scientific_name,
             scientific_name
         )
@@ -55,7 +55,7 @@ class TestValidateDuration(TestPlantSerializerValidators):
         duration = "Perennial_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's duration can only contain letters.",
+            f"Invalid entry for the plant's duration.",
             self.test_obj.validate_duration,
             duration
         )
@@ -74,7 +74,7 @@ class TestValidateBloomPeriod(TestPlantSerializerValidators):
         bloom_period = "Mid_summer"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's bloom period can only contain letters.",
+            f"Invalid entry for the plant's bloom period.",
             self.test_obj.validate_bloom_period,
             bloom_period
         )
@@ -93,7 +93,7 @@ class TestValidateGrowthPeriod(TestPlantSerializerValidators):
         growth_period = "Spring_Summer"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's growth period can only contain letters.",
+            f"Invalid entry for the plant's growth period.",
             self.test_obj.validate_growth_period,
             growth_period
         )
@@ -112,7 +112,7 @@ class TestValidateGrowthRate(TestPlantSerializerValidators):
         growth_rate = "Slow_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's growth rate can only contain letters.",
+            f"Invalid entry for the plant's growth rate.",
             self.test_obj.validate_growth_rate,
             growth_rate
         )
@@ -131,7 +131,7 @@ class TestValidateShadeTolerance(TestPlantSerializerValidators):
         shade_tolerance = "Intolerant_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's shade tolerance can only contain letters.",
+            f"Invalid entry for the plant's shade tolerance.",
             self.test_obj.validate_shade_tolerance,
             shade_tolerance
         )
@@ -150,7 +150,7 @@ class TestValidateMoistureUse(TestPlantSerializerValidators):
         moisture_use = "Medium_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's moisture use can only contain letters.",
+            f"Invalid entry for the plant's moisture use.",
             self.test_obj.validate_moisture_use,
             moisture_use
         )
@@ -165,11 +165,11 @@ class TestValidateFamilyName(TestPlantSerializerValidators):
         family_name = "Rose Bushes"
         self.assertEqual(family_name, self.test_obj.validate_family_common_name(family_name))
 
-    def test_invalid_family_name(self):
+    def test_invalid_family_common_name(self):
         family_name = "Rose*Bushes"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's family common name can only contain letters.",
+            f"Invalid entry for the plant's family common name.",
             self.test_obj.validate_family_common_name,
             family_name
         )
@@ -188,7 +188,7 @@ class TestValidateTrefleID(TestPlantSerializerValidators):
         trefle_id = "123"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's Trefle ID can only contain numbers.",
+            f"Invalid entry for the plant's Trefle ID.",
             self.test_obj.validate_trefle_id,
             trefle_id
         )
@@ -207,7 +207,7 @@ class TestValidateCommonName(TestPlantSerializerValidators):
         common_name = "Rose*Bush"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A plant's common name can only contain letters.",
+            f"Invalid entry for the plant's common name.",
             self.test_obj.validate_common_name,
             common_name
         )

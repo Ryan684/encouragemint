@@ -197,7 +197,7 @@ class TestPost(TestCase):
 
         self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
         self.assertEquals(
-            {"Message": "Encouragemint can't create plants right now. Try again later."},
+            {"Message": "Encouragemint can't add new plants right now. Try again later."},
             response.data
         )
 

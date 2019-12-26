@@ -33,7 +33,8 @@ class TestValidateGardenName(TestGardenSerializerValidators):
         garden_name = "Backyard_123"
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A garden's name can only contain letters.",
+            f"Invalid entry for the garden's name. "
+            f"A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes.",
             self.test_obj.validate_garden_name,
             garden_name
         )

@@ -31,7 +31,7 @@ class PlantSerializer(serializers.ModelSerializer):
     def validate_scientific_name(value):
         if re.fullmatch(r"^[a-zA-Z\-\s.']+$", value) is None:
             raise serializers.ValidationError(
-                "A plant's scientific name can only contain letters.")
+                "Invalid entry for the plant's scientific name.")
         return value
 
     @staticmethod
@@ -39,7 +39,7 @@ class PlantSerializer(serializers.ModelSerializer):
         if value:
             if re.fullmatch(r"^[a-zA-Z,\s]+$", value) is None:
                 raise serializers.ValidationError(
-                    "A plant's duration can only contain letters.")
+                    "Invalid entry for the plant's duration.")
         return value
 
     @staticmethod
@@ -47,7 +47,7 @@ class PlantSerializer(serializers.ModelSerializer):
         if value:
             if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
                 raise serializers.ValidationError(
-                    "A plant's bloom period can only contain letters.")
+                    "Invalid entry for the plant's bloom period.")
         return value
 
     @staticmethod
@@ -55,7 +55,7 @@ class PlantSerializer(serializers.ModelSerializer):
         if value:
             if re.fullmatch(r"^[a-zA-Z\s,]+$", value) is None:
                 raise serializers.ValidationError(
-                    "A plant's growth period can only contain letters.")
+                    "Invalid entry for the plant's growth period.")
         return value
 
     @staticmethod
@@ -63,7 +63,7 @@ class PlantSerializer(serializers.ModelSerializer):
         if value:
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
                 raise serializers.ValidationError(
-                    "A plant's growth rate can only contain letters.")
+                    "Invalid entry for the plant's growth rate.")
         return value
 
     @staticmethod
@@ -71,7 +71,7 @@ class PlantSerializer(serializers.ModelSerializer):
         if value:
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
                 raise serializers.ValidationError(
-                    "A plant's shade tolerance can only contain letters.")
+                    "Invalid entry for the plant's shade tolerance.")
         return value
 
     @staticmethod
@@ -79,28 +79,28 @@ class PlantSerializer(serializers.ModelSerializer):
         if value:
             if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
                 raise serializers.ValidationError(
-                    "A plant's moisture use can only contain letters.")
+                    "Invalid entry for the plant's moisture use.")
         return value
 
     @staticmethod
     def validate_common_name(value):
         if re.fullmatch(r"^[a-zA-Z\-\s']+$", value) is None:
             raise serializers.ValidationError(
-                "A plant's common name can only contain letters.")
+                "Invalid entry for the plant's common name.")
         return value
 
     @staticmethod
     def validate_family_common_name(value):
         if re.fullmatch(r"^[a-zA-Z\-\s']+$", value) is None:
             raise serializers.ValidationError(
-                "A plant's family common name can only contain letters.")
+                "Invalid entry for the plant's family common name.")
         return value
 
     @staticmethod
     def validate_trefle_id(value):
         if not isinstance(value, int):
             raise serializers.ValidationError(
-                "A plant's Trefle ID can only contain numbers.")
+                "Invalid entry for the plant's Trefle ID.")
         return value
 
 
@@ -116,9 +116,10 @@ class GardenSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_garden_name(value):
-        if re.fullmatch(r"^[a-zA-Z\-\s']+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z0-9\-\s']+$", value) is None:
             raise serializers.ValidationError(
-                "A garden's name can only contain letters.")
+                "Invalid entry for the garden's name. "
+                "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes.")
         return value
 
     @staticmethod

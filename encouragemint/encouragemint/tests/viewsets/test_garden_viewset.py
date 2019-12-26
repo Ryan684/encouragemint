@@ -136,7 +136,8 @@ class TestPatch(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["A garden's name can only contain letters."]}
+            {"garden_name": ["Invalid entry for the garden's name. "
+                             "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes."]}
         )
 
     def test_partial_update_garden_by_invalid_id(self):
@@ -178,13 +179,14 @@ class TestPost(TestCase):
 
     def test_create_garden_invalid_payload(self):
         response = self._build_post_response(
-            {"garden_name": "F00", "direction": "north", "profile": str(TEST_PROFILE.profile_id)})
+            {"garden_name": "F00$", "direction": "north", "profile": str(TEST_PROFILE.profile_id)})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["A garden's name can only contain letters."]}
+            {"garden_name": ["Invalid entry for the garden's name. "
+                             "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes."]}
         )
 
 
@@ -231,7 +233,8 @@ class TestPut(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["A garden's name can only contain letters."]}
+            {"garden_name": ["Invalid entry for the garden's name. "
+                             "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes."]}
         )
 
     def test_update_garden_by_invalid_id(self):
