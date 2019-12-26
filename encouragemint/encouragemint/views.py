@@ -27,6 +27,7 @@ class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()
     lookup_field = "plant_id"
     http_method_names = ["get", "post", "put", "delete"]
+    trefle = TrefleAPI()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -80,9 +81,9 @@ class PlantViewSet(viewsets.ModelViewSet):
 
     def _lookup_plant(self, plant_name, query, garden=None):
         if query == "scientific_name":
-            result = TrefleAPI().lookup_plants_by_scientific_name(plant_name)
+            result = self.trefle.lookup_plants_by_scientific_name(plant_name)
         else:
-            result = TrefleAPI().lookup_plants_by_expected_name(plant_name)
+            result = self.trefle.lookup_plants_by_expected_name(plant_name)
 
         if isinstance(result, dict):
             if not garden:
