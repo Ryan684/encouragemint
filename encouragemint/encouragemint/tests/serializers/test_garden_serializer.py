@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 from django.test import TestCase
 from rest_framework import serializers
 

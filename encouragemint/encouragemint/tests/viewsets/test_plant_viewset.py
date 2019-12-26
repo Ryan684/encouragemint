@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 import json
 from unittest.mock import patch, Mock
 from uuid import UUID, uuid4
