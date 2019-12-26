@@ -1,26 +1,2 @@
-# encouragemint
-
-MVP:
-
-POST plants
-   - query takes plant name & garden as params and optional variety argument:
-   - queries against trefle for that query plant name
-   - if one response:
-        - get plant_id from json object, load that.
-            - if more than one variety:
-                    if variety != none:
-                        lookup variety by variety input:
-                            if one result:
-                                turn it into a model.
-            return list of possible varieties
-     else…
-	return list of potential plants.
-
-
-Future?
-
-POST plants:
- - takes garden_id, loads garden details, makes suggestions based on environment.
-
-- MVP slice - garden position (south facing etc). Make recommendation based on light requirements/shade?
-
+MVP - recommend plants based on sunlight (Trefle client tweaks to query by shade tolerance etc)
+MVP2 - recommend plants based on soil richness/similar (gardens in regions with more acidic soil will see better results from plants with acidic soil requirements and reverse)
