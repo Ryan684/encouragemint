@@ -118,8 +118,8 @@ class GardenSerializer(serializers.ModelSerializer):
     def validate_garden_name(value):
         if re.fullmatch(r"^[a-zA-Z0-9\-\s']+$", value) is None:
             raise serializers.ValidationError(
-                "Invalid entry for the garden's name. "
-                "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes.")
+                "Invalid entry for the garden's name. A garden's name can only "
+                "contain letters, numbers, hyphens, spaces and apostrophes.")
         return value
 
     @staticmethod
