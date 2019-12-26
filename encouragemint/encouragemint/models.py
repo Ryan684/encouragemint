@@ -19,7 +19,7 @@ class Garden(models.Model):
     def sunlight(self):
         if self.direction == "north":
             return "low"
-        elif self.direction == "south":
+        if self.direction == "south":
             return "high"
         return "medium"
 
