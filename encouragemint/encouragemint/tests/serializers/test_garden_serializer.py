@@ -39,10 +39,10 @@ class TestValidateGardenName(TestGardenSerializerValidators):
         )
 
 
-class TestValidateFacingDirection(TestGardenSerializerValidators):
+class TestValidateDirection(TestGardenSerializerValidators):
     @classmethod
     def setUpClass(cls):
-        super(TestValidateFacingDirection, cls).setUpClass()
+        super(TestValidateDirection, cls).setUpClass()
 
     def test_valid_direction(self):
         direction = "north"

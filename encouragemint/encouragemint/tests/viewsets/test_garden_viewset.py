@@ -11,9 +11,9 @@ from encouragemint.encouragemint.serializers import GardenSerializer
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
 SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north"}
+SAMPLE_GARDEN_SUNLIGHT = "low"
 
 
-# TODO check tests for sunlight
 class TestGardenViewsetParameters(TestCase):
     def test_viewset_parameters(self):
         self.assertEqual(["get", "post", "put", "patch", "delete"], GardenViewSet.http_method_names)
@@ -66,6 +66,7 @@ class TestGetRetrieve(TestCase):
         self.assertIn("garden_id", model_data)
         self.assertEqual(garden.garden_name, model_data.get("garden_name"))
         self.assertEqual(garden.direction, model_data.get("direction"))
+        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
 
     def test_get_garden_by_invalid_id(self):
         request = self.factory.get(GARDEN_URL, format="json")
@@ -95,6 +96,7 @@ class TestGetList(TestCase):
             self.assertIn("garden_id", garden)
             self.assertIn("garden_name", garden)
             self.assertIn("direction", garden)
+            self.assertIn("sunlight", garden)
 
 
 class TestPatch(TestCase):
@@ -125,6 +127,7 @@ class TestPatch(TestCase):
         self.assertIn("profile", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
         self.assertEqual("north", model_data.get("direction"))
+        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
 
     def test_partial_update_garden_invalid_payload(self):
         response = self._build_patch_response({"garden_name": "Foo_updated", "direction": "north"})
@@ -171,6 +174,7 @@ class TestPost(TestCase):
         self.assertIn("profile", model_data)
         self.assertEqual(SAMPLE_GARDEN.get("garden_name"), model_data.get("garden_name"))
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
+        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
 
     def test_create_garden_invalid_payload(self):
         response = self._build_post_response(
@@ -217,6 +221,7 @@ class TestPut(TestCase):
         self.assertIn("garden_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
+        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
 
     def test_update_garden_invalid_payload(self):
         response = self._build_put_response(
