@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Garden, Profile
-from encouragemint.encouragemint.views import GardenViewSet
 from encouragemint.encouragemint.serializers import GardenSerializer
+from encouragemint.encouragemint.views import GardenViewSet
 
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})

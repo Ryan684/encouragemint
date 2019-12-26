@@ -3,8 +3,8 @@
 from django.test import TestCase
 from rest_framework import serializers
 
-from encouragemint.encouragemint.serializers import GardenSerializer
 from encouragemint.encouragemint.models import Garden, Profile
+from encouragemint.encouragemint.serializers import GardenSerializer
 
 
 class TestGardenSerializerValidators(TestCase):

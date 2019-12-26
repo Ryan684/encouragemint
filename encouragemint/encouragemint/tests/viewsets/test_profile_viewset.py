@@ -6,9 +6,9 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from encouragemint.encouragemint.views import ProfileViewSet
 from encouragemint.encouragemint.models import Profile
 from encouragemint.encouragemint.serializers import ProfileSerializer
+from encouragemint.encouragemint.views import ProfileViewSet
 
 PROFILE_URL = "/profile/"
 SAMPLE_PROFILE = {
