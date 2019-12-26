@@ -18,10 +18,10 @@ SAMPLE_PROFILE = {
 
 
 class TestProfileViewsetParameters(TestCase):
-  def test_viewset_parameters(self):
-      self.assertEqual(["get", "post", "put", "patch", "delete"], ProfileViewSet.http_method_names)
-      self.assertEqual("profile_id", ProfileViewSet.lookup_field)
-      self.assertEqual(ProfileSerializer, ProfileViewSet.serializer_class)
+    def test_viewset_parameters(self):
+        self.assertEqual(["get", "post", "put", "patch", "delete"], ProfileViewSet.http_method_names)
+        self.assertEqual("profile_id", ProfileViewSet.lookup_field)
+        self.assertEqual(ProfileSerializer, ProfileViewSet.serializer_class)
 
 
 class TestDelete(TestCase):
@@ -134,7 +134,8 @@ class TestPatch(TestCase):
         )
 
     def test_partial_update_profile_by_invalid_id(self):
-        request = self.factory.patch(PROFILE_URL, {"first_name": "Foo_updated", "last_name": "Bar"}, format="json")
+        request = self.factory.patch(
+            PROFILE_URL, {"first_name": "Foo_updated", "last_name": "Bar"}, format="json")
         response = self.view(request, profile_id="Foo")
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)

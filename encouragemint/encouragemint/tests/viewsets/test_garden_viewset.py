@@ -83,8 +83,10 @@ class TestGetList(TestCase):
         self.get_all_view = GardenViewSet.as_view({"get": "list"})
 
     def test_get_all_gardens(self):
-        Garden.objects.create(**{"garden_name": "Fooflower", "direction": "north"}, profile=TEST_PROFILE)
-        Garden.objects.create(**{"garden_name": "Barflower", "direction": "north"}, profile=TEST_PROFILE)
+        Garden.objects.create(
+            **{"garden_name": "Fooflower", "direction": "north"}, profile=TEST_PROFILE)
+        Garden.objects.create(
+            **{"garden_name": "Barflower", "direction": "north"}, profile=TEST_PROFILE)
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_all_view(request)
         response.render()
@@ -138,12 +140,17 @@ class TestPatch(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["Invalid entry for the garden's name. "
-                             "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes."]}
+            {
+                "garden_name": [
+                    "Invalid entry for the garden's name. A garden's name can "
+                    "only contain letters, numbers, hyphens, spaces and apostrophes."
+                ]
+            }
         )
 
     def test_partial_update_garden_by_invalid_id(self):
-        request = self.factory.patch(GARDEN_URL, {"garden_name": "Foo_updated", "direction": "north"}, format="json")
+        request = self.factory.patch(
+            GARDEN_URL, {"garden_name": "Foo_updated", "direction": "north"}, format="json")
         response = self.view(request, garden_id="Foo")
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
@@ -180,15 +187,22 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
 
     def test_create_garden_invalid_payload(self):
-        response = self._build_post_response(
-            {"garden_name": "F00$", "direction": "north", "profile": str(TEST_PROFILE.profile_id)})
+        response = self._build_post_response({
+            "garden_name": "F00$",
+            "direction": "north",
+            "profile": str(TEST_PROFILE.profile_id)
+        })
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["Invalid entry for the garden's name. "
-                             "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes."]}
+            {
+                "garden_name": [
+                    "Invalid entry for the garden's name. A garden's name can "
+                    "only contain letters, numbers, hyphens, spaces and apostrophes."
+                ]
+            }
         )
 
 
@@ -228,25 +242,34 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
 
     def test_update_garden_invalid_payload(self):
-        response = self._build_put_response(
-            {"garden_name": "Foo_updated", "direction": "north", "profile": str(TEST_PROFILE.profile_id)})
+        response = self._build_put_response({
+            "garden_name": "Foo_updated",
+            "direction": "north",
+            "profile": str(TEST_PROFILE.profile_id)
+        })
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"garden_name": ["Invalid entry for the garden's name. "
-                             "A garden's name can only contain letters, numbers, hyphens, spaces and apostrophes."]}
+            {
+                "garden_name": [
+                    "Invalid entry for the garden's name. A garden's name can "
+                    "only contain letters, numbers, hyphens, spaces and apostrophes."
+                ]
+            }
         )
 
     def test_update_garden_by_invalid_id(self):
         request = self.factory.put(
             GARDEN_URL,
-            {"garden_name": "Fooupdated", "direction": "north", "profile": str(TEST_PROFILE.profile_id)},
+            {
+                "garden_name": "Fooupdated",
+                "direction": "north",
+                "profile": str(TEST_PROFILE.profile_id)
+            },
             format="json"
         )
         response = self.view(request, garden_id="Foo")
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
-

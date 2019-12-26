@@ -6,8 +6,8 @@ from unittest.mock import patch, Mock
 from django.test import TestCase, override_settings
 from requests.exceptions import ConnectionError
 
-from encouragemint.lib.trefle.trefle import TrefleAPI
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
+from encouragemint.lib.trefle.trefle import TrefleAPI
 
 
 def get_mock_json_file(file_path):

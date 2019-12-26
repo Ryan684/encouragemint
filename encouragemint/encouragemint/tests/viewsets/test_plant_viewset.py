@@ -86,7 +86,8 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
         self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
         self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
+        self.assertEqual(
+            SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
         self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
@@ -174,7 +175,8 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
         self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
         self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
+        self.assertEqual(
+            SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
@@ -266,7 +268,8 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
         self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
         self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
+        self.assertEqual(
+            SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
