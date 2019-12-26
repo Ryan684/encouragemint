@@ -2,9 +2,9 @@
 
 import json
 from unittest.mock import patch, Mock
+from requests.exceptions import ConnectionError
 
 from django.test import TestCase, override_settings
-from requests.exceptions import ConnectionError
 
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 from encouragemint.lib.trefle.trefle import TrefleAPI

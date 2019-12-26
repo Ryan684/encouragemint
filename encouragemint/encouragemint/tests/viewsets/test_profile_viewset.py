@@ -19,7 +19,8 @@ SAMPLE_PROFILE = {
 
 class TestProfileViewsetParameters(TestCase):
     def test_viewset_parameters(self):
-        self.assertEqual(["get", "post", "put", "patch", "delete"], ProfileViewSet.http_method_names)
+        self.assertEqual(
+            ["get", "post", "put", "patch", "delete"], ProfileViewSet.http_method_names)
         self.assertEqual("profile_id", ProfileViewSet.lookup_field)
         self.assertEqual(ProfileSerializer, ProfileViewSet.serializer_class)
 
