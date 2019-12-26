@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework import serializers
 
 from encouragemint.encouragemint.serializers import GardenSerializer
-from encouragemint.encouragemint.models import Garden
+from encouragemint.encouragemint.models import Garden, Profile
 
 
 class TestGardenSerializerValidators(TestCase):
@@ -57,3 +57,21 @@ class TestValidateDirection(TestGardenSerializerValidators):
             self.test_obj.validate_direction,
             direction
         )
+
+
+class TestValidateSunlight(TestGardenSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidateSunlight, cls).setUpClass()
+
+    def test_direction_sunlight_scenarios(self):
+        self._validate_sunlight_by_direction("north", "low")
+        self._validate_sunlight_by_direction("south", "high")
+        self._validate_sunlight_by_direction("east", "medium")
+        self._validate_sunlight_by_direction("west", "medium")
+
+    def _validate_sunlight_by_direction(self, direction, expected_sunlight):
+        profile = Profile.objects.create(**{"first_name": "Jane", "last_name": "Doe"})
+        garden = Garden.objects.create(
+            **{"garden_name": "Backyard", "profile": profile, "direction": direction})
+        self.assertEqual(expected_sunlight, garden.sunlight)
