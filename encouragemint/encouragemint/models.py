@@ -21,8 +21,7 @@ class Garden(models.Model):
             return "low"
         elif self.direction == "south":
             return "high"
-        else:
-            return "medium"
+        return "medium"
 
 
 class Plant(models.Model):
