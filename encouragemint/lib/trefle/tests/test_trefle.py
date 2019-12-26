@@ -2,7 +2,7 @@
 
 import json
 from unittest.mock import patch, Mock
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError  # pylint: disable=redefined-builtin
 
 from django.test import TestCase, override_settings
 
