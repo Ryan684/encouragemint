@@ -33,6 +33,15 @@ class TestTrefle(TestCase):
         )
 
     @patch("requests.get")
+    def test_search_plants_no_results(self, mock_get):
+        mock_get.return_value = []
+
+        plant_name = "Fooflower"
+        response = self.trefle.lookup_plants_by_expected_name(plant_name)
+
+        self.assertEquals([], response)
+
+    @patch("requests.get")
     def test_search_plants_one_result(self, mock_get):
         mock_responses = [Mock(), Mock()]
         mock_responses[0].json.return_value = self.search_single_match
@@ -64,6 +73,15 @@ class TestTrefle(TestCase):
         response = self.trefle.lookup_plants_by_scientific_name(plant_name)
 
         self._validate_plant(response)
+
+    @patch("requests.get")
+    def test_lookup_plants_by_shade_tolerance(self, mock_get):
+        mock_get.return_value = self.search_many_matches
+
+        shade_tolerance = "Intermediate"
+        response = self.trefle.lookup_plants_by_shade_tolerance(shade_tolerance)
+
+        self.assertEquals(self.search_many_matches, response)
 
     def _validate_plant(self, response):
         test_plant = {

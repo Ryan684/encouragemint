@@ -15,6 +15,9 @@ class TrefleAPI:
     def lookup_plants_by_expected_name(self, plant_name):
         return self._lookup_plants("q", plant_name)
 
+    def lookup_plants_by_shade_tolerance(self, shade_tolerance):
+        return self._lookup_plants("shade_tolerance", shade_tolerance)
+
     def _lookup_plants(self, name_key, plant_name):
         try:
             results = self._lookup_plants_by_name(name_key, plant_name)
