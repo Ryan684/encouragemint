@@ -232,7 +232,7 @@ class TestPost(TestCase):
             {"Message": "Encouragemint couldn't find any plants with that name."},
             response.data
         )
-        
+
 
 class TestPut(TestCase):
     def setUp(self):
