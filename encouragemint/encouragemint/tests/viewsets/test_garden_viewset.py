@@ -14,7 +14,7 @@ SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north"}
 SAMPLE_GARDEN_SUNLIGHT = "low"
 
 
-class TestGardenViewsetParameters(TestCase):  # pylint: disable=duplicate-code
+class TestGardenViewsetParameters(TestCase):
     def test_viewset_parameters(self):
         self.assertEqual(["get", "post", "put", "patch", "delete"], GardenViewSet.http_method_names)
         self.assertEqual("garden_id", GardenViewSet.lookup_field)

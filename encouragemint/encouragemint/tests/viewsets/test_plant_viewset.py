@@ -29,7 +29,7 @@ SAMPLE_PLANT = {
 }
 
 
-class TestPlantViewsetParameters(TestCase):  # pylint: disable=duplicate-code
+class TestPlantViewsetParameters(TestCase):
     def test_viewset_parameters(self):
         plant_viewset = PlantViewSet
         self.assertEqual(["get", "post", "put", "delete"], plant_viewset.http_method_names)
