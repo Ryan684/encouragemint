@@ -21,7 +21,7 @@ class TestGardenViewsetParameters(TestCase):  # pylint: disable=duplicate-code
         self.assertEqual(GardenSerializer, GardenViewSet.serializer_class)
 
 
-class TestDelete(TestCase):
+class TestDelete(TestCase):  # pylint: disable=duplicate-code
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = GardenViewSet.as_view({"delete": "destroy"})
