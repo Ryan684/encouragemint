@@ -37,7 +37,7 @@ class TestPlantViewsetParameters(TestCase):  # pylint: disable=duplicate-code
         self.assertEqual(None, plant_viewset.serializer_class)
 
 
-class TestDelete(TestCase):
+class TestDelete(TestCase):  # pylint: disable=duplicate-code
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"delete": "destroy"})

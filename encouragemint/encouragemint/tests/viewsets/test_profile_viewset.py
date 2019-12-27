@@ -23,7 +23,7 @@ class TestProfileViewsetParameters(TestCase):
         self.assertEqual(ProfileSerializer, ProfileViewSet.serializer_class)
 
 
-class TestDelete(TestCase):
+class TestDelete(TestCase):  # pylint: disable=duplicate-code
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = ProfileViewSet.as_view({"delete": "destroy"})
