@@ -47,6 +47,12 @@ class PlantViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+        if not result:
+            return Response(
+                {"Message": "Encouragemint couldn't find any plants with that name"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         if isinstance(result, dict):
             serializer = PlantSerializer(data=result)
             serializer.is_valid(raise_exception=True)

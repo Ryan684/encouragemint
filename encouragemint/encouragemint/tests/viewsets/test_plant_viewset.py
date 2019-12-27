@@ -198,7 +198,7 @@ class TestPost(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
-        self.assertEquals(
+        self.assertEqual(
             {"Message": "Encouragemint can't add new plants right now. Try again later."},
             response.data
         )
@@ -215,11 +215,23 @@ class TestPost(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_300_MULTIPLE_CHOICES, response.status_code)
-        self.assertEquals(
+        self.assertEqual(
             search_many_matches,
             response.data
         )
 
+    @patch("requests.get")
+    def test_create_plant_no_trefle_results(self, mock_trefle):
+        mock_trefle.return_value = []
+        payload = self.new_plant_request.copy()
+        response = self._build_post_response(payload)
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            {"Message": "Encouragemint couldn't find any plants with that name"},
+            response.data
+        )
 
 class TestPut(TestCase):
     def setUp(self):
