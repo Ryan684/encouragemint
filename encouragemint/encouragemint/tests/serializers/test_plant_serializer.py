@@ -14,14 +14,14 @@ class TestPlantSerializerValidators(TestCase):
 
 class TestSerializerParameters(TestPlantSerializerValidators):
     def test_serializer_parameters(self):
-        self.assertEquals(
+        self.assertEqual(
             ["plant_id", "garden", "common_name", "trefle_id", "scientific_name",
              "duration", "bloom_period", "growth_period", "growth_rate", "shade_tolerance",
              "moisture_use", "family_common_name"],
             self.test_obj.Meta.fields
         )
-        self.assertEquals(["plant_id", "garden"], self.test_obj.Meta.read_only_fields)
-        self.assertEquals(Plant, self.test_obj.Meta.model)
+        self.assertEqual(["plant_id", "garden"], self.test_obj.Meta.read_only_fields)
+        self.assertEqual(Plant, self.test_obj.Meta.model)
 
 
 class TestValidateScientificName(TestPlantSerializerValidators):

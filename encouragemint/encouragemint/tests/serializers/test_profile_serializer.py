@@ -14,10 +14,10 @@ class TestProfileSerializerValidators(TestCase):
 
 class TestSerializerParameters(TestProfileSerializerValidators):
     def test_serializer_parameters(self):
-        self.assertEquals(
+        self.assertEqual(
             ["profile_id", "first_name", "last_name", "gardens"], self.test_obj.Meta.fields)
-        self.assertEquals(["profile_id"], self.test_obj.Meta.read_only_fields)
-        self.assertEquals(Profile, self.test_obj.Meta.model)
+        self.assertEqual(["profile_id"], self.test_obj.Meta.read_only_fields)
+        self.assertEqual(Profile, self.test_obj.Meta.model)
 
 
 class TestValidateFirstName(TestProfileSerializerValidators):

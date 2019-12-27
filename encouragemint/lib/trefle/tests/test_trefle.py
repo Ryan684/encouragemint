@@ -39,7 +39,7 @@ class TestTrefle(TestCase):
         plant_name = "Fooflower"
         response = self.trefle.lookup_plants_by_expected_name(plant_name)
 
-        self.assertEquals([], response)
+        self.assertEqual([], response)
 
     @patch("requests.get")
     def test_search_plants_one_result(self, mock_get):
@@ -60,7 +60,7 @@ class TestTrefle(TestCase):
         search_term = "grass"
         response = self.trefle.lookup_plants_by_expected_name(search_term)
 
-        self.assertEquals(self.search_many_matches, response)
+        self.assertEqual(self.search_many_matches, response)
 
     @patch("requests.get")
     def test_lookup_plant_by_scientific_name(self, mock_get):
@@ -81,7 +81,7 @@ class TestTrefle(TestCase):
         shade_tolerance = "Intermediate"
         response = self.trefle.lookup_plants_by_shade_tolerance(shade_tolerance)
 
-        self.assertEquals(self.search_many_matches, response)
+        self.assertEqual(self.search_many_matches, response)
 
     def _validate_plant(self, response):
         test_plant = {

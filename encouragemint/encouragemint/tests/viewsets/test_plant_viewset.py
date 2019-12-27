@@ -290,7 +290,7 @@ class TestPut(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
-        self.assertEquals(
+        self.assertEqual(
             {"Message": "Encouragemint can't update plants right now. Try again later."},
             response.data
         )
