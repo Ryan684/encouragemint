@@ -41,7 +41,7 @@ class TestDelete(TestCase):
 
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_profile_bad_id(self):  # pylint: disable=duplicate-code
+    def test_delete_profile_bad_id(self):
         response = self._build_delete_response("Foo")
         response.render()
 
