@@ -1,5 +1,3 @@
-# pylint: disable=duplicate-code
-
 import json
 
 from django.test import TestCase
