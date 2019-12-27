@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 import json
 
 from django.test import TestCase
@@ -15,7 +17,7 @@ SAMPLE_PROFILE = {
 }
 
 
-class TestProfileViewsetParameters(TestCase):  # pylint: disable=duplicate-code
+class TestProfileViewsetParameters(TestCase):
     def test_viewset_parameters(self):
         self.assertEqual(
             ["get", "post", "put", "patch", "delete"], ProfileViewSet.http_method_names)
