@@ -49,7 +49,7 @@ class PlantViewSet(viewsets.ModelViewSet):
 
         if not result:
             return Response(
-                {"Message": "Encouragemint couldn't find any plants with that name"},
+                {"Message": "Encouragemint couldn't find any plants with that name."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 

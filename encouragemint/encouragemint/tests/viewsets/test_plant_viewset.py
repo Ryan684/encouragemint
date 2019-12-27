@@ -229,7 +229,7 @@ class TestPost(TestCase):
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
-            {"Message": "Encouragemint couldn't find any plants with that name"},
+            {"Message": "Encouragemint couldn't find any plants with that name."},
             response.data
         )
 
