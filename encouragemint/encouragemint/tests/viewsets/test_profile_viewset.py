@@ -1,5 +1,3 @@
-# pylint: disable=duplicate-code
-
 import json
 
 from django.test import TestCase
@@ -44,7 +42,7 @@ class TestDelete(TestCase):
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_delete_profile_bad_id(self):
-        response = self._build_delete_response("Foo")
+        response = self._build_delete_response("Foo_profile")
         response.render()
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
