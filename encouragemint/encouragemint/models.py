@@ -14,6 +14,7 @@ class Garden(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="gardens")
     garden_name = models.CharField(max_length=25)
     direction = models.CharField(max_length=5)
+    location = models.CharField(max_length=100)
 
     @property
     def sunlight(self):

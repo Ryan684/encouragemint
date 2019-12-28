@@ -111,7 +111,8 @@ class GardenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Garden
-        fields = ["garden_id", "garden_name", "plants", "profile", "direction", "sunlight"]
+        fields = ["garden_id", "garden_name", "plants", "profile",
+                  "direction", "sunlight", "location"]
         read_only_fields = ["garden_id", "profile"]
 
     @staticmethod
@@ -129,6 +130,14 @@ class GardenSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "A garden's direction can only be north, east, south or west.")
         return direction
+
+    @staticmethod
+    def validate_location(value):
+        if re.fullmatch(r"^[a-zA-Z0-9\-\s',]+$", value) is None:
+            raise serializers.ValidationError(
+                "Invalid entry for the garden's location. A garden's location can only "
+                "contain letters, numbers, hyphens, spaces, commas and apostrophes.")
+        return value
 
 
 class ProfileSerializer(serializers.ModelSerializer):

@@ -15,7 +15,8 @@ class TestGardenSerializerValidators(TestCase):
 class TestSerializerParameters(TestGardenSerializerValidators):
     def test_serializer_parameters(self):
         self.assertEqual(
-            ["garden_id", "garden_name", "plants", "profile", "direction", "sunlight"],
+            ["garden_id", "garden_name", "plants", "profile", "direction",
+             "sunlight", "location"],
             self.test_obj.Meta.fields)
         self.assertEqual(["garden_id", "profile"], self.test_obj.Meta.read_only_fields)
         self.assertEqual(Garden, self.test_obj.Meta.model)
@@ -76,3 +77,23 @@ class TestValidateSunlight(TestGardenSerializerValidators):
         garden = Garden.objects.create(
             **{"garden_name": "Backyard", "profile": profile, "direction": direction})
         self.assertEqual(expected_sunlight, garden.sunlight)
+
+
+class TestValidateLocation(TestGardenSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidateLocation, cls).setUpClass()
+
+    def test_valid_location(self):
+        location = "1234 Shallow Road, Falmouth, UK"
+        self.assertEqual(location, self.test_obj.validate_location(location))
+
+    def test_invalid_location(self):
+        location = "1234*Shaddow*Road*Falmouth*UK"
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            f"Invalid entry for the garden's location. A garden's location can only "
+            f"contain letters, numbers, hyphens, spaces, commas and apostrophes.",
+            self.test_obj.validate_location,
+            location
+        )

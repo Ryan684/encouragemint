@@ -10,7 +10,7 @@ from encouragemint.encouragemint.views import GardenViewSet
 
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
-SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north"}
+SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Romsey, UK"}
 SAMPLE_GARDEN_SUNLIGHT = "low"
 
 
@@ -67,6 +67,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(garden.garden_name, model_data.get("garden_name"))
         self.assertEqual(garden.direction, model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
+        self.assertEqual(garden.location, model_data.get("location"))
 
     def test_get_garden_by_invalid_id(self):
         request = self.factory.get(GARDEN_URL, format="json")
@@ -99,6 +100,7 @@ class TestGetList(TestCase):
             self.assertIn("garden_name", garden)
             self.assertIn("direction", garden)
             self.assertIn("sunlight", garden)
+            self.assertIn("location", garden)
 
 
 class TestPatch(TestCase):
@@ -128,8 +130,9 @@ class TestPatch(TestCase):
         self.assertIn("garden_id", model_data)
         self.assertIn("profile", model_data)
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
-        self.assertEqual("north", model_data.get("direction"))
+        self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
+        self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
 
     def test_partial_update_garden_invalid_payload(self):
         response = self._build_patch_response({"garden_name": "Foo_updated", "direction": "north"})
@@ -183,12 +186,14 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_GARDEN.get("garden_name"), model_data.get("garden_name"))
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
+        self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
 
     def test_create_garden_invalid_payload(self):
         response = self._build_post_response({
             "garden_name": "F00$",
-            "direction": "north",
-            "profile": str(TEST_PROFILE.profile_id)
+            "direction": SAMPLE_GARDEN.get("direction"),
+            "profile": str(TEST_PROFILE.profile_id),
+            "location": SAMPLE_GARDEN.get("location")
         })
         response.render()
 
@@ -238,12 +243,14 @@ class TestPut(TestCase):
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
+        self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
 
     def test_update_garden_invalid_payload(self):
         response = self._build_put_response({
             "garden_name": "Foo_updated",
-            "direction": "north",
-            "profile": str(TEST_PROFILE.profile_id)
+            "direction": SAMPLE_GARDEN.get("direction"),
+            "profile": str(TEST_PROFILE.profile_id),
+            "location": SAMPLE_GARDEN.get("location")
         })
         response.render()
 
@@ -263,8 +270,9 @@ class TestPut(TestCase):
             GARDEN_URL,
             {
                 "garden_name": "Fooupdated",
-                "direction": "north",
-                "profile": str(TEST_PROFILE.profile_id)
+                "direction": SAMPLE_GARDEN.get("direction"),
+                "profile": str(TEST_PROFILE.profile_id),
+                "location": SAMPLE_GARDEN.get("location")
             },
             format="json"
         )
