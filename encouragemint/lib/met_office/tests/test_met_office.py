@@ -17,4 +17,4 @@ class TestMetOfficeAPI(TestCase):
         mock.latlng = expected_latlng
         mock_google.return_value = mock
 
-        self.assertEqual(expected_latlng, self.met_office.print_geocode("Truro, UK"))
+        self.assertEqual(expected_latlng, self.met_office._geocode_location("Truro, UK"))

@@ -3,7 +3,7 @@ from django.conf import settings
 
 
 class MetOfficeAPI:
-    def print_geocode(self, location):
-        g = geocoder.google(location, key=settings.GOOGLE_API_KEY)
+    def _geocode_location(self, location):
+        geocode = geocoder.google(location, key=settings.GOOGLE_API_KEY)
 
-        return g.latlng
+        return geocode.latlng
