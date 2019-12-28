@@ -113,7 +113,7 @@ class GardenSerializer(serializers.ModelSerializer):
         model = Garden
         fields = ["garden_id", "garden_name", "plants", "profile",
                   "direction", "sunlight", "location"]
-        read_only_fields = ["garden_id", "profile"]
+        read_only_fields = ["garden_id", "profile", "sunlight"]
 
     @staticmethod
     def validate_garden_name(value):
