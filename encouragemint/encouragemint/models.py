@@ -1,5 +1,7 @@
 import uuid
 
+import geocoder
+from django.conf import settings
 from django.db import models
 
 
@@ -23,6 +25,11 @@ class Garden(models.Model):
         if self.direction == "south":
             return "high"
         return "medium"
+
+    @property
+    def latitude_longitude(self):
+        geocode = geocoder.google(self.location, key=settings.GOOGLE_API_KEY)
+        return geocode.latlng
 
 
 class Plant(models.Model):

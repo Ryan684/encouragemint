@@ -1,6 +1,7 @@
 import json
+from unittest.mock import patch, Mock
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
@@ -10,8 +11,9 @@ from encouragemint.encouragemint.views import GardenViewSet
 
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
-SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Romsey, UK"}
+SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
 SAMPLE_GARDEN_SUNLIGHT = "low"
+SAMPLE_GARDEN_LATITUDE_LONGITUDE = [50.263195, -5.051041]
 
 
 class TestGardenViewsetParameters(TestCase):
@@ -46,12 +48,18 @@ class TestDelete(TestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
+@override_settings(GOOGLE_API_KEY="Foo")
 class TestGetRetrieve(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
 
-    def test_get_garden(self):
+    @patch("geocoder.google")
+    def test_get_garden(self, mock_google):
+        mock = Mock()
+        mock.latlng = SAMPLE_GARDEN_LATITUDE_LONGITUDE
+        mock_google.return_value = mock
+
         garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
         garden_id = garden.garden_id
         request = self.factory.get(GARDEN_URL, format="json")
@@ -68,6 +76,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(garden.direction, model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
         self.assertEqual(garden.location, model_data.get("location"))
+        self.assertEqual(SAMPLE_GARDEN_LATITUDE_LONGITUDE, model_data.get("latitude_longitude"))
 
     def test_get_garden_by_invalid_id(self):
         request = self.factory.get(GARDEN_URL, format="json")
@@ -76,6 +85,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
+@override_settings(GOOGLE_API_KEY="Foo")
 class TestGetList(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -101,8 +111,10 @@ class TestGetList(TestCase):
             self.assertIn("direction", garden)
             self.assertIn("sunlight", garden)
             self.assertIn("location", garden)
+            self.assertIn("latitude_longitude", garden)
 
 
+@override_settings(GOOGLE_API_KEY="Foo")
 class TestPatch(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -119,7 +131,12 @@ class TestPatch(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    def test_partial_update_garden(self):
+    @patch("geocoder.google")
+    def test_partial_update_garden(self, mock_google):
+        mock = Mock()
+        mock.latlng = SAMPLE_GARDEN_LATITUDE_LONGITUDE
+        mock_google.return_value = mock
+
         response = self._build_patch_response({"garden_name": "Fooupdated", "direction": "north"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -133,6 +150,7 @@ class TestPatch(TestCase):
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
         self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
+        self.assertEqual(SAMPLE_GARDEN_LATITUDE_LONGITUDE, model_data.get("latitude_longitude"))
 
     def test_partial_update_garden_invalid_payload(self):
         response = self._build_patch_response({"garden_name": "Foo_updated", "direction": "north"})
@@ -157,6 +175,7 @@ class TestPatch(TestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
+@override_settings(GOOGLE_API_KEY="Foo")
 class TestPost(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -171,7 +190,12 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    def test_create_garden(self):
+    @patch("geocoder.google")
+    def test_create_garden(self, mock_google):
+        mock = Mock()
+        mock.latlng = SAMPLE_GARDEN_LATITUDE_LONGITUDE
+        mock_google.return_value = mock
+
         payload = SAMPLE_GARDEN
         payload["profile"] = str(TEST_PROFILE.profile_id)
         response = self._build_post_response(payload)
@@ -187,6 +211,7 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
         self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
+        self.assertEqual(SAMPLE_GARDEN_LATITUDE_LONGITUDE, model_data.get("latitude_longitude"))
 
     def test_create_garden_invalid_payload(self):
         response = self._build_post_response({
@@ -209,6 +234,7 @@ class TestPost(TestCase):
         )
 
 
+@override_settings(GOOGLE_API_KEY="Foo")
 class TestPut(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -227,7 +253,12 @@ class TestPut(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    def test_update_garden(self):
+    @patch("geocoder.google")
+    def test_update_garden(self, mock_google):
+        mock = Mock()
+        mock.latlng = SAMPLE_GARDEN_LATITUDE_LONGITUDE
+        mock_google.return_value = mock
+
         new_garden_details = SAMPLE_GARDEN.copy()
         new_garden_details["garden_name"] = "Fooupdated"
         new_garden_details["profile"] = str(TEST_PROFILE.profile_id)
@@ -244,6 +275,7 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
         self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
+        self.assertEqual(SAMPLE_GARDEN_LATITUDE_LONGITUDE, model_data.get("latitude_longitude"))
 
     def test_update_garden_invalid_payload(self):
         response = self._build_put_response({
