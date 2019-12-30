@@ -1,10 +1,12 @@
 import json
 from unittest.mock import patch, Mock
+from requests.exceptions import ConnectionError
 
 from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
+from encouragemint.encouragemint.exceptions import GeocoderConnectionError
 from encouragemint.encouragemint.models import Garden, Profile
 from encouragemint.encouragemint.serializers import GardenSerializer
 from encouragemint.encouragemint.views import GardenViewSet
@@ -231,6 +233,23 @@ class TestPost(TestCase):
                     "only contain letters, numbers, hyphens, spaces and apostrophes."
                 ]
             }
+        )
+
+    @patch("geocoder.google")
+    def test_create_garden_geocoder_unreachable(self, mock_google):
+        mock_google.side_effect = ConnectionError
+        request = self.factory.post(
+            GARDEN_URL,
+            SAMPLE_GARDEN,
+            format="json"
+        )
+        response = self.view(request)
+        response.render()
+
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
+        self.assertEqual(
+            {"Message": "Encouragemint can't create new gardens right now. Try again later."},
+            response.data
         )
 
 

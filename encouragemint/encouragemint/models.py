@@ -1,8 +1,11 @@
 import uuid
 
 import geocoder
+import requests
 from django.conf import settings
 from django.db import models
+
+from encouragemint.encouragemint.exceptions import GeocoderConnectionError
 
 
 class Profile(models.Model):
@@ -28,8 +31,11 @@ class Garden(models.Model):
 
     @property
     def latitude_longitude(self):
-        geocode = geocoder.google(self.location, key=settings.GOOGLE_API_KEY)
-        return geocode.latlng
+        try:
+            geocode = geocoder.google(self.location, key=settings.GOOGLE_API_KEY)
+            return geocode.latlng
+        except requests.ConnectionError:
+            raise GeocoderConnectionError()
 
 
 class Plant(models.Model):

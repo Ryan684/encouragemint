@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
+from encouragemint.encouragemint.exceptions import GeocoderConnectionError
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
@@ -21,6 +22,20 @@ class GardenViewSet(viewsets.ModelViewSet):
     serializer_class = GardenSerializer
     lookup_field = "garden_id"
     http_method_names = ["get", "post", "put", "patch", "delete"]
+
+    def create(self, request, *args, **kwargs):
+        try:
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+        except GeocoderConnectionError:
+            return Response(
+                {"Message": "Encouragemint can't create new gardens right now. Try again later."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class PlantViewSet(viewsets.ModelViewSet):
