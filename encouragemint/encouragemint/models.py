@@ -1,11 +1,7 @@
+import json
 import uuid
 
-import geocoder
-import requests
-from django.conf import settings
 from django.db import models
-
-from encouragemint.encouragemint.exceptions import GeocoderConnectionError
 
 
 class Profile(models.Model):
@@ -20,6 +16,7 @@ class Garden(models.Model):
     garden_name = models.CharField(max_length=25)
     direction = models.CharField(max_length=5)
     location = models.CharField(max_length=100)
+    coordinates = models.CharField(max_length=50)
 
     @property
     def sunlight(self):
@@ -28,14 +25,6 @@ class Garden(models.Model):
         if self.direction == "south":
             return "high"
         return "medium"
-
-    @property
-    def latitude_longitude(self):
-        try:
-            geocode = geocoder.google(self.location, key=settings.GOOGLE_API_KEY)
-            return geocode.latlng
-        except requests.ConnectionError:
-            raise GeocoderConnectionError()
 
 
 class Plant(models.Model):

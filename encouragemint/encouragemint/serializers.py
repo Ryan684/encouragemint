@@ -108,13 +108,13 @@ class GardenSerializer(serializers.ModelSerializer):
     profile = serializers.SlugRelatedField(slug_field="profile_id", queryset=Profile.objects.all())
     plants = PlantSerializer(many=True, read_only=True)
     sunlight = serializers.ReadOnlyField()
-    latitude_longitude = serializers.ReadOnlyField()
+    coordinates = serializers.ReadOnlyField()
 
     class Meta:
         model = Garden
         fields = ["garden_id", "garden_name", "plants", "profile",
-                  "direction", "sunlight", "location", "latitude_longitude"]
-        read_only_fields = ["garden_id", "profile", "sunlight", "latitude_longitude"]
+                  "direction", "sunlight", "location", "coordinates"]
+        read_only_fields = ["garden_id", "profile", "sunlight"]
 
     @staticmethod
     def validate_garden_name(value):
