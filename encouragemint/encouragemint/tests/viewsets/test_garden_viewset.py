@@ -14,7 +14,27 @@ GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
 SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
 SAMPLE_GARDEN_SUNLIGHT = "low"
-SAMPLE_GARDEN_COORDINATES = [50.263195, -5.051041]
+SAMPLE_GARDEN_COORDINATES = "[50.263195, -5.051041]"
+
+
+@override_settings(GOOGLE_API_KEY="Foo")
+@patch("geocoder.google")
+def create_test_garden(mock_google):
+    mock = Mock()
+    mock.latlng = SAMPLE_GARDEN_COORDINATES
+    mock_google.return_value = mock
+
+    existing_garden = SAMPLE_GARDEN
+    existing_garden["profile"] = str(TEST_PROFILE.profile_id)
+    request = APIRequestFactory().post(
+        GARDEN_URL,
+        existing_garden,
+        format="json"
+    )
+    response = GardenViewSet.as_view({"post": "create"})(request)
+    response.render()
+    model_data = json.loads(response.content.decode("utf-8"))
+    return model_data
 
 
 class TestGardenViewsetParameters(TestCase):
@@ -49,21 +69,14 @@ class TestDelete(TestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
-@override_settings(GOOGLE_API_KEY="Foo")
 class TestGetRetrieve(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
 
-    @patch("geocoder.google")
-    def test_get_garden(self, mock_google):
-        mock = Mock()
-        mock.latlng = SAMPLE_GARDEN_COORDINATES
-        mock_google.return_value = mock
-
-        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
-        print(garden.coordinates)
-        garden_id = garden.garden_id
+    def test_get_garden(self):
+        garden = create_test_garden()
+        garden_id = garden.get("garden_id")
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_by_id_view(request, garden_id=garden_id)
         response.render()
@@ -74,10 +87,10 @@ class TestGetRetrieve(TestCase):
         self.assertIn("plants", model_data)
         self.assertIn("profile", model_data)
         self.assertIn("garden_id", model_data)
-        self.assertEqual(garden.garden_name, model_data.get("garden_name"))
-        self.assertEqual(garden.direction, model_data.get("direction"))
+        self.assertEqual(garden.get("garden_name"), model_data.get("garden_name"))
+        self.assertEqual(garden.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
-        self.assertEqual(garden.location, model_data.get("location"))
+        self.assertEqual(garden.get("location"), model_data.get("location"))
         self.assertEqual(SAMPLE_GARDEN_COORDINATES, model_data.get("coordinates"))
 
     def test_get_garden_by_invalid_id(self):
@@ -87,17 +100,15 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
-@override_settings(GOOGLE_API_KEY="Foo")
 class TestGetList(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.get_all_view = GardenViewSet.as_view({"get": "list"})
 
     def test_get_all_gardens(self):
-        Garden.objects.create(
-            **{"garden_name": "Fooflower", "direction": "north"}, profile=TEST_PROFILE)
-        Garden.objects.create(
-            **{"garden_name": "Barflower", "direction": "north"}, profile=TEST_PROFILE)
+        create_test_garden()
+        create_test_garden()
+
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_all_view(request)
         response.render()
@@ -116,15 +127,14 @@ class TestGetList(TestCase):
             self.assertIn("coordinates", garden)
 
 
-@override_settings(GOOGLE_API_KEY="Foo")
 class TestPatch(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = GardenViewSet.as_view({"patch": "partial_update"})
 
     def _build_patch_response(self, update_payload):
-        garden = Garden.objects.create(**SAMPLE_GARDEN, profile=TEST_PROFILE)
-        garden_id = garden.garden_id
+        garden = create_test_garden()
+        garden_id = garden.get("garden_id")
         request = self.factory.patch(
             GARDEN_URL,
             update_payload,
@@ -133,12 +143,7 @@ class TestPatch(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    @patch("geocoder.google")
-    def test_partial_update_garden(self, mock_google):
-        mock = Mock()
-        mock.latlng = SAMPLE_GARDEN_COORDINATES
-        mock_google.return_value = mock
-
+    def test_partial_update_garden(self):
         response = self._build_patch_response({"garden_name": "Fooupdated", "direction": "north"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -203,7 +208,7 @@ class TestPost(TestCase):
         response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
-
+        print(model_data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         self.assertIn("plants", model_data)
@@ -253,17 +258,14 @@ class TestPost(TestCase):
         )
 
 
-@override_settings(GOOGLE_API_KEY="Foo")
 class TestPut(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = GardenViewSet.as_view({"put": "update"})
 
     def _build_put_response(self, update_payload):
-        existing_garden = SAMPLE_GARDEN
-        existing_garden["profile"] = TEST_PROFILE
-        garden = Garden.objects.create(**existing_garden)
-        garden_id = garden.garden_id
+        garden = create_test_garden()
+        garden_id = garden.get("garden_id")
         request = self.factory.put(
             GARDEN_URL,
             update_payload,
@@ -272,12 +274,7 @@ class TestPut(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    @patch("geocoder.google")
-    def test_update_garden(self, mock_google):
-        mock = Mock()
-        mock.latlng = SAMPLE_GARDEN_COORDINATES
-        mock_google.return_value = mock
-
+    def test_update_garden(self):
         new_garden_details = SAMPLE_GARDEN.copy()
         new_garden_details["garden_name"] = "Fooupdated"
         new_garden_details["profile"] = str(TEST_PROFILE.profile_id)
