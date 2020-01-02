@@ -208,7 +208,7 @@ class TestPost(TestCase):
         response = self._build_post_response(payload)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
-        print(model_data)
+
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         self.assertIn("plants", model_data)
