@@ -30,7 +30,6 @@ class GardenViewSet(viewsets.ModelViewSet):
         try:
             coordinates = self._lookup_garden_coordinates()
         except GeocoderConnectionError:
-            print("FOO")
             return Response(
                 {"Message": "Encouragemint can't create new gardens right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -40,7 +39,6 @@ class GardenViewSet(viewsets.ModelViewSet):
     def _lookup_garden_coordinates(self):
         try:
             geocode = geocoder.google(self.request.data["location"], key=settings.GOOGLE_API_KEY)
-            print(geocode)
             return geocode.latlng
         except requests.ConnectionError:
             raise GeocoderConnectionError()
