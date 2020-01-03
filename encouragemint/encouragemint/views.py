@@ -25,7 +25,7 @@ class GardenViewSet(viewsets.ModelViewSet):
     lookup_field = "garden_id"
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self.perform_create(serializer)
