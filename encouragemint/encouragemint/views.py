@@ -1,5 +1,4 @@
 import geocoder
-import requests
 from django.conf import settings
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -26,6 +25,11 @@ class GardenViewSet(viewsets.ModelViewSet):
     lookup_field = "garden_id"
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.perform_create(serializer)
+
     def perform_create(self, serializer):
         try:
             coordinates = self._lookup_garden_coordinates()
@@ -34,14 +38,16 @@ class GardenViewSet(viewsets.ModelViewSet):
                 {"Message": "Encouragemint can't create new gardens right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
         serializer.save(coordinates=coordinates)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def _lookup_garden_coordinates(self):
-        try:
-            geocode = geocoder.google(self.request.data["location"], key=settings.GOOGLE_API_KEY)
-            return geocode.latlng
-        except requests.ConnectionError:
+        geocode = geocoder.google(self.request.data["location"], key=settings.GOOGLE_API_KEY)
+        if not geocode.latlng:
             raise GeocoderConnectionError()
+        return geocode.latlng
 
 
 class PlantViewSet(viewsets.ModelViewSet):

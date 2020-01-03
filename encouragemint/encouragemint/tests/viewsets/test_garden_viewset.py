@@ -1,6 +1,5 @@
 import json
 from unittest.mock import patch, Mock
-from requests.exceptions import ConnectionError
 
 from django.test import TestCase, override_settings
 from rest_framework import status
@@ -242,7 +241,10 @@ class TestPost(TestCase):
 
     @patch("geocoder.google")
     def test_create_garden_geocoder_unreachable(self, mock_google):
-        mock_google.side_effect = ConnectionError
+        mock = Mock()
+        mock.latlng = None
+        mock_google.return_value = mock
+
         request = self.factory.post(
             GARDEN_URL,
             SAMPLE_GARDEN,
