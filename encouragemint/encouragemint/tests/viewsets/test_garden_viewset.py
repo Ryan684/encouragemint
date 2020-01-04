@@ -2,6 +2,7 @@ import json
 from unittest.mock import patch, Mock
 
 from django.test import TestCase, override_settings
+from geopy.exc import GeocoderServiceError
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
@@ -13,14 +14,18 @@ GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
 SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
 SAMPLE_GARDEN_SUNLIGHT = "low"
-SAMPLE_GARDEN_COORDINATES = "[50.263195, -5.051041]"
+SAMPLE_GARDEN_COORDINATES = [50.263195, -5.051041]
 
 
 @override_settings(GOOGLE_API_KEY="Foo")
-@patch("geocoder.google")
+@patch("geopy.geocoders.googlev3.GoogleV3.geocode")
 def create_test_garden(mock_google):
-    mock = Mock()
-    mock.latlng = SAMPLE_GARDEN_COORDINATES
+    attributes = {
+        'address': 'test_address',
+        'latitude': SAMPLE_GARDEN_COORDINATES[0],
+        'longitude': SAMPLE_GARDEN_COORDINATES[1]
+    }
+    mock = Mock(**attributes)
     mock_google.return_value = mock
 
     existing_garden = SAMPLE_GARDEN
@@ -90,7 +95,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(garden.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
         self.assertEqual(garden.get("location"), model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_COORDINATES, model_data.get("coordinates"))
+        self.assertEqual(str(SAMPLE_GARDEN_COORDINATES), model_data.get("coordinates"))
 
     def test_get_garden_by_invalid_id(self):
         request = self.factory.get(GARDEN_URL, format="json")
@@ -156,12 +161,12 @@ class TestPatch(TestCase):
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
         self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_COORDINATES, model_data.get("coordinates"))
+        self.assertEqual(str(SAMPLE_GARDEN_COORDINATES), model_data.get("coordinates"))
 
     def test_partial_update_garden_invalid_payload(self):
         response = self._build_patch_response({"garden_name": "Foo_updated", "direction": "north"})
         response.render()
-
+        print(response.content)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
@@ -196,10 +201,10 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    @patch("geocoder.google")
+    @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
     def test_create_garden(self, mock_google):
-        mock = Mock()
-        mock.latlng = SAMPLE_GARDEN_COORDINATES
+        attributes = {'address': 'test_address', 'latitude': 50.263195, 'longitude': -5.051041}
+        mock = Mock(**attributes)
         mock_google.return_value = mock
 
         payload = SAMPLE_GARDEN
@@ -239,11 +244,9 @@ class TestPost(TestCase):
             }
         )
 
-    @patch("geocoder.google")
+    @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
     def test_create_garden_geocoder_unreachable(self, mock_google):
-        mock = Mock()
-        mock.latlng = None
-        mock_google.return_value = mock
+        mock_google.side_effect = GeocoderServiceError
 
         request = self.factory.post(
             GARDEN_URL,
@@ -293,7 +296,7 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
         self.assertEqual(SAMPLE_GARDEN.get("location"), model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_COORDINATES, model_data.get("coordinates"))
+        self.assertEqual(str(SAMPLE_GARDEN_COORDINATES), model_data.get("coordinates"))
 
     def test_update_garden_invalid_payload(self):
         response = self._build_put_response({

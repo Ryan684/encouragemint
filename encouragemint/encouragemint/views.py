@@ -1,5 +1,6 @@
-import geocoder
 from django.conf import settings
+from geopy import GoogleV3
+from geopy.exc import GeocoderServiceError
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
@@ -44,10 +45,12 @@ class GardenViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def _lookup_garden_coordinates(self):
-        geocode = geocoder.google(self.request.data["location"], key=settings.GOOGLE_API_KEY)
-        if not geocode.latlng:
+        try:
+            geolocator = GoogleV3(api_key=settings.GOOGLE_API_KEY)
+            location = geolocator.geocode(self.request.data["location"])
+            return [location.latitude, location.longitude]
+        except GeocoderServiceError:
             raise GeocoderConnectionError()
-        return geocode.latlng
 
 
 class PlantViewSet(viewsets.ModelViewSet):
