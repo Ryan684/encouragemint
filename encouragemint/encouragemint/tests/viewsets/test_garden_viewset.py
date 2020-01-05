@@ -22,7 +22,7 @@ SAMPLE_GARDEN_LONGITUDE = -5.051041
 @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
 def create_test_garden(mock_google):
     attributes = {
-        'address': 'test_address',
+        'address': SAMPLE_GARDEN.get("location"),
         'latitude': SAMPLE_GARDEN_LATITUDE,
         'longitude': SAMPLE_GARDEN_LONGITUDE
     }
@@ -207,7 +207,11 @@ class TestPost(TestCase):
 
     @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
     def test_create_garden(self, mock_google):
-        attributes = {'address': 'test_address', 'latitude': 50.263195, 'longitude': -5.051041}
+        attributes = {
+            'address': SAMPLE_GARDEN.get("location"),
+            'latitude': SAMPLE_GARDEN_LATITUDE,
+            'longitude': SAMPLE_GARDEN_LONGITUDE
+        }
         mock = Mock(**attributes)
         mock_google.return_value = mock
 
