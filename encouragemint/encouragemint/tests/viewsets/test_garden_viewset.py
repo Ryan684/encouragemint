@@ -264,6 +264,24 @@ class TestPost(TestCase):
             response.data
         )
 
+    @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
+    def test_create_garden_geocoder_no_location_matches(self, mock_google):
+        mock_google.return_value = None
+
+        request = self.factory.post(
+            GARDEN_URL,
+            SAMPLE_GARDEN,
+            format="json"
+        )
+        response = self.view(request)
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            {"Message": "Encouragemint couldn't find that location. Try to be more accurate."},
+            response.data
+        )
+
 
 class TestPut(TestCase):
     def setUp(self):

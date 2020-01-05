@@ -4,7 +4,7 @@ from geopy.exc import GeocoderServiceError
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from encouragemint.encouragemint.exceptions import GeocoderConnectionError
+from encouragemint.encouragemint.exceptions import GeocoderConnectionError, GeocoderNoResultsError
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
@@ -39,6 +39,11 @@ class GardenViewSet(viewsets.ModelViewSet):
                 {"Message": "Encouragemint can't create new gardens right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        except GeocoderNoResultsError:
+            return Response(
+                {"Message": "Encouragemint couldn't find that location. Try to be more accurate."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         serializer.save(latitude=latitude, longitude=longitude, location=location)
         headers = self.get_success_headers(serializer.data)
@@ -48,7 +53,9 @@ class GardenViewSet(viewsets.ModelViewSet):
         try:
             geolocator = GoogleV3(api_key=settings.GOOGLE_API_KEY)
             location = geolocator.geocode(self.request.data["location"])
-            return location.latitude, location.longitude, location.address
+            if location:
+                return location.latitude, location.longitude, location.address
+            raise GeocoderNoResultsError()
         except GeocoderServiceError:
             raise GeocoderConnectionError()
 
