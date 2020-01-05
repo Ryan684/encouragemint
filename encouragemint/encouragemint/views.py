@@ -1,6 +1,6 @@
 from django.conf import settings
 from geopy import GoogleV3
-from geopy.exc import GeocoderServiceError
+from geopy.exc import GeopyError
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
@@ -53,10 +53,11 @@ class GardenViewSet(viewsets.ModelViewSet):
         try:
             geolocator = GoogleV3(api_key=settings.GOOGLE_API_KEY)
             location = geolocator.geocode(self.request.data["location"])
+
             if location:
                 return location.latitude, location.longitude, location.address
             raise GeocoderNoResultsError()
-        except GeocoderServiceError:
+        except GeopyError:
             raise GeocoderConnectionError()
 
 
