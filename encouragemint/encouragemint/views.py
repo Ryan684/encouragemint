@@ -33,14 +33,14 @@ class GardenViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         try:
-            coordinates = self._lookup_garden_coordinates()
+            latitude, longitude = self._lookup_garden_coordinates()
         except GeocoderConnectionError:
             return Response(
                 {"Message": "Encouragemint can't create new gardens right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-        serializer.save(coordinates=coordinates)
+        serializer.save(latitude=latitude, longitude=longitude)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -48,7 +48,7 @@ class GardenViewSet(viewsets.ModelViewSet):
         try:
             geolocator = GoogleV3(api_key=settings.GOOGLE_API_KEY)
             location = geolocator.geocode(self.request.data["location"])
-            return [location.latitude, location.longitude]
+            return location.latitude, location.longitude
         except GeocoderServiceError:
             raise GeocoderConnectionError()
 

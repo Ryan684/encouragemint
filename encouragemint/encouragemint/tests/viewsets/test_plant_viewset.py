@@ -14,7 +14,16 @@ from encouragemint.encouragemint.views import PlantViewSet
 
 PLANT_URL = "/plant/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
-TEST_GARDEN = Garden.objects.create(**{"garden_name": "Foo", "profile": TEST_PROFILE})
+TEST_GARDEN = Garden.objects.create(
+    **{
+        "garden_name": "Foo",
+        "profile": TEST_PROFILE,
+        "direction": "north",
+        "location": "Truro, UK",
+        "latitude": 50.263195,
+        "longitude": -5.051041
+    }
+)
 SAMPLE_PLANT = {
     "scientific_name": "Eriophyllum lanatum",
     "common_name": "common woolly sunflower",

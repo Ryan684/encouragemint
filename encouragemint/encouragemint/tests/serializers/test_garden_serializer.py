@@ -16,7 +16,7 @@ class TestSerializerParameters(TestGardenSerializerValidators):
     def test_serializer_parameters(self):
         self.assertEqual(
             ["garden_id", "garden_name", "plants", "profile", "direction",
-             "sunlight", "location", "coordinates"],
+             "sunlight", "location", "latitude", "longitude"],
             self.test_obj.Meta.fields)
         self.assertEqual(["garden_id", "profile", "sunlight"],
                          self.test_obj.Meta.read_only_fields)
@@ -76,7 +76,15 @@ class TestValidateSunlight(TestGardenSerializerValidators):
     def _validate_sunlight_by_direction(self, direction, expected_sunlight):
         profile = Profile.objects.create(**{"first_name": "Jane", "last_name": "Doe"})
         garden = Garden.objects.create(
-            **{"garden_name": "Backyard", "profile": profile, "direction": direction})
+            **{
+                "garden_name": "Backyard",
+                "profile": profile,
+                "direction": direction,
+                "location": "Truro, UK",
+                "latitude": 50.263195,
+                "longitude": -5.051041
+            }
+        )
         self.assertEqual(expected_sunlight, garden.sunlight)
 
 

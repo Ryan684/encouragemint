@@ -15,7 +15,8 @@ class Garden(models.Model):
     garden_name = models.CharField(max_length=25)
     direction = models.CharField(max_length=5)
     location = models.CharField(max_length=100)
-    coordinates = models.CharField(max_length=50)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
 
     @property
     def sunlight(self):
