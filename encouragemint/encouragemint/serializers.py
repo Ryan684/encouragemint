@@ -135,10 +135,12 @@ class GardenSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_location(value):
-        if re.fullmatch(r"^[a-zA-Z0-9\-\s',]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z0-9\-\s',]+,[a-zA-Z0-9\-\s',]+$", value) is None:
             raise serializers.ValidationError(
                 "Invalid entry for the garden's location. A garden's location can only "
-                "contain letters, numbers, hyphens, spaces, commas and apostrophes.")
+                "contain letters, numbers, hyphens, spaces, commas and apostrophes. "
+                "To be a valid location, you also have to have at least one degree of accuracy. "
+                "For example; 'London' would not be valid, but 'London, UK' would work.")
         return value
 
 

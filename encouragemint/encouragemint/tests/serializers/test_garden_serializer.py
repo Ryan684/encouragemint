@@ -94,15 +94,17 @@ class TestValidateLocation(TestGardenSerializerValidators):
         super(TestValidateLocation, cls).setUpClass()
 
     def test_valid_location(self):
-        location = "1234 Shallow Road, Falmouth, UK"
+        location = "Falmouth, UK"
         self.assertEqual(location, self.test_obj.validate_location(location))
 
     def test_invalid_location(self):
-        location = "1234*Shaddow*Road*Falmouth*UK"
+        location = "Falmouth"
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the garden's location. A garden's location can only "
-            f"contain letters, numbers, hyphens, spaces, commas and apostrophes.",
+            f"contain letters, numbers, hyphens, spaces, commas and apostrophes. "
+            f"To be a valid location, you also have to have at least one degree of accuracy. "
+            f"For example; 'London' would not be valid, but 'London, UK' would work.",
             self.test_obj.validate_location,
             location
         )
