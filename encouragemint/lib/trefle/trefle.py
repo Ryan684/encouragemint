@@ -18,12 +18,12 @@ class TrefleAPI:
     def lookup_plants_by_shade_tolerance(self, shade_tolerance):
         return self._lookup_plants("shade_tolerance", shade_tolerance)
 
-    def _lookup_plants(self, name_key, plant_name):
+    def _lookup_plants(self, plant_attribute, criteria):
         try:
-            results = self._lookup_plants_by_name(name_key, plant_name)
+            results = self._lookup_plants_by_name(plant_attribute, criteria)
 
             if len(results) == 1:
-                plant = self._lookup_plant_by_id(results)
+                plant = self._lookup_plant_by_id(results[0].get("id"))
                 return self._extract_plant_data(plant)
 
             return results
@@ -41,10 +41,10 @@ class TrefleAPI:
 
         return results.json()
 
-    def _lookup_plant_by_id(self, results):
+    def _lookup_plant_by_id(self, plant_id):
         return self._send_trefle_request(
             self._compile_parameters(),
-            self._compile_url(results[0].get("id"))
+            self._compile_url(plant_id)
         ).json()
 
     def _compile_parameters(self, key=None, value=None):
