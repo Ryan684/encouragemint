@@ -31,6 +31,7 @@ class TestValidateFirstName(TestProfileSerializerValidators):
 
     def test_invalid_first_name(self):
         first_name = "Ryan_123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Your first name can only contain letters.",
@@ -50,6 +51,7 @@ class TestValidateLastName(TestProfileSerializerValidators):
 
     def test_invalid_last_name(self):
         last_name = "Ryan_123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Your last name can only contain letters.",

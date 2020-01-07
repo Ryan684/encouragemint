@@ -34,6 +34,7 @@ class TestValidateGardenName(TestGardenSerializerValidators):
 
     def test_invalid_garden_name(self):
         garden_name = "Backyard_123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the garden's name. "
@@ -54,6 +55,7 @@ class TestValidateDirection(TestGardenSerializerValidators):
 
     def test_invalid_direction(self):
         direction = "down"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"A garden's direction can only be north, east, south or west.",
@@ -99,6 +101,7 @@ class TestValidateLocation(TestGardenSerializerValidators):
 
     def test_invalid_location(self):
         location = "Falmouth"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the garden's location. A garden's location can only "

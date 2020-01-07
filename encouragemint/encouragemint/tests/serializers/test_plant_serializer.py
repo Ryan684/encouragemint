@@ -35,6 +35,7 @@ class TestValidateScientificName(TestPlantSerializerValidators):
 
     def test_invalid_scientific_name(self):
         scientific_name = "Rose*123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's scientific name.",
@@ -54,6 +55,7 @@ class TestValidateDuration(TestPlantSerializerValidators):
 
     def test_invalid_duration(self):
         duration = "Perennial_123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's duration.",
@@ -73,6 +75,7 @@ class TestValidateBloomPeriod(TestPlantSerializerValidators):
 
     def test_invalid_bloom_period(self):
         bloom_period = "Mid_summer"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's bloom period.",
@@ -92,6 +95,7 @@ class TestValidateGrowthPeriod(TestPlantSerializerValidators):
 
     def test_invalid_growth_period(self):
         growth_period = "Spring_Summer"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's growth period.",
@@ -111,6 +115,7 @@ class TestValidateGrowthRate(TestPlantSerializerValidators):
 
     def test_invalid_growth_rate(self):
         growth_rate = "Slow_123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's growth rate.",
@@ -130,6 +135,7 @@ class TestValidateShadeTolerance(TestPlantSerializerValidators):
 
     def test_invalid_shade_tolerance(self):
         shade_tolerance = "Intolerant_123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's shade tolerance.",
@@ -149,6 +155,7 @@ class TestValidateMoistureUse(TestPlantSerializerValidators):
 
     def test_invalid_moisture_use(self):
         moisture_use = "Medium_123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's moisture use.",
@@ -168,6 +175,7 @@ class TestValidateFamilyName(TestPlantSerializerValidators):
 
     def test_invalid_family_common_name(self):
         family_name = "Rose*Bushes"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's family common name.",
@@ -187,6 +195,7 @@ class TestValidateTrefleID(TestPlantSerializerValidators):
 
     def test_invalid_trefle_id(self):
         trefle_id = "123"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's Trefle ID.",
@@ -206,6 +215,7 @@ class TestValidateCommonName(TestPlantSerializerValidators):
 
     def test_invalid_common_name(self):
         common_name = "Rose*Bush"
+
         self.assertRaisesMessage(
             serializers.ValidationError,
             f"Invalid entry for the plant's common name.",
