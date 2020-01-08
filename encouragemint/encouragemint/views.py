@@ -75,10 +75,11 @@ class PlantViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         serializer = NewPlantRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        plant_name_query = request.data["plant_name"]
+        plant_name = request.data["plant_name"]
+        garden = Garden.objects.get(garden_id=self.request.data["garden"])
 
         try:
-            result = self._lookup_plant(plant_name_query, "common_name")
+            result = self._lookup_plant_by_name("common_name", plant_name, garden)
         except TrefleConnectionError:
             return Response(
                 {"Message": "Encouragemint can't add new plants right now. Try again later."},
@@ -107,10 +108,10 @@ class PlantViewSet(viewsets.ModelViewSet):
         plant_id = kwargs["plant_id"]
         plant = Plant.objects.get(plant_id=plant_id)
         garden = plant.garden
-        plant_name_query = plant.scientific_name
+        plant_name = plant.scientific_name
 
         try:
-            result = self._lookup_plant(plant_name_query, "scientific_name", garden)
+            result = self._lookup_plant_by_name("scientific_name", plant_name, garden)
         except TrefleConnectionError:
             return Response(
                 {"Message": "Encouragemint can't update plants right now. Try again later."},
@@ -123,12 +124,10 @@ class PlantViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
-    def _lookup_plant(self, plant_name, query, garden=None):
+    def _lookup_plant_by_name(self, query, plant_name, garden):
         result = self.trefle.lookup_plants({query: plant_name})
 
         if isinstance(result, dict):
-            if not garden:
-                garden = Garden.objects.get(garden_id=self.request.data["garden"])
             result["garden"] = garden.garden_id
 
         return result
