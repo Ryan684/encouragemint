@@ -124,10 +124,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
     def _lookup_plant(self, plant_name, query, garden=None):
-        if query == "scientific_name":
-            result = self.trefle.lookup_plants_by_scientific_name(plant_name)
-        else:
-            result = self.trefle.lookup_plants_by_expected_name(plant_name)
+        result = self.trefle.lookup_plants({query: plant_name})
 
         if isinstance(result, dict):
             if not garden:

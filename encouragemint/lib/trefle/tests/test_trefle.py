@@ -27,63 +27,26 @@ class TestTrefle(TestCase):
     @patch("requests.get")
     def test_trefle_unreachable(self, mock_get):
         mock_get.side_effect = ConnectionError
+
         self.assertRaises(
             TrefleConnectionError,
-            self.trefle.lookup_plants_by_scientific_name, "Fooflower"
+            self.trefle.lookup_plants, {"q": "Fooflower"}
         )
 
     @patch("requests.get")
     def test_search_plants_no_results(self, mock_get):
         mock_get.return_value = []
 
-        plant_name = "Fooflower"
-        response = self.trefle.lookup_plants_by_expected_name(plant_name)
+        response = self.trefle.lookup_plants({"q": "Barflower"})
 
         self.assertEqual([], response)
 
     @patch("requests.get")
-    def test_search_plants_one_result(self, mock_get):
+    def test_lookup_plants_one_result(self, mock_get):
         mock_responses = [Mock(), Mock()]
         mock_responses[0].json.return_value = self.search_single_match
         mock_responses[1].json.return_value = self.id_search
         mock_get.side_effect = mock_responses
-
-        plant_name = "common woolly sunflower"
-        response = self.trefle.lookup_plants_by_expected_name(plant_name)
-
-        self._validate_plant(response)
-
-    @patch("requests.get")
-    def test_search_plants_many_results(self, mock_get):
-        mock_get.return_value = self.search_many_matches
-
-        search_term = "grass"
-        response = self.trefle.lookup_plants_by_expected_name(search_term)
-
-        self.assertEqual(self.search_many_matches, response)
-
-    @patch("requests.get")
-    def test_lookup_plant_by_scientific_name(self, mock_get):
-        mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = self.search_single_match
-        mock_responses[1].json.return_value = self.id_search
-        mock_get.side_effect = mock_responses
-        plant_name = "Eriophyllum lanatum"
-
-        response = self.trefle.lookup_plants_by_scientific_name(plant_name)
-
-        self._validate_plant(response)
-
-    @patch("requests.get")
-    def test_lookup_plants_by_shade_tolerance(self, mock_get):
-        mock_get.return_value = self.search_many_matches
-        shade_tolerance = "Intermediate"
-
-        response = self.trefle.lookup_plants_by_shade_tolerance(shade_tolerance)
-
-        self.assertEqual(self.search_many_matches, response)
-
-    def _validate_plant(self, response):
         test_plant = {
             "trefle_id": 134845,
             "common_name": "common woolly sunflower",
@@ -97,13 +60,22 @@ class TestTrefle(TestCase):
             "scientific_name": "Eriophyllum lanatum"
         }
 
-        self.assertEqual(test_plant.get("trefle_id"), response.get("trefle_id"))
-        self.assertEqual(test_plant.get("scientific_name"), response.get("scientific_name"))
-        self.assertEqual(test_plant.get("common_name"), response.get("common_name"))
-        self.assertEqual(test_plant.get("duration"), response.get("duration"))
-        self.assertEqual(test_plant.get("bloom_period"), response.get("bloom_period"))
-        self.assertEqual(test_plant.get("growth_period"), response.get("growth_period"))
-        self.assertEqual(test_plant.get("growth_rate"), response.get("growth_rate"))
-        self.assertEqual(test_plant.get("shade_tolerance"), response.get("shade_tolerance"))
-        self.assertEqual(test_plant.get("moisture_use"), response.get("moisture_use"))
-        self.assertEqual(test_plant.get("family_common_name"), response.get("family_common_name"))
+        response = self.trefle.lookup_plants({"scientific_name": "common woolly sunflower"})
+
+        self.assertEqual(test_plant, response)
+
+    @patch("requests.get")
+    def test_lookup_plants_many_results(self, mock_get):
+        mock_get.return_value = self.search_many_matches
+
+        response = self.trefle.lookup_plants({"q": "grass"})
+
+        self.assertEqual(self.search_many_matches, response)
+
+    @patch("requests.get")
+    def test_lookup_plants_by_multiple_properties(self, mock_get):
+        mock_get.return_value = self.search_many_matches
+
+        response = self.trefle.lookup_plants({"shade_tolerance": "High", "moisture_use": "High"})
+
+        self.assertEqual(self.search_many_matches, response)

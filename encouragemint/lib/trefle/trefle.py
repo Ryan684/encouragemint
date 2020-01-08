@@ -9,30 +9,21 @@ class TrefleAPI:
     HEADERS = {"content-type": "application/json"}
     TOKEN = settings.TREFLE_API_KEY
 
-    def lookup_plants_by_scientific_name(self, plant_name):
-        return self._lookup_plants("scientific_name", plant_name)
-
-    def lookup_plants_by_expected_name(self, plant_name):
-        return self._lookup_plants("q", plant_name)
-
-    def lookup_plants_by_shade_tolerance(self, shade_tolerance):
-        return self._lookup_plants("shade_tolerance", shade_tolerance)
-
-    def _lookup_plants(self, plant_attribute, criteria):
+    def lookup_plants(self, trefle_query):
         try:
-            results = self._lookup_plants_by_name(plant_attribute, criteria)
+            results = self._lookup_plants_by_name(trefle_query)
 
             if len(results) == 1:
                 plant = self._lookup_plant_by_id(results[0].get("id"))
                 return self._extract_plant_data(plant)
 
             return results
-        except requests.ConnectionError:
+        except requests.RequestException:
             raise TrefleConnectionError()
 
-    def _lookup_plants_by_name(self, name_key, plant_name):
+    def _lookup_plants_by_name(self, trefle_query):
         results = self._send_trefle_request(
-            self._compile_parameters(name_key, plant_name),
+            self._compile_parameters(trefle_query),
             self._compile_url()
         )
 
@@ -47,15 +38,16 @@ class TrefleAPI:
             self._compile_url(plant_id)
         ).json()
 
-    def _compile_parameters(self, key=None, value=None):
-        parameters = {
+    def _compile_parameters(self, extra_parameters=None):
+        url_parameters = {
             "token": self.TOKEN
         }
 
-        if key and value:
-            parameters[key] = value
+        if extra_parameters:
+            for parameter in extra_parameters:
+                url_parameters[parameter] = extra_parameters[parameter]
 
-        return parameters
+        return url_parameters
 
     def _compile_url(self, plant_id=None):
         url = self.PLANTS_ENDPOINT
