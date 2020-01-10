@@ -1,7 +1,7 @@
 from django.conf import settings
 from geopy import GoogleV3
 from geopy.exc import GeopyError
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 
 from encouragemint.encouragemint.exceptions import GeocoderConnectionError, GeocoderNoResultsError
@@ -131,3 +131,11 @@ class PlantViewSet(viewsets.ModelViewSet):
             result["garden"] = garden.garden_id
 
         return result
+
+
+class RecommendViewSet(generics.RetrieveAPIView):
+    queryset = Garden.objects.all()
+    serializer_class = GardenSerializer
+    lookup_field = "garden_id"
+
+    # TODO Override retrieve, have it take url parameter and generate payload for trefle

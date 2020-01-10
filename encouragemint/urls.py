@@ -13,12 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 
-from encouragemint.encouragemint.views import ProfileViewSet, PlantViewSet, GardenViewSet
+from encouragemint.encouragemint.views import ProfileViewSet, PlantViewSet, GardenViewSet, RecommendViewSet
 
 router = DefaultRouter()
 router.register(r"profile", ProfileViewSet)
 router.register(r"garden", GardenViewSet)
 router.register(r"plant", PlantViewSet)
-urlpatterns = router.urls
+
+urlpatterns = [
+    url(r"^recommend/(?P<garden_id>[^/.]+)/$", RecommendViewSet.as_view()),
+]
+
+urlpatterns += router.urls
