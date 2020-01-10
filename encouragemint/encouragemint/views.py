@@ -137,5 +137,11 @@ class RecommendViewSet(generics.RetrieveAPIView):
     queryset = Garden.objects.all()
     serializer_class = GardenSerializer
     lookup_field = "garden_id"
+    http_method_names = ["get"]
+    trefle = TrefleAPI()
 
-    # TODO Override retrieve, have it take url parameter and generate payload for trefle
+    def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        garden = self.get_object()
+        query = {"shade_tolerance": garden.sunlight}  # Tolerant Intolerant Intermediate
+        plants = self.trefle.lookup_plants(query)
+        return Response(plants)

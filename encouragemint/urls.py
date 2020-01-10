@@ -16,15 +16,15 @@ Including another URLconf
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 
-from encouragemint.encouragemint.views import ProfileViewSet, PlantViewSet, GardenViewSet, RecommendViewSet
+from encouragemint.encouragemint import views
 
 router = DefaultRouter()
-router.register(r"profile", ProfileViewSet)
-router.register(r"garden", GardenViewSet)
-router.register(r"plant", PlantViewSet)
+router.register(r"profile", views.ProfileViewSet)
+router.register(r"garden", views.GardenViewSet)
+router.register(r"plant", views.PlantViewSet)
 
 urlpatterns = [
-    url(r"^recommend/(?P<garden_id>[^/.]+)/$", RecommendViewSet.as_view()),
+    url(r"^recommend/(?P<garden_id>[^/.]+)/$", views.RecommendViewSet.as_view()),
 ]
 
 urlpatterns += router.urls
