@@ -127,7 +127,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
-    def _lookup_plant_by_name(self, query, plant_name, garden):
+    def _lookup_plant_by_name(self, query, plant_name, garden):  # pylint: disable=no-self-use
         result = TREFLE.lookup_plants({query: plant_name})
 
         if isinstance(result, dict):
@@ -149,7 +149,8 @@ class RecommendViewSet(generics.RetrieveAPIView):
             plants = TREFLE.lookup_plants(query)
         except trefle.exceptions.TrefleConnectionError:
             return Response(
-                {"Message": "Encouragemint can't recommend plants for your garden right now. Try again later."},
+                {"Message": "Encouragemint can't recommend plants for your garden right now. "
+                            "Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
