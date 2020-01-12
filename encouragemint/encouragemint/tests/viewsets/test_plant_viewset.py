@@ -196,7 +196,8 @@ class TestPost(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"plant_name": ["A plant's name can only contain letters."]}
+            {"plant_name": ["Invalid entry for the plant's's name. A garden's name can only "
+                            "contain letters, hyphens, spaces and apostrophes."]}
         )
 
     @patch("requests.get")
