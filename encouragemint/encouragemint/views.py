@@ -141,11 +141,11 @@ class RecommendViewSet(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         garden = self.get_object()
-        query = {"shade_tolerance": self._get_shade_tolerance(garden)}  # Tolerant Intolerant Intermediate
+        query = {"shade_tolerance": self._get_shade_tolerance(garden)}
         plants = self.trefle.lookup_plants(query)
         return Response(plants)
 
-    def _get_shade_tolerance(self, garden):
+    def _get_shade_tolerance(self, garden):  # pylint: disable=no-self-use
         if garden.sunlight == "north":
             return "Tolerant"
         if garden.sunlight == "south":
