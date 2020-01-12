@@ -8,6 +8,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Profile
 from encouragemint.encouragemint.serializers import GardenSerializer
+from encouragemint.encouragemint.tests.viewsets.helpers import create_test_garden
 from encouragemint.encouragemint.views import GardenViewSet
 
 GARDEN_URL = "/garden/"
@@ -19,25 +20,6 @@ SAMPLE_GARDEN_GEOCODE_LOCATION = {
     'latitude': 50.263195,
     'longitude': -5.051041
 }
-
-
-@override_settings(GOOGLE_API_KEY="Foo")
-@patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-def create_test_garden(mock_google):
-    mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
-    mock_google.return_value = mock
-
-    existing_garden = SAMPLE_GARDEN
-    existing_garden["profile"] = str(TEST_PROFILE.profile_id)
-    request = APIRequestFactory().post(
-        GARDEN_URL,
-        existing_garden,
-        format="json"
-    )
-    response = GardenViewSet.as_view({"post": "create"})(request)
-    response.render()
-    model_data = json.loads(response.content.decode("utf-8"))
-    return model_data
 
 
 class TestGardenViewsetParameters(TestCase):
@@ -247,7 +229,7 @@ class TestPost(TestCase):
         )
 
     @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-    def test_create_garden_geocoder_unreachable(self, mock_google):
+    def test_unsuccessful_create_garden_from_geocoder_exception(self, mock_google):
         mock_google.side_effect = GeocoderServiceError
 
         request = self.factory.post(

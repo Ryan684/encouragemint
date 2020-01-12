@@ -9,8 +9,11 @@ from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
     NewPlantRequestSerializer)
+from encouragemint.lib import trefle
 from encouragemint.lib.trefle.trefle import TrefleAPI
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
+
+TREFLE = TrefleAPI()
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -112,7 +115,7 @@ class PlantViewSet(viewsets.ModelViewSet):
 
         try:
             result = self._lookup_plant_by_name("scientific_name", plant_name, garden)
-        except TrefleConnectionError:
+        except trefle.exceptions.TrefleConnectionError:
             return Response(
                 {"Message": "Encouragemint can't update plants right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -125,7 +128,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
     def _lookup_plant_by_name(self, query, plant_name, garden):
-        result = self.trefle.lookup_plants({query: plant_name})
+        result = TREFLE.lookup_plants({query: plant_name})
 
         if isinstance(result, dict):
             result["garden"] = garden.garden_id
@@ -137,12 +140,19 @@ class RecommendViewSet(generics.RetrieveAPIView):
     queryset = Garden.objects.all()
     lookup_field = "garden_id"
     http_method_names = ["get"]
-    trefle = TrefleAPI()
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         garden = self.get_object()
         query = {"shade_tolerance": self._get_shade_tolerance(garden)}
-        plants = self.trefle.lookup_plants(query)
+
+        try:
+            plants = TREFLE.lookup_plants(query)
+        except trefle.exceptions.TrefleConnectionError:
+            return Response(
+                {"Message": "Encouragemint can't recommend plants for your garden right now. Try again later."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
         return Response(plants)
 
     def _get_shade_tolerance(self, garden):  # pylint: disable=no-self-use

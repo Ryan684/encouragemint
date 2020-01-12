@@ -200,7 +200,7 @@ class TestPost(TestCase):
         )
 
     @patch("requests.get")
-    def test_create_plant_trefle_down(self, mock_trefle):
+    def test_unsuccessful_create_plant_from_trefle_exception(self, mock_trefle):
         mock_trefle.side_effect = requests.ConnectionError
         payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
