@@ -135,13 +135,19 @@ class PlantViewSet(viewsets.ModelViewSet):
 
 class RecommendViewSet(generics.RetrieveAPIView):
     queryset = Garden.objects.all()
-    serializer_class = GardenSerializer
     lookup_field = "garden_id"
     http_method_names = ["get"]
     trefle = TrefleAPI()
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         garden = self.get_object()
-        query = {"shade_tolerance": garden.sunlight}  # Tolerant Intolerant Intermediate
+        query = {"shade_tolerance": self._get_shade_tolerance(garden)}  # Tolerant Intolerant Intermediate
         plants = self.trefle.lookup_plants(query)
         return Response(plants)
+
+    def _get_shade_tolerance(self, garden):
+        if garden.sunlight == "north":
+            return "Tolerant"
+        if garden.sunlight == "south":
+            return "Intolerant"
+        return "Intermediate"
