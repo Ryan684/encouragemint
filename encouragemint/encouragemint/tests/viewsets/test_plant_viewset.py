@@ -56,14 +56,14 @@ class TestDelete(TestCase):
         response = self.view(request, plant_id=plant_id)
         return response
 
-    def test_delete_plant(self):
+    def test_successful_delete_plant(self):
         plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         response = self._build_delete_response(plant_id)
         response.render()
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_plant_by_invalid_id(self):
+    def test_unsuccessful_delete_plant_from_invalid_id(self):
         response = self._build_delete_response("Foo")
         response.render()
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
@@ -74,7 +74,7 @@ class TestGetRetrieve(TestCase):
         self.factory = APIRequestFactory()
         self.get_by_id_view = PlantViewSet.as_view({"get": "retrieve"})
 
-    def test_get_plant(self):
+    def test_successful_get_plant(self):
         plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         request = self.factory.get(PLANT_URL, format="json")
@@ -98,7 +98,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
-    def test_get_plant_by_invalid_id(self):
+    def test_unsuccessful_get_plant_from_invalid_id(self):
         request = self.factory.get(PLANT_URL, format="json")
         response = self.get_by_id_view(request, plant_id="Foo")
 
@@ -110,7 +110,7 @@ class TestGetList(TestCase):
         self.factory = APIRequestFactory()
         self.get_all_view = PlantViewSet.as_view({"get": "list"})
 
-    def test_get_all_plants(self):
+    def test_successful_get_all_plants(self):
         Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
         request = self.factory.get(PLANT_URL, format="json")
@@ -154,7 +154,7 @@ class TestPost(TestCase):
         return response
 
     @patch("requests.get")
-    def test_create_plant(self, mock_trefle):
+    def test_successful_create_plant(self, mock_trefle):
         stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
         with open(f"{stubbed_json_responses_dir}/plant_search_one_match.json", "r") as file:
             search_single_match = json.load(file)
@@ -187,7 +187,7 @@ class TestPost(TestCase):
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
-    def test_create_plant_invalid_payload(self):
+    def test_unsuccessful_create_plant_from_invalid_payload(self):
         payload = self.new_plant_request.copy()
         payload["plant_name"] = "F00"
         response = self._build_post_response(payload)
@@ -214,7 +214,7 @@ class TestPost(TestCase):
         )
 
     @patch("requests.get")
-    def test_create_plant_many_trefle_results(self, mock_trefle):
+    def test_successful_create_plant_many_trefle_results(self, mock_trefle):
         stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
         with open(f"{stubbed_json_responses_dir}/plant_search_many_matches.json", "r") as file:
             search_many_matches = json.load(file)
@@ -231,7 +231,7 @@ class TestPost(TestCase):
         )
 
     @patch("requests.get")
-    def test_create_plant_no_trefle_results(self, mock_trefle):
+    def test_unsuccessful_create_plant_from_no_trefle_results(self, mock_trefle):
         mock_trefle.return_value = []
         payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
@@ -261,7 +261,7 @@ class TestPut(TestCase):
         return self.view(request, plant_id=plant_id)
 
     @patch("requests.get")
-    def test_update_plant(self, mock_trefle):
+    def test_successful_update_plant(self, mock_trefle):
         stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
         with open(f"{stubbed_json_responses_dir}/plant_search_one_match.json", "r") as file:
             search_single_match = json.load(file)
@@ -295,7 +295,7 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
     @patch("requests.get")
-    def test_update_plant_trefle_down(self, mock_trefle):
+    def test_unsuccessful_update_plant_from_trefle_exception(self, mock_trefle):
         mock_trefle.side_effect = requests.ConnectionError
         response = self._build_put_response()
         response.render()
@@ -306,7 +306,7 @@ class TestPut(TestCase):
             response.data
         )
 
-    def test_update_plant_by_invalid_id(self):
+    def test_unsuccessful_update_plant_from_invalid_id(self):
         new_plant_details = SAMPLE_PLANT.copy()
         new_plant_details["scientific_name"] = "Fooupdated"
         new_plant_details["garden"] = str(TEST_GARDEN.garden_id)

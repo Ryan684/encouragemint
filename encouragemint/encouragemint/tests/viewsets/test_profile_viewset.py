@@ -33,7 +33,7 @@ class TestDelete(TestCase):
         response = self.view(request, profile_id=profile_id)
         return response
 
-    def test_delete_profile(self):
+    def test_successful_delete_profile(self):
         profile = Profile.objects.create(**SAMPLE_PROFILE)
         profile_id = profile.profile_id
         response = self._build_delete_response(profile_id)
@@ -41,7 +41,7 @@ class TestDelete(TestCase):
 
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_profile_bad_id(self):
+    def test_unsuccessful_delete_profile_from_invalid_id(self):
         response = self._build_delete_response("Foo")
         response.render()
 
@@ -53,7 +53,7 @@ class TestGetRetrieve(TestCase):
         self.factory = APIRequestFactory()
         self.get_by_id_view = ProfileViewSet.as_view({"get": "retrieve"})
 
-    def test_get_profile(self):
+    def test_successful_get_profile(self):
         profile = Profile.objects.create(**SAMPLE_PROFILE)
         profile_id = profile.profile_id
         request = self.factory.get(PROFILE_URL, format="json")
@@ -66,7 +66,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(profile.first_name, model_data.get("first_name"))
         self.assertEqual(profile.last_name, model_data.get("last_name"))
 
-    def test_get_profile_by_invalid_id(self):
+    def test_unsuccessful_get_profile_from_invalid_id(self):
         request = self.factory.get(PROFILE_URL, format="json")
         response = self.get_by_id_view(request, profile_id="Foo")
 
@@ -78,7 +78,7 @@ class TestGetList(TestCase):
         self.factory = APIRequestFactory()
         self.get_all_view = ProfileViewSet.as_view({"get": "list"})
 
-    def test_get_all_profiles(self):
+    def test_successful_get_all_profiles(self):
         Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
         Profile.objects.create(**{"first_name": "Whizz", "last_name": "Bang"})
         request = self.factory.get(PROFILE_URL, format="json")
@@ -110,7 +110,7 @@ class TestPatch(TestCase):
         response = self.view(request, profile_id=profile_id)
         return response
 
-    def test_partial_update_profile(self):
+    def test_successful_partial_update_profile(self):
         response = self._build_patch_response({"first_name": "Fooupdated"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -122,7 +122,7 @@ class TestPatch(TestCase):
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
 
-    def test_partial_update_profile_invalid_payload(self):
+    def test_unsuccessful_partial_update_profile_from_invalid_payload(self):
         response = self._build_patch_response({"first_name": "Foo_updated", "last_name": "Bar"})
         response.render()
 
@@ -132,7 +132,7 @@ class TestPatch(TestCase):
             {"first_name": ["Your first name can only contain letters."]}
         )
 
-    def test_partial_update_profile_by_invalid_id(self):
+    def test_unsuccessful_partial_update_profile_from_invalid_id(self):
         request = self.factory.patch(
             PROFILE_URL, {"first_name": "Foo_updated", "last_name": "Bar"}, format="json")
         response = self.view(request, profile_id="Foo")
@@ -154,7 +154,7 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    def test_create_profile(self):
+    def test_successful_create_profile(self):
         response = self._build_post_response(SAMPLE_PROFILE)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -166,7 +166,7 @@ class TestPost(TestCase):
         self.assertEqual("Foo", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
 
-    def test_create_profile_invalid_payload(self):
+    def test_unsuccessful_create_profile_from_invalid_payload(self):
         response = self._build_post_response({"first_name": "F00", "last_name": "Bar"})
         response.render()
 
@@ -193,7 +193,7 @@ class TestPut(TestCase):
         response = self.view(request, profile_id=profile_id)
         return response
 
-    def test_update_profile(self):
+    def test_successful_update_profile(self):
         response = self._build_put_response({"first_name": "Fooupdated", "last_name": "Bar"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -205,7 +205,7 @@ class TestPut(TestCase):
         self.assertEqual("Fooupdated", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
 
-    def test_update_profile_invalid_payload(self):
+    def test_unsuccessful_update_profile_from_invalid_payload(self):
         response = self._build_put_response({"first_name": "Foo_updated", "last_name": "Bar"})
         response.render()
 
@@ -215,7 +215,7 @@ class TestPut(TestCase):
             {"first_name": ["Your first name can only contain letters."]}
         )
 
-    def test_update_profile_by_invalid_id(self):
+    def test_unsuccessful_update_profile_from_invalid_id(self):
         request = self.factory.put(
             PROFILE_URL,
             {"first_name": "Fooupdated", "last_name": "Bar"},

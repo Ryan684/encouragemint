@@ -39,7 +39,7 @@ class TestDelete(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    def test_delete_garden(self):
+    def test_successful_delete_garden(self):
         garden = create_test_garden()
         garden_id = garden.get("garden_id")
         response = self._build_delete_response(garden_id)
@@ -47,7 +47,7 @@ class TestDelete(TestCase):
 
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
-    def test_delete_garden_invalid_id(self):
+    def test_unsuccessful_delete_garden_from_invalid_id(self):
         response = self._build_delete_response("Foo")
         response.render()
 
@@ -59,7 +59,7 @@ class TestGetRetrieve(TestCase):
         self.factory = APIRequestFactory()
         self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
 
-    def test_get_garden(self):
+    def test_successful_get_garden(self):
         garden = create_test_garden()
         garden_id = garden.get("garden_id")
         request = self.factory.get(GARDEN_URL, format="json")
@@ -79,7 +79,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"), model_data.get("longitude"))
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"), model_data.get("latitude"))
 
-    def test_get_garden_by_invalid_id(self):
+    def test_unsuccessful_get_garden_from_invalid_id(self):
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_by_id_view(request, garden_id="Foo")
 
@@ -91,7 +91,7 @@ class TestGetList(TestCase):
         self.factory = APIRequestFactory()
         self.get_all_view = GardenViewSet.as_view({"get": "list"})
 
-    def test_get_all_gardens(self):
+    def test_successful_get_all_gardens(self):
         create_test_garden()
         create_test_garden()
 
@@ -130,7 +130,7 @@ class TestPatch(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    def test_partial_update_garden(self):
+    def test_successful_partial_update_garden(self):
         response = self._build_patch_response({"garden_name": "Fooupdated", "direction": "north"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -147,7 +147,7 @@ class TestPatch(TestCase):
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"), model_data.get("longitude"))
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"), model_data.get("latitude"))
 
-    def test_partial_update_garden_invalid_payload(self):
+    def test_unsuccessful_partial_update_garden_from_invalid_payload(self):
         response = self._build_patch_response({"garden_name": "Foo_updated", "direction": "north"})
         response.render()
 
@@ -162,7 +162,7 @@ class TestPatch(TestCase):
             }
         )
 
-    def test_partial_update_garden_by_invalid_id(self):
+    def test_unsuccessful_partial_update_garden_from_invalid_id(self):
         request = self.factory.patch(
             GARDEN_URL, {"garden_name": "Foo_updated", "direction": "north"}, format="json")
         response = self.view(request, garden_id="Foo")
@@ -186,7 +186,7 @@ class TestPost(TestCase):
         return response
 
     @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-    def test_create_garden(self, mock_google):
+    def test_successful_create_garden(self, mock_google):
         mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
         mock_google.return_value = mock
 
@@ -208,7 +208,7 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"), model_data.get("longitude"))
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"), model_data.get("latitude"))
 
-    def test_create_garden_invalid_payload(self):
+    def test_unsuccessful_create_garden_from_invalid_payload(self):
         response = self._build_post_response({
             "garden_name": "F00$",
             "direction": SAMPLE_GARDEN.get("direction"),
@@ -247,7 +247,7 @@ class TestPost(TestCase):
         )
 
     @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-    def test_create_garden_geocoder_no_location_matches(self, mock_google):
+    def test_unsuccessful_create_garden_from_geocoder_location_not_found(self, mock_google):
         mock_google.return_value = None
 
         request = self.factory.post(
@@ -281,7 +281,7 @@ class TestPut(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    def test_update_garden(self):
+    def test_successful_update_garden(self):
         new_garden_details = SAMPLE_GARDEN.copy()
         new_garden_details["garden_name"] = "Fooupdated"
         new_garden_details["profile"] = str(TEST_PROFILE.profile_id)
@@ -301,7 +301,7 @@ class TestPut(TestCase):
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"), model_data.get("longitude"))
         self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"), model_data.get("latitude"))
 
-    def test_update_garden_invalid_payload(self):
+    def test_unsuccessful_update_garden_from_invalid_payload(self):
         response = self._build_put_response({
             "garden_name": "Foo_updated",
             "direction": SAMPLE_GARDEN.get("direction"),
@@ -321,7 +321,7 @@ class TestPut(TestCase):
             }
         )
 
-    def test_update_garden_by_invalid_id(self):
+    def test_unsuccessful_update_garden_from_invalid_id(self):
         request = self.factory.put(
             GARDEN_URL,
             {

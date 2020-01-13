@@ -154,7 +154,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-        return Response(plants)
+        return Response(plants, status=status.HTTP_200_OK)
 
     def _get_shade_tolerance(self, garden):  # pylint: disable=no-self-use
         if garden.sunlight == "north":
