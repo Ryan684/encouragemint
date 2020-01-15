@@ -31,6 +31,7 @@ try:
 except ImportError:
     TREFLE_API_KEY = None
     GOOGLE_API_KEY = None
+    METEOSTAT_API_KEY = None
 
 ALLOWED_HOSTS = [
     '127.0.0.1'
