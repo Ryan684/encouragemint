@@ -5,7 +5,7 @@ from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 
 class TrefleAPI:
-    PLANTS_ENDPOINT = "http://trefle.io/api/plants/"
+    TREFLE_URL = "http://trefle.io/api/plants/"
     HEADERS = {"content-type": "application/json"}
     TOKEN = settings.TREFLE_API_KEY
 
@@ -50,7 +50,7 @@ class TrefleAPI:
         return url_parameters
 
     def _compile_url(self, plant_id=None):
-        url = self.PLANTS_ENDPOINT
+        url = self.TREFLE_URL
 
         if plant_id:
             url = url + str(plant_id)
