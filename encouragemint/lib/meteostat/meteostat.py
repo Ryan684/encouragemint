@@ -9,8 +9,6 @@ class MeteostatAPI:
     HEADERS = {"content-type": "application/json"}
     TOKEN = settings.METEOSTAT_API_KEY
 
-    # for station in stations: if data: if data['precip'] not null: return it, else deduct 1 year, try again
-
     def search_for_nearest_weather_stations(self, latitude, longitude):
         parameters = {
             "lat": latitude,
