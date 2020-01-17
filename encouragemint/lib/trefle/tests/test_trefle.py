@@ -8,21 +8,16 @@ from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 from encouragemint.lib.trefle.trefle import TrefleAPI
 
 
-def get_mock_json_file(file_path):
-    with open(file_path, "r") as file:
-        return json.load(file)
-
-
 @override_settings(TREFLE_API_KEY="Foo")
 class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
-        self.search_single_match = get_mock_json_file(
-            "encouragemint/lib/trefle/tests/test_responses/plant_search_one_match.json")
-        self.search_many_matches = get_mock_json_file(
-            "encouragemint/lib/trefle/tests/test_responses/plant_search_many_matches.json")
-        self.id_search = get_mock_json_file(
-            "encouragemint/lib/trefle/tests/test_responses/id_search_response.json")
+        with open("encouragemint/lib/trefle/tests/test_responses/plant_search_one_match.json", "r") as file:
+            self.search_single_match = json.load(file)
+        with open("encouragemint/lib/trefle/tests/test_responses/plant_search_many_matches.json", "r") as file:
+            self.search_many_matches = json.load(file)
+        with open("encouragemint/lib/trefle/tests/test_responses/id_search_response.json", "r") as file:
+            self.id_search = json.load(file)
 
     @patch("requests.get")
     def test_trefle_unreachable(self, mock_get):
