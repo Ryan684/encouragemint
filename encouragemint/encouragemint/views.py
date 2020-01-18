@@ -154,7 +154,9 @@ class RecommendViewSet(generics.RetrieveAPIView):
         if average_rainfall:
             print(average_rainfall)
         else:
-            print("No rainfall data!")
+            last_year = last_year - 1
+            self._get_average_rainfall(garden, f"{last_year}-01", f"{last_year}-12")
+            print(average_rainfall)
 
         try:
             plants = TREFLE.lookup_plants(query)
@@ -180,7 +182,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
         nearby_weather_stations = self.meteostat.search_for_nearest_weather_stations(
             garden.latitude, garden.longitude)
         weather_data = None
-
+        print("blah")
         for station in nearby_weather_stations:
             station_weather_report = self.meteostat.get_station_weather_record(start_time, end_time, station.get("id"))
 
@@ -195,6 +197,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                     rainfall_records.append(month.get("precipitation"))
 
             if rainfall_records:
+                print(rainfall_records)
                 return sum(rainfall_records) / len(rainfall_records)
 
         return None
