@@ -32,7 +32,8 @@ class MeteostatAPI:
         parameters = {
             "start": start_date,
             "end": end_date,
-            "station": station
+            "station": station,
+            "key": self.TOKEN
         }
 
         try:
@@ -41,7 +42,6 @@ class MeteostatAPI:
                 headers=self.HEADERS,
                 params=parameters
             ).json()
-
             return weather_report.get("data")
         except requests.exceptions.RequestException:
             raise MeteostatConnectionError()

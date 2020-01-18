@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from geopy import GoogleV3
 from geopy.exc import GeopyError
@@ -10,6 +12,7 @@ from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
     NewPlantRequestSerializer)
 from encouragemint.lib import trefle
+from encouragemint.lib.meteostat.meteostat import MeteostatAPI
 from encouragemint.lib.trefle.trefle import TrefleAPI
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
@@ -140,17 +143,27 @@ class RecommendViewSet(generics.RetrieveAPIView):
     queryset = Garden.objects.all()
     lookup_field = "garden_id"
     http_method_names = ["get"]
+    meteostat = MeteostatAPI()
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         garden = self.get_object()
         query = {"shade_tolerance": self._get_shade_tolerance(garden)}
 
+        last_year = datetime.datetime.now().year - 1
+        average_rainfall = self._get_average_rainfall(garden, f"{last_year}-01", f"{last_year}-12")
+        if average_rainfall:
+            print(average_rainfall)
+        else:
+            print("No rainfall data!")
+
         try:
             plants = TREFLE.lookup_plants(query)
         except trefle.exceptions.TrefleConnectionError:
             return Response(
-                {"Message": "Encouragemint can't recommend plants for your garden right now. "
-                            "Try again later."},
+                {
+                    "Message": "Encouragemint can't recommend plants for your garden right now. "
+                    "Try again later."
+                },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -162,3 +175,30 @@ class RecommendViewSet(generics.RetrieveAPIView):
         if garden.sunlight == "south":
             return "Intolerant"
         return "Intermediate"
+
+    def _get_average_rainfall(self, garden, start_time, end_time):
+        nearby_weather_stations = self.meteostat.search_for_nearest_weather_stations(
+            garden.latitude, garden.longitude)
+        weather_data = None
+
+        for station in nearby_weather_stations:
+            station_weather_report = self.meteostat.get_station_weather_record(start_time, end_time, station.get("id"))
+
+            if station_weather_report:
+                weather_data = station_weather_report
+                break
+
+        if weather_data:
+            rainfall_records = []
+            for month in weather_data:
+                if month.get("precipitation"):
+                    rainfall_records.append(month.get("precipitation"))
+
+            if rainfall_records:
+                return sum(rainfall_records) / len(rainfall_records)
+
+        return None
+
+
+
+
