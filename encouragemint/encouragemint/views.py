@@ -10,7 +10,6 @@ from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
     NewPlantRequestSerializer)
 from encouragemint.encouragemint.weather import get_garden_moisture
-from encouragemint.lib import trefle
 from encouragemint.lib.meteostat.meteostat import MeteostatAPI
 from encouragemint.lib.trefle.trefle import TrefleAPI
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
@@ -117,7 +116,7 @@ class PlantViewSet(viewsets.ModelViewSet):
 
         try:
             result = self._lookup_plant_by_name("scientific_name", plant_name, garden)
-        except trefle.exceptions.TrefleConnectionError:
+        except TrefleConnectionError:
             return Response(
                 {"Message": "Encouragemint can't update plants right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -154,7 +153,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
 
         try:
             plants = TREFLE.lookup_plants(query)
-        except trefle.exceptions.TrefleConnectionError:
+        except TrefleConnectionError:
             return Response(
                 {
                     "Message": "Encouragemint can't recommend plants for your garden right now. "
