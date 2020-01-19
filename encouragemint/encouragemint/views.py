@@ -156,7 +156,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
             return Response(
                 {
                     "Message": "Encouragemint can't recommend plants for your garden right now. "
-                    "Try again later."
+                               "Try again later."
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -189,7 +189,8 @@ class RecommendViewSet(generics.RetrieveAPIView):
         average_rainfall = None
 
         while not average_rainfall and last_year != this_year - 5:
-            average_rainfall_for_year = self._get_average_rainfall(garden, f"{last_year}-01", f"{last_year}-12")
+            average_rainfall_for_year = self._get_average_rainfall(
+                garden, f"{last_year}-01", f"{last_year}-12")
 
             if average_rainfall_for_year:
                 average_rainfall = average_rainfall_for_year
@@ -204,7 +205,8 @@ class RecommendViewSet(generics.RetrieveAPIView):
         weather_data = None
 
         for station in nearby_weather_stations:
-            station_weather_report = self.meteostat.get_station_weather_record(start_time, end_time, station.get("id"))
+            station_weather_report = self.meteostat.get_station_weather_record(
+                start_time, end_time, station.get("id"))
 
             if station_weather_report:
                 weather_data = station_weather_report
