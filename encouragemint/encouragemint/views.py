@@ -1,5 +1,3 @@
-import datetime
-
 from django.conf import settings
 from geopy import GoogleV3
 from geopy.exc import GeopyError
@@ -11,6 +9,7 @@ from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
     NewPlantRequestSerializer)
+from encouragemint.encouragemint.weather import get_garden_moisture
 from encouragemint.lib import trefle
 from encouragemint.lib.meteostat.meteostat import MeteostatAPI
 from encouragemint.lib.trefle.trefle import TrefleAPI
@@ -148,7 +147,10 @@ class RecommendViewSet(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         garden = self.get_object()
         query = {"shade_tolerance": self._get_shade_tolerance(garden)}
-        self._add_garden_moisture_to_query(garden, query)
+
+        moisture_use = get_garden_moisture(garden)
+        if moisture_use:
+            query["moisture_use"] = moisture_use
 
         try:
             plants = TREFLE.lookup_plants(query)
@@ -169,56 +171,3 @@ class RecommendViewSet(generics.RetrieveAPIView):
         if garden.sunlight == "south":
             return "Intolerant"
         return "Intermediate"
-
-    def _add_garden_moisture_to_query(self, garden, query):
-        average_rainfall = self._get_historical_rainfall_data(garden)
-
-        if average_rainfall:
-            if average_rainfall > 60:
-                moisture_use = "High"
-            elif 30 < average_rainfall < 60:
-                moisture_use = "Medium"
-            else:
-                moisture_use = "Low"
-
-            query["moisture_use"] = moisture_use
-
-    def _get_historical_rainfall_data(self, garden):
-        this_year = datetime.datetime.now().year
-        last_year = this_year - 1
-        average_rainfall = None
-
-        while not average_rainfall and last_year != this_year - 5:
-            average_rainfall_for_year = self._get_average_rainfall(
-                garden, f"{last_year}-01", f"{last_year}-12")
-
-            if average_rainfall_for_year:
-                average_rainfall = average_rainfall_for_year
-            else:
-                last_year = last_year - 1
-
-        return average_rainfall
-
-    def _get_average_rainfall(self, garden, start_time, end_time):
-        nearby_weather_stations = self.meteostat.search_for_nearest_weather_stations(
-            garden.latitude, garden.longitude)
-        weather_data = None
-
-        for station in nearby_weather_stations:
-            station_weather_report = self.meteostat.get_station_weather_record(
-                start_time, end_time, station.get("id"))
-
-            if station_weather_report:
-                weather_data = station_weather_report
-                break
-
-        if weather_data:
-            rainfall_records = []
-            for month in weather_data:
-                if month.get("precipitation"):
-                    rainfall_records.append(month.get("precipitation"))
-
-            if rainfall_records:
-                return sum(rainfall_records) / len(rainfall_records)
-
-        return None
