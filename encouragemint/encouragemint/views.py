@@ -171,16 +171,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
         return "Intermediate"
 
     def _add_garden_moisture_to_query(self, garden, query):
-        this_year = datetime.datetime.now().year
-        last_year = this_year - 1
-        average_rainfall = None
-
-        while not average_rainfall and last_year != this_year - 5:
-            average_rainfall_for_year = self._get_average_rainfall(garden, f"{last_year}-01", f"{last_year}-12")
-            if average_rainfall_for_year:
-                average_rainfall = average_rainfall_for_year
-            else:
-                last_year = last_year - 1
+        average_rainfall = self._get_historical_rainfall_data(garden)
 
         if average_rainfall:
             if average_rainfall > 60:
@@ -191,6 +182,21 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 moisture_use = "Low"
 
             query["moisture_use"] = moisture_use
+
+    def _get_historical_rainfall_data(self, garden):
+        this_year = datetime.datetime.now().year
+        last_year = this_year - 1
+        average_rainfall = None
+
+        while not average_rainfall and last_year != this_year - 5:
+            average_rainfall_for_year = self._get_average_rainfall(garden, f"{last_year}-01", f"{last_year}-12")
+
+            if average_rainfall_for_year:
+                average_rainfall = average_rainfall_for_year
+            else:
+                last_year = last_year - 1
+
+        return average_rainfall
 
     def _get_average_rainfall(self, garden, start_time, end_time):
         nearby_weather_stations = self.meteostat.search_for_nearest_weather_stations(
