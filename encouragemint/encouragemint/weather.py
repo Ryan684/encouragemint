@@ -18,6 +18,8 @@ def get_garden_moisture(garden):
 
         return moisture_use
 
+    return None
+
 
 def _get_historical_rainfall_data(garden):
     this_year = datetime.datetime.now().year
@@ -25,7 +27,8 @@ def _get_historical_rainfall_data(garden):
     average_rainfall = None
 
     while not average_rainfall and last_year != this_year - 5:
-        average_rainfall_for_year = _get_average_rainfall(garden, f"{last_year}-01", f"{last_year}-12")
+        average_rainfall_for_year = _get_average_rainfall(
+            garden, f"{last_year}-01", f"{last_year}-12")
 
         if average_rainfall_for_year:
             average_rainfall = average_rainfall_for_year
@@ -36,11 +39,13 @@ def _get_historical_rainfall_data(garden):
 
 
 def _get_average_rainfall(garden, start_time, end_time):
-    nearby_weather_stations = METEOSTAT.search_for_nearest_weather_stations(garden.latitude, garden.longitude)
+    nearby_weather_stations = METEOSTAT.search_for_nearest_weather_stations(
+        garden.latitude, garden.longitude)
     weather_data = None
 
     for station in nearby_weather_stations:
-        station_weather_report = METEOSTAT.get_station_weather_record(start_time, end_time, station.get("id"))
+        station_weather_report = METEOSTAT.get_station_weather_record(
+            start_time, end_time, station.get("id"))
 
         if station_weather_report:
             weather_data = station_weather_report
