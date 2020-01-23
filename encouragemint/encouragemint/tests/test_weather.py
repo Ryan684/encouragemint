@@ -15,18 +15,19 @@ class TestWeatherFunctions(TestCase):
             self.station_search_with_data = json.load(file)
         with open("encouragemint/encouragemint/tests/test_responses/get_station_weather_record_with_data.json", "r") as file:
             self.weather_record_with_data = json.load(file)
+        patcher = patch("encouragemint.encouragemint.weather.METEOSTAT")
+        self.mock_meteostat = patcher.start()
+        self.addCleanup(patcher.stop)
 
-    @patch("encouragemint.encouragemint.weather.METEOSTAT")
-    def test_successful_get_garden_moisture_with_data(self, mock_meteostat):
-        mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
-        mock_meteostat.get_station_weather_record.return_value = self.weather_record_with_data
+    def test_successful_get_garden_moisture_with_data(self):
+        self.mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
+        self.mock_meteostat.get_station_weather_record.return_value = self.weather_record_with_data
 
         moisture = weather.get_garden_moisture(self.test_garden)
 
         self.assertEquals(moisture, "High")
 
-    @patch("encouragemint.encouragemint.weather.METEOSTAT")
-    def test_successful_get_garden_moisture_with_data_in_earlier_year_only(self, mock_meteostat):
+    def test_successful_get_garden_moisture_with_data_in_earlier_year_only(self):
         # mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
         # mock_meteostat.get_station_weather_record.return_value = self.weather_record_with_data
         #
@@ -34,10 +35,9 @@ class TestWeatherFunctions(TestCase):
         # self.assertEquals(moisture, "Medium")
         pass
 
-    @patch("encouragemint.encouragemint.weather.METEOSTAT")
-    def test_successful_get_garden_moisture_with_no_historical_data(self, mock_meteostat):
-        mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
-        mock_meteostat.get_station_weather_record.return_value = []
+    def test_successful_get_garden_moisture_with_no_historical_data(self):
+        self.mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
+        self.mock_meteostat.get_station_weather_record.return_value = []
 
         moisture = weather.get_garden_moisture(self.test_garden)
 

@@ -31,7 +31,6 @@ class TestRecommendViewsetParameters(TestCase):
 
     @patch("requests.get")
     def test_successful_recommendation(self, mock_get):
-        self.mock_weather.return_value = "Medium"
         mock_get.return_value = self.search_many_matches
 
         request = self.factory.get(RECOMMEND_URL, format="json")
@@ -44,7 +43,6 @@ class TestRecommendViewsetParameters(TestCase):
 
     @patch("requests.get")
     def test_successful_recommendation_but_no_results(self, mock_get):
-        self.mock_weather.return_value = "Medium"
         mock_get.return_value = []
 
         request = self.factory.get(RECOMMEND_URL, format="json")
@@ -57,7 +55,6 @@ class TestRecommendViewsetParameters(TestCase):
 
     @patch("requests.get")
     def test_unsuccessful_recommendation_from_trefle_exception(self, mock_trefle):
-        self.mock_weather.return_value = "Medium"
         mock_trefle.side_effect = requests.ConnectionError
 
         request = self.factory.get(RECOMMEND_URL, format="json")
