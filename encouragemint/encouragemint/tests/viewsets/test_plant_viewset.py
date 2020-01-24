@@ -1,8 +1,7 @@
 import json
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 from uuid import UUID, uuid4
 
-import requests
 from django.core import exceptions
 from django.test import TestCase
 from rest_framework import status
@@ -11,6 +10,7 @@ from rest_framework.test import APIRequestFactory
 from encouragemint.encouragemint import models
 from encouragemint.encouragemint.models import Plant, Garden, Profile
 from encouragemint.encouragemint.views import PlantViewSet
+from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 PLANT_URL = "/plant/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
@@ -144,6 +144,10 @@ class TestPost(TestCase):
             "garden": str(TEST_GARDEN.garden_id)
         }
 
+        patcher = patch("encouragemint.encouragemint.views.TREFLE.lookup_plants")
+        self.mock_trefle = patcher.start()
+        self.addCleanup(patcher.stop)
+
     def _build_post_response(self, payload):
         request = self.factory.post(
             PLANT_URL,
@@ -153,18 +157,8 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    @patch("requests.get")
-    def test_successful_create_plant(self, mock_trefle):
-        stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
-        with open(f"{stubbed_json_responses_dir}/plant_search_one_match.json", "r") as file:
-            search_single_match = json.load(file)
-        with open(f"{stubbed_json_responses_dir}/id_search_response.json", "r") as file:
-            id_search = json.load(file)
-
-        mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = search_single_match
-        mock_responses[1].json.return_value = id_search
-        mock_trefle.side_effect = mock_responses
+    def test_successful_create_plant(self):
+        self.mock_trefle.return_value = SAMPLE_PLANT
 
         payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
@@ -200,9 +194,8 @@ class TestPost(TestCase):
                             "contain letters, hyphens, spaces and apostrophes."]}
         )
 
-    @patch("requests.get")
-    def test_unsuccessful_create_plant_from_trefle_exception(self, mock_trefle):
-        mock_trefle.side_effect = requests.ConnectionError
+    def test_unsuccessful_create_plant_from_trefle_exception(self):
+        self.mock_trefle.side_effect = TrefleConnectionError
         payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
         response.render()
@@ -213,13 +206,12 @@ class TestPost(TestCase):
             response.data
         )
 
-    @patch("requests.get")
-    def test_successful_create_plant_many_trefle_results(self, mock_trefle):
+    def test_successful_create_plant_many_trefle_results(self):
         stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
         with open(f"{stubbed_json_responses_dir}/plant_search_many_matches.json", "r") as file:
             search_many_matches = json.load(file)
 
-        mock_trefle.return_value = search_many_matches
+        self.mock_trefle.return_value = search_many_matches
         payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
         response.render()
@@ -230,9 +222,8 @@ class TestPost(TestCase):
             response.data
         )
 
-    @patch("requests.get")
-    def test_unsuccessful_create_plant_from_no_trefle_results(self, mock_trefle):
-        mock_trefle.return_value = []
+    def test_unsuccessful_create_plant_from_no_trefle_results(self):
+        self.mock_trefle.return_value = []
         payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
         response.render()
@@ -249,6 +240,10 @@ class TestPut(TestCase):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"put": "update"})
 
+        patcher = patch("encouragemint.encouragemint.views.TREFLE.lookup_plants")
+        self.mock_trefle = patcher.start()
+        self.addCleanup(patcher.stop)
+
     def _build_put_response(self):
         existing_plant = SAMPLE_PLANT.copy()
         existing_plant["garden"] = TEST_GARDEN
@@ -260,19 +255,10 @@ class TestPut(TestCase):
         )
         return self.view(request, plant_id=plant_id)
 
-    @patch("requests.get")
-    def test_successful_update_plant(self, mock_trefle):
-        stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
-        with open(f"{stubbed_json_responses_dir}/plant_search_one_match.json", "r") as file:
-            search_single_match = json.load(file)
-        with open(f"{stubbed_json_responses_dir}/id_search_response.json", "r") as file:
-            id_search = json.load(file)
-
-        id_search["scientific_name"] = "Fooupdated"
-        mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = search_single_match
-        mock_responses[1].json.return_value = id_search
-        mock_trefle.side_effect = mock_responses
+    def test_successful_update_plant(self):
+        updated_plant = SAMPLE_PLANT.copy()
+        updated_plant["scientific_name"] = "Fooupdated"
+        self.mock_trefle.return_value = updated_plant
 
         response = self._build_put_response()
         response.render()
@@ -294,9 +280,8 @@ class TestPut(TestCase):
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
         self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
 
-    @patch("requests.get")
-    def test_unsuccessful_update_plant_from_trefle_exception(self, mock_trefle):
-        mock_trefle.side_effect = requests.ConnectionError
+    def test_unsuccessful_update_plant_from_trefle_exception(self):
+        self.mock_trefle.side_effect = TrefleConnectionError
         response = self._build_put_response()
         response.render()
 

@@ -1,13 +1,13 @@
 import json
 from unittest.mock import patch
 
-import requests
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.tests.viewsets.helpers import create_test_garden
 from encouragemint.encouragemint.views import RecommendViewSet
+from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
 RECOMMEND_URL = "/recommend/"
 SAMPLE_GARDEN = create_test_garden()
@@ -22,16 +22,20 @@ class TestRecommendViewsetParameters(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = RecommendViewSet.as_view()
+
         with open("encouragemint/lib/trefle/tests/test_responses/plant_search_many_matches.json", "r") as file:
-            self.search_many_matches = json.load(file)
+            self.recommend_many_results = json.load(file)
 
-        patcher = patch("encouragemint.encouragemint.views.get_garden_moisture", return_value="Medium")
-        self.mock_weather = patcher.start()
-        self.addCleanup(patcher.stop)
+        weather_patcher = patch("encouragemint.encouragemint.views.get_garden_moisture", return_value="Medium")
+        self.mock_weather = weather_patcher.start()
+        self.addCleanup(weather_patcher.stop)
 
-    @patch("requests.get")
-    def test_successful_recommendation(self, mock_get):
-        mock_get.return_value = self.search_many_matches
+        trefle_patcher = patch("encouragemint.encouragemint.views.TREFLE.lookup_plants")
+        self.mock_trefle = trefle_patcher.start()
+        self.addCleanup(trefle_patcher.stop)
+
+    def test_successful_recommendation(self):
+        self.mock_trefle.return_value = self.recommend_many_results
 
         request = self.factory.get(RECOMMEND_URL, format="json")
         response = self.view(request, garden_id=GARDEN_ID)
@@ -39,11 +43,31 @@ class TestRecommendViewsetParameters(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(self.search_many_matches, model_data)
+        self.assertEqual(self.recommend_many_results, model_data)
 
-    @patch("requests.get")
-    def test_successful_recommendation_but_no_results(self, mock_get):
-        mock_get.return_value = []
+    def test_successful_recommendation_one_result(self):
+        recommend_single_result = [
+            {
+                "slug": "eriophyllum-lanatum",
+                "scientific_name": "Eriophyllum lanatum",
+                "link": "http://trefle.io/api/plants/134845",
+                "id": 134845,
+                "complete_data": False,
+                "common_name": "common woolly sunflower"
+            }
+        ]
+        self.mock_trefle.return_value = recommend_single_result
+
+        request = self.factory.get(RECOMMEND_URL, format="json")
+        response = self.view(request, garden_id=GARDEN_ID)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(recommend_single_result, model_data)
+
+    def test_successful_recommendation_but_no_results(self):
+        self.mock_trefle.return_value = []
 
         request = self.factory.get(RECOMMEND_URL, format="json")
         response = self.view(request, garden_id=GARDEN_ID)
@@ -53,9 +77,8 @@ class TestRecommendViewsetParameters(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual([], model_data)
 
-    @patch("requests.get")
-    def test_successful_recommendation_but_no_meteostat_data(self, mock_get):
-        mock_get.return_value = self.search_many_matches
+    def test_successful_recommendation_but_no_meteostat_data(self):
+        self.mock_trefle.return_value = self.recommend_many_results
         self.mock_weather.return_value = None
 
         request = self.factory.get(RECOMMEND_URL, format="json")
@@ -64,11 +87,10 @@ class TestRecommendViewsetParameters(TestCase):
         model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(self.search_many_matches, model_data)
+        self.assertEqual(self.recommend_many_results, model_data)
 
-    @patch("requests.get")
-    def test_unsuccessful_recommendation_from_trefle_exception(self, mock_get):
-        mock_get.side_effect = requests.ConnectionError
+    def test_unsuccessful_recommendation_from_trefle_exception(self):
+        self.mock_trefle.side_effect = TrefleConnectionError
 
         request = self.factory.get(RECOMMEND_URL, format="json")
         response = self.view(request, garden_id=GARDEN_ID)

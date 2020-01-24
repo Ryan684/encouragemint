@@ -69,7 +69,6 @@ class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()
     lookup_field = "plant_id"
     http_method_names = ["get", "post", "put", "delete"]
-    trefle = TrefleAPI()
 
     def get_serializer_class(self):
         if self.request.method == "POST":

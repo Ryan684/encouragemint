@@ -176,6 +176,10 @@ class TestPost(TestCase):
         self.factory = APIRequestFactory()
         self.view = GardenViewSet.as_view({"post": "create"})
 
+        patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode")
+        self.mock_google = patcher.start()
+        self.addCleanup(patcher.stop)
+
     def _build_post_response(self, payload):
         request = self.factory.post(
             GARDEN_URL,
@@ -185,10 +189,9 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-    def test_successful_create_garden(self, mock_google):
+    def test_successful_create_garden(self):
         mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
-        mock_google.return_value = mock
+        self.mock_google.return_value = mock
 
         payload = SAMPLE_GARDEN
         payload["profile"] = str(TEST_PROFILE.profile_id)
@@ -228,9 +231,8 @@ class TestPost(TestCase):
             }
         )
 
-    @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-    def test_unsuccessful_create_garden_from_geocoder_exception(self, mock_google):
-        mock_google.side_effect = GeocoderServiceError
+    def test_unsuccessful_create_garden_from_geocoder_exception(self):
+        self.mock_google.side_effect = GeocoderServiceError
 
         request = self.factory.post(
             GARDEN_URL,
@@ -246,9 +248,8 @@ class TestPost(TestCase):
             response.data
         )
 
-    @patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-    def test_unsuccessful_create_garden_from_geocoder_location_not_found(self, mock_google):
-        mock_google.return_value = None
+    def test_unsuccessful_create_garden_from_geocoder_location_not_found(self):
+        self.mock_google.return_value = None
 
         request = self.factory.post(
             GARDEN_URL,

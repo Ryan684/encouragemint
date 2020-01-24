@@ -12,6 +12,7 @@ from encouragemint.lib.trefle.trefle import TrefleAPI
 class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
+
         with open("encouragemint/lib/trefle/tests/test_responses/plant_search_one_match.json", "r") as file:
             self.search_single_match = json.load(file)
         with open("encouragemint/lib/trefle/tests/test_responses/plant_search_many_matches.json", "r") as file:
@@ -19,29 +20,30 @@ class TestTrefle(TestCase):
         with open("encouragemint/lib/trefle/tests/test_responses/id_search_response.json", "r") as file:
             self.id_search = json.load(file)
 
-    @patch("requests.get")
-    def test_trefle_unreachable(self, mock_get):
-        mock_get.side_effect = ConnectionError
+        patcher = patch("requests.get")
+        self.mock_get = patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_trefle_unreachable(self):
+        self.mock_get.side_effect = ConnectionError
 
         self.assertRaises(
             TrefleConnectionError,
             self.trefle.lookup_plants, {"q": "Fooflower"}
         )
 
-    @patch("requests.get")
-    def test_search_plants_no_results(self, mock_get):
-        mock_get.return_value = []
+    def test_search_plants_no_results(self):
+        self.mock_get.return_value = []
 
         response = self.trefle.lookup_plants({"q": "Barflower"})
 
         self.assertEqual([], response)
 
-    @patch("requests.get")
-    def test_lookup_plants_one_result(self, mock_get):
+    def test_lookup_plants_one_result(self):
         mock_responses = [Mock(), Mock()]
         mock_responses[0].json.return_value = self.search_single_match
         mock_responses[1].json.return_value = self.id_search
-        mock_get.side_effect = mock_responses
+        self.mock_get.side_effect = mock_responses
         test_plant = {
             "trefle_id": 134845,
             "common_name": "common woolly sunflower",
@@ -59,17 +61,15 @@ class TestTrefle(TestCase):
 
         self.assertEqual(test_plant, response)
 
-    @patch("requests.get")
-    def test_lookup_plants_many_results(self, mock_get):
-        mock_get.return_value = self.search_many_matches
+    def test_lookup_plants_many_results(self):
+        self.mock_get.return_value = self.search_many_matches
 
         response = self.trefle.lookup_plants({"q": "grass"})
 
         self.assertEqual(self.search_many_matches, response)
 
-    @patch("requests.get")
-    def test_lookup_plants_by_multiple_properties(self, mock_get):
-        mock_get.return_value = self.search_many_matches
+    def test_lookup_plants_by_multiple_properties(self):
+        self.mock_get.return_value = self.search_many_matches
 
         response = self.trefle.lookup_plants({"shade_tolerance": "High", "moisture_use": "High"})
 

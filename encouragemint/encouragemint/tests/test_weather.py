@@ -12,12 +12,14 @@ from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
 class TestWeather(TestCase):
     def setUp(self):
         self.test_garden = Garden.objects.get(garden_id=create_test_garden().get("garden_id"))
+
         with open(
                 "encouragemint/encouragemint/tests/test_responses/search_for_nearest_weather_stations.json",
                 "r") as file:
             self.station_search_with_data = json.load(file)
         with open("encouragemint/encouragemint/tests/test_responses/get_station_weather_record.json", "r") as file:
             self.weather_record_with_data = json.load(file)
+
         patcher = patch("encouragemint.encouragemint.weather.METEOSTAT")
         self.mock_meteostat = patcher.start()
         self.addCleanup(patcher.stop)
