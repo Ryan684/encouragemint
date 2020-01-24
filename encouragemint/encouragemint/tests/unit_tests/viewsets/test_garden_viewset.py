@@ -8,7 +8,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Profile
 from encouragemint.encouragemint.serializers import GardenSerializer
-from encouragemint.encouragemint.tests.viewsets.helpers import create_test_garden
+from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden
 from encouragemint.encouragemint.views import GardenViewSet
 
 GARDEN_URL = "/garden/"

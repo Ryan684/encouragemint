@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from encouragemint.encouragemint import weather
 from encouragemint.encouragemint.models import Garden
-from encouragemint.encouragemint.tests.viewsets.helpers import create_test_garden
+from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden
 from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
 
 
@@ -13,11 +13,10 @@ class TestWeather(TestCase):
     def setUp(self):
         self.test_garden = Garden.objects.get(garden_id=create_test_garden().get("garden_id"))
 
-        with open(
-                "encouragemint/encouragemint/tests/test_responses/search_for_nearest_weather_stations.json",
-                "r") as file:
+        test_responses_dir = "encouragemint/encouragemint/tests/unit_tests/test_responses"
+        with open(f"{test_responses_dir}/search_for_nearest_weather_stations.json", "r") as file:
             self.station_search_with_data = json.load(file)
-        with open("encouragemint/encouragemint/tests/test_responses/get_station_weather_record.json", "r") as file:
+        with open(f"{test_responses_dir}/get_station_weather_record.json", "r") as file:
             self.weather_record_with_data = json.load(file)
 
         patcher = patch("encouragemint.encouragemint.weather.METEOSTAT")
