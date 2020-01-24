@@ -18,13 +18,14 @@ class TestMeteostat(TestCase):
         self.sample_weather_start_date = "2019-01"
         self.sample_weather_end_date = "2019-12"
 
-        with open("encouragemint/lib/meteostat/tests/test_responses/station_search_response_no_data.json", "r") as file:
+        test_responses_dir = "encouragemint/lib/meteostat/tests/test_responses"
+        with open(f"{test_responses_dir}/station_search_response_no_data.json", "r") as file:
             self.station_search_matches = json.load(file)
-        with open("encouragemint/lib/meteostat/tests/test_responses/station_search_response_with_data.json", "r") as file:
+        with open(f"{test_responses_dir}/station_search_response_with_data.json", "r") as file:
             self.station_search_no_matches = json.load(file)
-        with open("encouragemint/lib/meteostat/tests/test_responses/station_weather_lookup_with_data.json", "r") as file:
+        with open(f"{test_responses_dir}/station_weather_lookup_with_data.json", "r") as file:
             self.station_weather_data = json.load(file)
-        with open("encouragemint/lib/meteostat/tests/test_responses/station_weather_lookup_no_data.json", "r") as file:
+        with open(f"{test_responses_dir}/station_weather_lookup_no_data.json", "r") as file:
             self.station_weather_no_data = json.load(file)
 
         patcher = patch("requests.post")

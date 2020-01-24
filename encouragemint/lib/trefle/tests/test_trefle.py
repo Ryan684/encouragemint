@@ -13,11 +13,12 @@ class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
 
-        with open("encouragemint/lib/trefle/tests/test_responses/plant_search_one_match.json", "r") as file:
+        test_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        with open(f"{test_responses_dir}/plant_search_one_match.json", "r") as file:
             self.search_single_match = json.load(file)
-        with open("encouragemint/lib/trefle/tests/test_responses/plant_search_many_matches.json", "r") as file:
+        with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.search_many_matches = json.load(file)
-        with open("encouragemint/lib/trefle/tests/test_responses/id_search_response.json", "r") as file:
+        with open(f"{test_responses_dir}/id_search_response.json", "r") as file:
             self.id_search = json.load(file)
 
         patcher = patch("requests.get")

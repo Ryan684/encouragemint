@@ -141,8 +141,8 @@ class TestPost(TestCase):
         )
 
     def test_successful_create_plant_many_trefle_results(self):
-        stubbed_json_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
-        with open(f"{stubbed_json_responses_dir}/plant_search_many_matches.json", "r") as file:
+        test_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             search_many_matches = json.load(file)
 
         self.mock_trefle.return_value = search_many_matches

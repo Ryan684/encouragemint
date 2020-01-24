@@ -23,10 +23,12 @@ class TestRecommendViewsetParameters(TestCase):
         self.factory = APIRequestFactory()
         self.view = RecommendViewSet.as_view()
 
-        with open("encouragemint/lib/trefle/tests/test_responses/plant_search_many_matches.json", "r") as file:
+        test_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.recommend_many_results = json.load(file)
 
-        weather_patcher = patch("encouragemint.encouragemint.views.get_garden_moisture", return_value="Medium")
+        weather_patcher = patch(
+            "encouragemint.encouragemint.views.get_garden_moisture", return_value="Medium")
         self.mock_weather = weather_patcher.start()
         self.addCleanup(weather_patcher.stop)
 
@@ -98,6 +100,9 @@ class TestRecommendViewsetParameters(TestCase):
 
         self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
         self.assertEqual(
-            {"Message": "Encouragemint can't recommend plants for your garden right now. Try again later."},
+            {
+                "Message": "Encouragemint can't recommend plants for your garden right now. "
+                           "Try again later."
+            },
             response.data
         )
