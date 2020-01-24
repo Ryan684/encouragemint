@@ -1,12 +1,16 @@
 import datetime
 
+from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
 from encouragemint.lib.meteostat.meteostat import MeteostatAPI
 
 METEOSTAT = MeteostatAPI()
 
 
 def get_garden_moisture(garden):
-    average_rainfall = _get_historical_rainfall_data(garden)
+    try:
+        average_rainfall = _get_historical_rainfall_data(garden)
+    except MeteostatConnectionError:
+        return None
 
     if average_rainfall:
         if average_rainfall > 60:
@@ -29,7 +33,6 @@ def _get_historical_rainfall_data(garden):
     while not average_rainfall and last_year != this_year - 5:
         average_rainfall_for_year = _get_average_rainfall(
             garden, f"{last_year}-01", f"{last_year}-12")
-
         if average_rainfall_for_year:
             average_rainfall = average_rainfall_for_year
         else:
@@ -44,9 +47,10 @@ def _get_average_rainfall(garden, start_time, end_time):
     weather_data = None
 
     for station in nearby_weather_stations:
+        print(station)
         station_weather_report = METEOSTAT.get_station_weather_record(
             start_time, end_time, station.get("id"))
-
+        print(station_weather_report)
         if station_weather_report:
             weather_data = station_weather_report
             break

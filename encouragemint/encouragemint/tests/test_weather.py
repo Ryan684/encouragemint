@@ -6,9 +6,10 @@ from django.test import TestCase
 from encouragemint.encouragemint import weather
 from encouragemint.encouragemint.models import Garden
 from encouragemint.encouragemint.tests.viewsets.helpers import create_test_garden
+from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
 
 
-class TestWeatherFunctions(TestCase):
+class TestWeather(TestCase):
     def setUp(self):
         self.test_garden = Garden.objects.get(garden_id=create_test_garden().get("garden_id"))
         with open("encouragemint/encouragemint/tests/test_responses/search_for_nearest_weather_stations_with_data.json", "r") as file:
@@ -28,12 +29,15 @@ class TestWeatherFunctions(TestCase):
         self.assertEquals(moisture, "High")
 
     def test_successful_get_garden_moisture_with_data_in_earlier_year_only(self):
-        # mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
-        # mock_meteostat.get_station_weather_record.return_value = self.weather_record_with_data
-        #
-        # moisture = weather.get_garden_moisture(self.test_garden)
-        # self.assertEquals(moisture, "Medium")
-        pass
+        mocked_weather_records = [
+            [], [], self.weather_record_with_data
+        ]
+        self.mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
+        self.mock_meteostat.get_station_weather_record.side_effect = mocked_weather_records
+
+        moisture = weather.get_garden_moisture(self.test_garden)
+
+        self.assertEquals(moisture, "High")
 
     def test_successful_get_garden_moisture_with_no_historical_data(self):
         self.mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
@@ -43,11 +47,32 @@ class TestWeatherFunctions(TestCase):
 
         self.assertIsNone(moisture)
 
-    def test_unsuccessful_get_garden_moisture_from_meteostat_exception(self):
-        pass
+    def test_unsuccessful_get_garden_moisture_from_station_search_meteostat_exception(self):
+        self.mock_meteostat.search_for_nearest_weather_stations.side_effect = MeteostatConnectionError
+
+        moisture = weather.get_garden_moisture(self.test_garden)
+
+        self.assertIsNone(moisture)
+
+    def test_unsuccessful_get_garden_moisture_from_weather_search_meteostat_exception(self):
+        self.mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
+        self.mock_meteostat.get_station_weather_record.side_effect = MeteostatConnectionError
+
+        moisture = weather.get_garden_moisture(self.test_garden)
+
+        self.assertIsNone(moisture)
 
     def test_unsuccessful_get_garden_moisture_from_no_station_data(self):
-        pass
+        self.mock_meteostat.search_for_nearest_weather_stations.return_value = []
+
+        moisture = weather.get_garden_moisture(self.test_garden)
+
+        self.assertIsNone(moisture)
 
     def test_unsuccessful_get_garden_moisture_from_no_historical_weather_data(self):
-        pass
+        self.mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data
+        self.mock_meteostat.get_station_weather_record.return_value = []
+
+        moisture = weather.get_garden_moisture(self.test_garden)
+
+        self.assertIsNone(moisture)
