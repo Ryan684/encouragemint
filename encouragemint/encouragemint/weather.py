@@ -47,10 +47,10 @@ def _get_average_rainfall(garden, start_time, end_time):
     weather_data = None
 
     for station in nearby_weather_stations:
-        print(station)
+
         station_weather_report = METEOSTAT.get_station_weather_record(
             start_time, end_time, station.get("id"))
-        print(station_weather_report)
+
         if station_weather_report:
             weather_data = station_weather_report
             break
