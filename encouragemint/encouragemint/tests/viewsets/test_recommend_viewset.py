@@ -54,8 +54,21 @@ class TestRecommendViewsetParameters(TestCase):
         self.assertEqual([], model_data)
 
     @patch("requests.get")
-    def test_unsuccessful_recommendation_from_trefle_exception(self, mock_trefle):
-        mock_trefle.side_effect = requests.ConnectionError
+    def test_successful_recommendation_but_no_meteostat_data(self, mock_get):
+        mock_get.return_value = self.search_many_matches
+        self.mock_weather.return_value = None
+
+        request = self.factory.get(RECOMMEND_URL, format="json")
+        response = self.view(request, garden_id=GARDEN_ID)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(self.search_many_matches, model_data)
+
+    @patch("requests.get")
+    def test_unsuccessful_recommendation_from_trefle_exception(self, mock_get):
+        mock_get.side_effect = requests.ConnectionError
 
         request = self.factory.get(RECOMMEND_URL, format="json")
         response = self.view(request, garden_id=GARDEN_ID)
