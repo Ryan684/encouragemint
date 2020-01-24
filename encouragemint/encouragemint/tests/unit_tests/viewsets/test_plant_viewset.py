@@ -41,7 +41,7 @@ SAMPLE_PLANT = {
 class TestPlantViewsetParameters(TestCase):
     def test_viewset_parameters(self):
         plant_viewset = PlantViewSet
-        self.assertEqual(["get", "post", "put", "delete"], plant_viewset.http_method_names)
+        self.assertEqual(["post", "put", "delete"], plant_viewset.http_method_names)
         self.assertEqual("plant_id", plant_viewset.lookup_field)
         self.assertEqual(None, plant_viewset.serializer_class)
 
@@ -67,72 +67,6 @@ class TestDelete(TestCase):
         response = self._build_delete_response("Foo")
         response.render()
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
-
-class TestGetRetrieve(TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.get_by_id_view = PlantViewSet.as_view({"get": "retrieve"})
-
-    def test_successful_get_plant(self):
-        plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
-        plant_id = plant.plant_id
-        request = self.factory.get(PLANT_URL, format="json")
-        response = self.get_by_id_view(request, plant_id=plant_id)
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        self.assertIn("plant_id", model_data)
-        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT.get("common_name"), model_data.get("common_name"))
-        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
-        self.assertEqual(
-            SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
-        self.assertEqual(SAMPLE_PLANT.get("garden_id"), model_data.get("garden_id"))
-        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
-
-    def test_unsuccessful_get_plant_from_invalid_id(self):
-        request = self.factory.get(PLANT_URL, format="json")
-        response = self.get_by_id_view(request, plant_id="Foo")
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
-
-class TestGetList(TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.get_all_view = PlantViewSet.as_view({"get": "list"})
-
-    def test_successful_get_all_plants(self):
-        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
-        Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
-        request = self.factory.get(PLANT_URL, format="json")
-        response = self.get_all_view(request)
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        for plant in model_data:
-            self.assertIn("plant_id", plant)
-            self.assertIn("scientific_name", plant)
-            self.assertIn("common_name", plant)
-            self.assertIn("duration", plant)
-            self.assertIn("bloom_period", plant)
-            self.assertIn("growth_period", plant)
-            self.assertIn("growth_rate", plant)
-            self.assertIn("shade_tolerance", plant)
-            self.assertIn("moisture_use", plant)
-            self.assertIn("family_common_name", plant)
-            self.assertIn("garden", plant)
-            self.assertIn("trefle_id", plant)
 
 
 class TestPost(TestCase):

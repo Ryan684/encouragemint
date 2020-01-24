@@ -24,7 +24,7 @@ SAMPLE_GARDEN_GEOCODE_LOCATION = {
 
 class TestGardenViewsetParameters(TestCase):
     def test_viewset_parameters(self):
-        self.assertEqual(["get", "post", "put", "patch", "delete"], GardenViewSet.http_method_names)
+        self.assertEqual(["post", "put", "patch", "delete"], GardenViewSet.http_method_names)
         self.assertEqual("garden_id", GardenViewSet.lookup_field)
         self.assertEqual(GardenSerializer, GardenViewSet.serializer_class)
 
@@ -52,66 +52,6 @@ class TestDelete(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
-
-class TestGetRetrieve(TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
-
-    def test_successful_get_garden(self):
-        garden = create_test_garden()
-        garden_id = garden.get("garden_id")
-        request = self.factory.get(GARDEN_URL, format="json")
-        response = self.get_by_id_view(request, garden_id=garden_id)
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        self.assertIn("plants", model_data)
-        self.assertIn("profile", model_data)
-        self.assertIn("garden_id", model_data)
-        self.assertEqual(SAMPLE_GARDEN.get("garden_name"), model_data.get("garden_name"))
-        self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
-        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"), model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"), model_data.get("longitude"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"), model_data.get("latitude"))
-
-    def test_unsuccessful_get_garden_from_invalid_id(self):
-        request = self.factory.get(GARDEN_URL, format="json")
-        response = self.get_by_id_view(request, garden_id="Foo")
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-
-
-class TestGetList(TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.get_all_view = GardenViewSet.as_view({"get": "list"})
-
-    def test_successful_get_all_gardens(self):
-        create_test_garden()
-        create_test_garden()
-
-        request = self.factory.get(GARDEN_URL, format="json")
-        response = self.get_all_view(request)
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        for garden in model_data:
-            self.assertIn("plants", garden)
-            self.assertIn("profile", garden)
-            self.assertIn("garden_id", garden)
-            self.assertIn("garden_name", garden)
-            self.assertIn("direction", garden)
-            self.assertIn("sunlight", garden)
-            self.assertIn("location", garden)
-            self.assertIn("latitude", garden)
-            self.assertIn("longitude", garden)
 
 
 class TestPatch(TestCase):
