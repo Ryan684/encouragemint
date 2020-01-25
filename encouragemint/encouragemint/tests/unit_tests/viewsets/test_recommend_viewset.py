@@ -57,7 +57,7 @@ class TestRecommendViewsetParameters(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": "The season url parameter must be either Spring, Summer, Autumn or Winter."
+                "Message": "The season must be either Spring, Summer, Autumn or Winter."
             },
             response.data
         )
