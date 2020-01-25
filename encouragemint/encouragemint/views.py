@@ -150,21 +150,30 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 {"Message": "You must specify a season url parameter for plant recommendations."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         season = request.GET["season"].upper()
-        
+
         try:
             assert season in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
         except AssertionError:
             return Response(
                 {"Message": "The season must be either Spring, Summer, Autumn or Winter."},
                 status=status.HTTP_400_BAD_REQUEST
-            )            
+            )
 
         garden = self.get_object()
         query = {"shade_tolerance": self._get_shade_tolerance(garden)}
 
-        moisture_use = get_garden_moisture(garden)
+        if season == "spring":
+            start_time, end_time = 3, 5
+        elif season == "summer":
+            start_time, end_time = 6, 8
+        elif season == "autumn":
+            start_time, end_time = 9, 11
+        else:
+            start_time, end_time = 12, 2
+
+        moisture_use = get_garden_moisture(garden, start_time, end_time)
         if moisture_use:
             query["moisture_use"] = moisture_use
 

@@ -6,9 +6,9 @@ from encouragemint.lib.meteostat.meteostat import MeteostatAPI
 METEOSTAT = MeteostatAPI()
 
 
-def get_garden_moisture(garden):
+def get_garden_moisture(garden, start_month, end_month):
     try:
-        average_rainfall = _get_historical_rainfall_data(garden)
+        average_rainfall = _get_historical_rainfall_data(garden, start_month, end_month)
     except MeteostatConnectionError:
         return None
 
@@ -25,14 +25,14 @@ def get_garden_moisture(garden):
     return None
 
 
-def _get_historical_rainfall_data(garden):
+def _get_historical_rainfall_data(garden, start_month, end_month):
     this_year = datetime.datetime.now().year
     last_year = this_year - 1
     average_rainfall = None
 
     while not average_rainfall and last_year != this_year - 5:
         average_rainfall_for_year = _get_average_rainfall(
-            garden, f"{last_year}-01", f"{last_year}-12")
+            garden, f"{last_year}-{start_month}", f"{last_year}-{end_month}")
         if average_rainfall_for_year:
             average_rainfall = average_rainfall_for_year
         else:
