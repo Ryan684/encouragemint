@@ -165,15 +165,14 @@ class RecommendViewSet(generics.RetrieveAPIView):
         query = {"shade_tolerance": self._get_shade_tolerance(garden)}
 
         if season == "spring":
-            start_time, end_time = 3, 5
+            moisture_use = get_garden_moisture(garden, 3, 5)
         elif season == "summer":
-            start_time, end_time = 6, 8
+            moisture_use = get_garden_moisture(garden, 6, 8)
         elif season == "autumn":
-            start_time, end_time = 9, 11
+            moisture_use = get_garden_moisture(garden, 9, 11)
         else:
-            start_time, end_time = 12, 2
+            moisture_use = get_garden_moisture(garden, 12, 2)
 
-        moisture_use = get_garden_moisture(garden, start_time, end_time)
         if moisture_use:
             query["moisture_use"] = moisture_use
 
