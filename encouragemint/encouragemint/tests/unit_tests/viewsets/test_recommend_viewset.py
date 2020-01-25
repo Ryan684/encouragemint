@@ -36,10 +36,36 @@ class TestRecommendViewsetParameters(TestCase):
         self.mock_trefle = trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 
+    def test_unsuccessful_recommendation_from_no_season_parameter(self):
+        request = self.factory.get(RECOMMEND_URL, format="json")
+        response = self.view(request, garden_id=GARDEN_ID)
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            {
+                "Message": "You must specify a season url parameter for plant recommendations."
+            },
+            response.data
+        )
+
+    def test_unsuccessful_recommendation_from_invalid_season_parameter(self):
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=december", format="json")
+        response = self.view(request, garden_id=GARDEN_ID)
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            {
+                "Message": "The season url parameter must be either Spring, Summer, Autumn or Winter."
+            },
+            response.data
+        )
+
     def test_successful_recommendation(self):
         self.mock_trefle.return_value = self.recommend_many_results
 
-        request = self.factory.get(RECOMMEND_URL, format="json")
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=spring", format="json")
         response = self.view(request, garden_id=GARDEN_ID)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -60,7 +86,7 @@ class TestRecommendViewsetParameters(TestCase):
         ]
         self.mock_trefle.return_value = recommend_single_result
 
-        request = self.factory.get(RECOMMEND_URL, format="json")
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=spring", format="json")
         response = self.view(request, garden_id=GARDEN_ID)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -71,7 +97,7 @@ class TestRecommendViewsetParameters(TestCase):
     def test_successful_recommendation_but_no_results(self):
         self.mock_trefle.return_value = []
 
-        request = self.factory.get(RECOMMEND_URL, format="json")
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=spring", format="json")
         response = self.view(request, garden_id=GARDEN_ID)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -83,7 +109,7 @@ class TestRecommendViewsetParameters(TestCase):
         self.mock_trefle.return_value = self.recommend_many_results
         self.mock_weather.return_value = None
 
-        request = self.factory.get(RECOMMEND_URL, format="json")
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=spring", format="json")
         response = self.view(request, garden_id=GARDEN_ID)
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
@@ -94,7 +120,7 @@ class TestRecommendViewsetParameters(TestCase):
     def test_unsuccessful_recommendation_from_trefle_exception(self):
         self.mock_trefle.side_effect = TrefleConnectionError
 
-        request = self.factory.get(RECOMMEND_URL, format="json")
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=spring", format="json")
         response = self.view(request, garden_id=GARDEN_ID)
         response.render()
 
