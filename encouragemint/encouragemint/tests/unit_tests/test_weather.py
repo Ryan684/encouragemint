@@ -79,5 +79,3 @@ class TestWeather(TestCase):
         moisture = weather.get_garden_moisture(self.test_garden, "SPRING")
 
         self.assertIsNone(moisture)
-
-# TODO: Test for winter when year changes mid query
