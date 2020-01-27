@@ -45,7 +45,7 @@ def _get_historical_rainfall_data(garden, season):
         end_month = "11"
 
     while not average_rainfall and start_year != this_year - 5:
-        average_rainfall_for_year = _get_average_rainfall(
+        average_rainfall_for_year = _get_average_rainfall_for_season(
             garden, f"{start_year}-{start_month}", f"{end_year}-{end_month}")
         if average_rainfall_for_year:
             average_rainfall = average_rainfall_for_year
@@ -56,7 +56,7 @@ def _get_historical_rainfall_data(garden, season):
     return average_rainfall
 
 
-def _get_average_rainfall(garden, start_time, end_time):
+def _get_average_rainfall_for_season(garden, start_time, end_time):
     nearby_weather_stations = METEOSTAT.search_for_nearest_weather_stations(
         garden.latitude, garden.longitude)
     weather_data = None
