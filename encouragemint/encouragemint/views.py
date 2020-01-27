@@ -165,7 +165,6 @@ class RecommendViewSet(generics.RetrieveAPIView):
         query = {"shade_tolerance": self._get_shade_tolerance(garden)}
         moisture_use = get_garden_moisture(garden, season)
 
-        print(moisture_use)
         if moisture_use:
             query["moisture_use"] = moisture_use
 
