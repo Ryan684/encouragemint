@@ -163,16 +163,9 @@ class RecommendViewSet(generics.RetrieveAPIView):
 
         garden = self.get_object()
         query = {"shade_tolerance": self._get_shade_tolerance(garden)}
+        moisture_use = get_garden_moisture(garden, season)
 
-        if season == "spring":
-            moisture_use = get_garden_moisture(garden, 3, 5)
-        elif season == "summer":
-            moisture_use = get_garden_moisture(garden, 6, 8)
-        elif season == "autumn":
-            moisture_use = get_garden_moisture(garden, 9, 11)
-        else:
-            moisture_use = get_garden_moisture(garden, 12, 2)
-
+        print(moisture_use)
         if moisture_use:
             query["moisture_use"] = moisture_use
 

@@ -6,9 +6,9 @@ from encouragemint.lib.meteostat.meteostat import MeteostatAPI
 METEOSTAT = MeteostatAPI()
 
 
-def get_garden_moisture(garden, start_month, end_month):
+def get_garden_moisture(garden, season):
     try:
-        average_rainfall = _get_historical_rainfall_data(garden, start_month, end_month)
+        average_rainfall = _get_historical_rainfall_data(garden, season)
     except MeteostatConnectionError:
         return None
 
@@ -19,24 +19,39 @@ def get_garden_moisture(garden, start_month, end_month):
             moisture_use = "Medium"
         else:
             moisture_use = "Low"
-
         return moisture_use
 
     return None
 
 
-def _get_historical_rainfall_data(garden, start_month, end_month):
-    this_year = datetime.datetime.now().year
-    last_year = this_year - 1
+def _get_historical_rainfall_data(garden, season):
     average_rainfall = None
+    this_year = datetime.datetime.now().year
+    start_year = this_year - 1
+    end_year = start_year
 
-    while not average_rainfall and last_year != this_year - 5:
+    if season == "WINTER":
+        end_year = start_year + 1
+        start_month = "12"
+        end_month = "02"
+    elif season == "SPRING":
+        start_month = "03"
+        end_month = "05"
+    elif season == "SUMMER":
+        start_month = "06"
+        end_month = "08"
+    else:
+        start_month = "09"
+        end_month = "11"
+
+    while not average_rainfall and start_year != this_year - 5:
         average_rainfall_for_year = _get_average_rainfall(
-            garden, f"{last_year}-{start_month}", f"{last_year}-{end_month}")
+            garden, f"{start_year}-{start_month}", f"{end_year}-{end_month}")
         if average_rainfall_for_year:
             average_rainfall = average_rainfall_for_year
         else:
-            last_year = last_year - 1
+            start_year = start_year - 1
+            end_year = end_year - 1
 
     return average_rainfall
 
