@@ -29,7 +29,7 @@ class TestWeather(TestCase):
 
         moisture = weather.get_garden_moisture(self.test_garden, "SPRING")
 
-        self.assertEquals(moisture, "High")
+        self.assertEqual(moisture, "High")
 
     def test_successful_get_garden_moisture_with_data_in_earlier_year_only(self):
         mocked_weather_records = [
@@ -40,7 +40,7 @@ class TestWeather(TestCase):
 
         moisture = weather.get_garden_moisture(self.test_garden, "SPRING")
 
-        self.assertEquals(moisture, "High")
+        self.assertEqual(moisture, "High")
 
     def test_successful_get_garden_moisture_with_no_historical_data(self):
         self.mock_meteostat.search_for_nearest_weather_stations.return_value = self.station_search_with_data

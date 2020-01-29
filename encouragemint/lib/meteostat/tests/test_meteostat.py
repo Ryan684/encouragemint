@@ -39,7 +39,7 @@ class TestMeteostat(TestCase):
 
         stations = self.meteostat.search_for_nearest_weather_stations(self.sample_latitude, self.sample_longitude)
         
-        self.assertEquals(self.station_search_matches.get("data"), stations)
+        self.assertEqual(self.station_search_matches.get("data"), stations)
 
     def test_unsuccessful_search_for_nearest_weather_stations(self):
         mock = Mock()
@@ -48,7 +48,7 @@ class TestMeteostat(TestCase):
 
         stations = self.meteostat.search_for_nearest_weather_stations(self.sample_latitude, self.sample_longitude)
 
-        self.assertEquals(self.station_search_no_matches.get("data"), stations)
+        self.assertEqual(self.station_search_no_matches.get("data"), stations)
 
     def test_unsuccessful_search_for_nearest_weather_stations_from_meteostat_exception(self):
         self.mock_post.side_effect = requests.exceptions.ConnectionError
@@ -71,7 +71,7 @@ class TestMeteostat(TestCase):
             self.sample_weather_station
         )
 
-        self.assertEquals(self.station_weather_data.get("data"), weather_report)
+        self.assertEqual(self.station_weather_data.get("data"), weather_report)
 
     def test_unsuccessful_get_station_weather_record(self):
         mock = Mock()
@@ -84,7 +84,7 @@ class TestMeteostat(TestCase):
             self.sample_weather_station
         )
 
-        self.assertEquals(self.station_weather_no_data.get("data"), weather_report)
+        self.assertEqual(self.station_weather_no_data.get("data"), weather_report)
 
     def test_unsuccessful_get_station_weather_record_from_meteostat_exception(self):
         self.mock_post.side_effect = requests.exceptions.ConnectionError
