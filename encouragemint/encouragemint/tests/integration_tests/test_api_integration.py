@@ -6,7 +6,7 @@ from rest_framework import status
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden, \
-    SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT
+    SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, TREFLE_ID_LOOKUP_RESPONSE
 
 
 class TestProfile(TestCase):
@@ -83,8 +83,12 @@ class TestPlant(TestCase):
         self.test_garden = Garden.objects.get(garden_id=create_test_garden().get("garden_id"))
         self.test_plant = Plant.objects.create(**self.plant_data, garden=self.test_garden)
 
-        patcher = patch("encouragemint.encouragemint.views.TREFLE.lookup_plants", return_value=self.plant_data)
-        self.mock_trefle = patcher.start()
+        mock_responses = [Mock(), Mock()]
+        mock_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
+        mock_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
+
+        patcher = patch("requests.get", side_effect=mock_responses)
+        self.mock_get = patcher.start()
         self.addCleanup(patcher.stop)
 
     def test_create_plant(self):
@@ -106,4 +110,21 @@ class TestPlant(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
 
-# TODO: Add /recommend/ integration tests
+class TestRecommend(TestCase):
+    def setUp(self):
+        self.url = "/recommend/"
+        self.test_garden = create_test_garden()
+        self.plant_data = SAMPLE_PLANT.copy()
+
+        mock_responses = [Mock(), Mock()]
+        mock_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
+        mock_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
+
+        patcher = patch("requests.get", side_effect=mock_responses)
+        self.mock_get = patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_recommend_plants_for_garden(self):
+        response = self.client.get(
+            self.url + f"{self.test_garden.get('garden_id')}/?season=Spring", content_type="application/json")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
