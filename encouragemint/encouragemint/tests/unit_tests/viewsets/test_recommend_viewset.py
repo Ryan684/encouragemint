@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden
+from encouragemint.encouragemint.tests.helpers import create_test_garden
 from encouragemint.encouragemint.views import RecommendViewSet
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 

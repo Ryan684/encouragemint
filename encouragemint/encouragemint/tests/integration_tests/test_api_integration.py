@@ -5,7 +5,7 @@ from django.test import TestCase, override_settings
 from rest_framework import status
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
-from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden, \
+from encouragemint.encouragemint.tests.helpers import create_test_garden, \
     SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, TREFLE_ID_LOOKUP_RESPONSE, \
     METEOSTAT_STATION_SEARCH_RESPONSE, METEOSTAT_STATION_WEATHER_RESPONSE
 

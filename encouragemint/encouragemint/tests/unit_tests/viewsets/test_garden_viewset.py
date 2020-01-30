@@ -8,7 +8,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Profile
 from encouragemint.encouragemint.serializers import GardenSerializer
-from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden, SAMPLE_GARDEN, \
+from encouragemint.encouragemint.tests.helpers import create_test_garden, SAMPLE_GARDEN, \
     SAMPLE_GARDEN_SUNLIGHT, SAMPLE_GARDEN_GEOCODE_LOCATION
 from encouragemint.encouragemint.views import GardenViewSet
 

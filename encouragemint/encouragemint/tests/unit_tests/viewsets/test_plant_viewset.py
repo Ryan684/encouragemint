@@ -9,7 +9,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint import models
 from encouragemint.encouragemint.models import Plant, Garden, Profile
-from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import SAMPLE_PLANT
+from encouragemint.encouragemint.tests.helpers import SAMPLE_PLANT
 from encouragemint.encouragemint.views import PlantViewSet
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
