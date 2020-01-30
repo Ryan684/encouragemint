@@ -6,7 +6,8 @@ from rest_framework import status
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden, \
-    SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, TREFLE_ID_LOOKUP_RESPONSE
+    SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, TREFLE_ID_LOOKUP_RESPONSE, \
+    METEOSTAT_STATION_SEARCH_RESPONSE, METEOSTAT_STATION_WEATHER_RESPONSE
 
 
 class TestProfile(TestCase):
@@ -110,25 +111,27 @@ class TestPlant(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
 
-@override_settings(GOOGLE_API_KEY="Foo")
+@override_settings(METEOSTAT_API_KEY="Foo")
 class TestRecommend(TestCase):
     def setUp(self):
         self.url = "/recommend/"
         self.test_garden = create_test_garden()
-        self.plant_data = SAMPLE_PLANT.copy()
 
-        mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
-        mock_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
+        mock_trefle_responses = [Mock(), Mock()]
+        mock_trefle_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
+        mock_trefle_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
 
-        trefle_patcher = patch("requests.get", side_effect=mock_responses)
+        trefle_patcher = patch("requests.get", side_effect=mock_trefle_responses)
         self.mock_get = trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 
-        geocoder_patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
-                                 return_value=Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION))
-        geocoder_patcher.start()
-        self.addCleanup(geocoder_patcher.stop)
+        mock_meteostat_responses = [Mock(), Mock()]
+        mock_meteostat_responses[0].json.return_value = METEOSTAT_STATION_SEARCH_RESPONSE
+        mock_meteostat_responses[1].json.return_value = METEOSTAT_STATION_WEATHER_RESPONSE
+
+        meteostat_patcher = patch("requests.post", side_effect=mock_meteostat_responses)
+        self.mock_post = meteostat_patcher.start()
+        self.addCleanup(meteostat_patcher.stop)
 
     def test_recommend_plants_for_garden(self):
         response = self.client.get(

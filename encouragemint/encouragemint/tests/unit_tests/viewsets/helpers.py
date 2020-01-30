@@ -643,3 +643,211 @@ TREFLE_ID_LOOKUP_RESPONSE = {
     "common_name": "common woolly sunflower",
     "class": None
 }
+
+METEOSTAT_STATION_SEARCH_RESPONSE = {
+    "meta": {},
+    "data": [
+        {
+            "id": "03865",
+            "name": "Southampton / Weather Centre",
+            "distance": "7.4"
+        },
+        {
+            "id": "03749",
+            "name": "Middle Wallop",
+            "distance": "11.5"
+        },
+        {
+            "id": "03746",
+            "name": "Boscombe Down",
+            "distance": "16.5"
+        },
+        {
+            "id": "03743",
+            "name": "Larkhill",
+            "distance": "19.6"
+        },
+        {
+            "id": "03862",
+            "name": "Bournemouth Airport",
+            "distance": "20.4"
+        },
+        {
+            "id": "03761",
+            "name": "Odiham",
+            "distance": "29.1"
+        },
+        {
+            "id": "03866",
+            "name": "Saint Catherine's Point",
+            "distance": "29.3"
+        },
+        {
+            "id": "03768",
+            "name": "Farnborough",
+            "distance": "37.6"
+        },
+        {
+            "id": "03740",
+            "name": "Lyneham",
+            "distance": "41.1"
+        },
+        {
+            "id": "03763",
+            "name": "Bracknell / Beaufort Park",
+            "distance": "41.2"
+        }
+    ]
+}
+
+METEOSTAT_STATION_WEATHER_RESPONSE = {
+    "meta": {
+        "source": "National Oceanic and Atmospheric Administration, Deutscher Wetterdienst"
+    },
+    "data": [
+        {
+            "month": "2019-01",
+            "temperature_mean": 3.9,
+            "temperature_mean_min": 1,
+            "temperature_mean_max": 6.8,
+            "temperature_min": -11.1,
+            "temperature_max": 10.6,
+            "precipitation": 97,
+            "raindays": 13,
+            "pressure": 1011,
+            "sunshine": 66
+        },
+        {
+            "month": "2019-02",
+            "temperature_mean": 4.8,
+            "temperature_mean_min": 1.5,
+            "temperature_mean_max": 8.1,
+            "temperature_min": -7.5,
+            "temperature_max": 13.1,
+            "precipitation": 89,
+            "raindays": 8,
+            "pressure": 1015.9,
+            "sunshine": 64
+        },
+        {
+            "month": "2019-03",
+            "temperature_mean": 7,
+            "temperature_mean_min": 1.7,
+            "temperature_mean_max": 12.2,
+            "temperature_min": -4.7,
+            "temperature_max": 15.7,
+            "precipitation": 44,
+            "raindays": 7,
+            "pressure": 1016.3,
+            "sunshine": 166
+        },
+        {
+            "month": "2019-04",
+            "temperature_mean": 9.7,
+            "temperature_mean_min": 5.1,
+            "temperature_mean_max": 14.2,
+            "temperature_min": -0.9,
+            "temperature_max": 18.3,
+            "precipitation": 50,
+            "raindays": 9,
+            "pressure": 1013.3,
+            "sunshine": 175
+        },
+        {
+            "month": "2019-05",
+            "temperature_mean": 12.7,
+            "temperature_mean_min": 7.7,
+            "temperature_mean_max": 17.5,
+            "temperature_min": 0.8,
+            "temperature_max": 25.2,
+            "precipitation": 26,
+            "raindays": 6,
+            "pressure": 1018.7,
+            "sunshine": 217
+        },
+        {
+            "month": "2019-06",
+            "temperature_mean": 15.6,
+            "temperature_mean_min": 10.1,
+            "temperature_mean_max": 20.9,
+            "temperature_min": 2.6,
+            "temperature_max": 26.5,
+            "precipitation": 61,
+            "raindays": 7,
+            "pressure": 1017.6,
+            "sunshine": 231
+        },
+        {
+            "month": "2019-07",
+            "temperature_mean": 16.7,
+            "temperature_mean_min": 12.9,
+            "temperature_mean_max": 20.4,
+            "temperature_min": 7.6,
+            "temperature_max": 26.8,
+            "precipitation": 75,
+            "raindays": 16,
+            "pressure": 1013.2,
+            "sunshine": 187
+        },
+        {
+            "month": "2019-08",
+            "temperature_mean": 16.7,
+            "temperature_mean_min": 12.4,
+            "temperature_mean_max": 21,
+            "temperature_min": 6.2,
+            "temperature_max": 25.2,
+            "precipitation": 29,
+            "raindays": 8,
+            "pressure": 1016.6,
+            "sunshine": 181
+        },
+        {
+            "month": "2019-09",
+            "temperature_mean": 14.6,
+            "temperature_mean_min": 9.4,
+            "temperature_mean_max": 19.7,
+            "temperature_min": 2.5,
+            "temperature_max": 23.2,
+            "precipitation": 41,
+            "raindays": 5,
+            "pressure": 1022.5,
+            "sunshine": 171
+        },
+        {
+            "month": "2019-10",
+            "temperature_mean": 12.3,
+            "temperature_mean_min": 8.4,
+            "temperature_mean_max": 16.1,
+            "temperature_min": -1,
+            "temperature_max": 18.5,
+            "precipitation": 79,
+            "raindays": 13,
+            "pressure": 1016.6,
+            "sunshine": 92
+        },
+        {
+            "month": "2019-11",
+            "temperature_mean": 10,
+            "temperature_mean_min": 7.1,
+            "temperature_mean_max": 12.7,
+            "temperature_min": 1,
+            "temperature_max": 16.7,
+            "precipitation": 109,
+            "raindays": 22,
+            "pressure": 1002.1,
+            "sunshine": 69
+        },
+        {
+            "month": "2019-12",
+            "temperature_mean": 4.2,
+            "temperature_mean_min": 1.1,
+            "temperature_mean_max": 7.3,
+            "temperature_min": -6.2,
+            "temperature_max": 13,
+            "precipitation": 53,
+            "raindays": 9,
+            "pressure": 1006.4,
+            "sunshine": 74
+        }
+    ]
+}
