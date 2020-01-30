@@ -51,10 +51,10 @@ class TestGarden(TestCase):
                      "profile": str(profile.profile_id)}
         self.test_garden = create_test_garden()
 
-        patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
-                        return_value=Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION))
-        patcher.start()
-        self.addCleanup(patcher.stop)
+        geocoder_patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
+                                 return_value=Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION))
+        geocoder_patcher.start()
+        self.addCleanup(geocoder_patcher.stop)
 
     def test_create_garden(self):
         response = self.client.post(self.url, self.data, content_type="application/json")
@@ -87,9 +87,9 @@ class TestPlant(TestCase):
         mock_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
         mock_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
 
-        patcher = patch("requests.get", side_effect=mock_responses)
-        self.mock_get = patcher.start()
-        self.addCleanup(patcher.stop)
+        trefle_patcher = patch("requests.get", side_effect=mock_responses)
+        self.mock_get = trefle_patcher.start()
+        self.addCleanup(trefle_patcher.stop)
 
     def test_create_plant(self):
         data = {
@@ -110,6 +110,7 @@ class TestPlant(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
 
+@override_settings(GOOGLE_API_KEY="Foo")
 class TestRecommend(TestCase):
     def setUp(self):
         self.url = "/recommend/"
@@ -120,9 +121,14 @@ class TestRecommend(TestCase):
         mock_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
         mock_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
 
-        patcher = patch("requests.get", side_effect=mock_responses)
-        self.mock_get = patcher.start()
-        self.addCleanup(patcher.stop)
+        trefle_patcher = patch("requests.get", side_effect=mock_responses)
+        self.mock_get = trefle_patcher.start()
+        self.addCleanup(trefle_patcher.stop)
+
+        geocoder_patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
+                                 return_value=Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION))
+        geocoder_patcher.start()
+        self.addCleanup(geocoder_patcher.stop)
 
     def test_recommend_plants_for_garden(self):
         response = self.client.get(
