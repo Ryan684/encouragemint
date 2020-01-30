@@ -89,7 +89,7 @@ class TestPlant(TestCase):
         mock_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
 
         trefle_patcher = patch("requests.get", side_effect=mock_responses)
-        self.mock_get = trefle_patcher.start()
+        trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 
     def test_create_plant(self):
@@ -122,7 +122,7 @@ class TestRecommend(TestCase):
         mock_trefle_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
 
         trefle_patcher = patch("requests.get", side_effect=mock_trefle_responses)
-        self.mock_get = trefle_patcher.start()
+        trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 
         mock_meteostat_responses = [Mock(), Mock()]
@@ -130,7 +130,7 @@ class TestRecommend(TestCase):
         mock_meteostat_responses[1].json.return_value = METEOSTAT_STATION_WEATHER_RESPONSE
 
         meteostat_patcher = patch("requests.post", side_effect=mock_meteostat_responses)
-        self.mock_post = meteostat_patcher.start()
+        meteostat_patcher.start()
         self.addCleanup(meteostat_patcher.stop)
 
     def test_recommend_plants_for_garden(self):
