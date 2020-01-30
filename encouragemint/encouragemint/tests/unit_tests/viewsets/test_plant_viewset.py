@@ -9,6 +9,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint import models
 from encouragemint.encouragemint.models import Plant, Garden, Profile
+from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import SAMPLE_PLANT
 from encouragemint.encouragemint.views import PlantViewSet
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
 
@@ -24,18 +25,7 @@ TEST_GARDEN = Garden.objects.create(
         "longitude": -5.051041
     }
 )
-SAMPLE_PLANT = {
-    "scientific_name": "Eriophyllum lanatum",
-    "common_name": "common woolly sunflower",
-    "duration": "Annual, Perennial",
-    "bloom_period": "Spring",
-    "growth_period": "Summer",
-    "growth_rate": "Slow",
-    "shade_tolerance": "High",
-    "moisture_use": "High",
-    "family_common_name": "Aster family",
-    "trefle_id": 134845
-}
+PLANT_DATA = SAMPLE_PLANT.copy()
 
 
 class TestPlantViewsetParameters(TestCase):
@@ -57,7 +47,7 @@ class TestDelete(TestCase):
         return response
 
     def test_successful_delete_plant(self):
-        plant = Plant.objects.create(**SAMPLE_PLANT, garden=TEST_GARDEN)
+        plant = Plant.objects.create(**PLANT_DATA, garden=TEST_GARDEN)
         plant_id = plant.plant_id
         response = self._build_delete_response(plant_id)
         response.render()
@@ -92,7 +82,7 @@ class TestPost(TestCase):
         return response
 
     def test_successful_create_plant(self):
-        self.mock_trefle.return_value = SAMPLE_PLANT
+        self.mock_trefle.return_value = PLANT_DATA
 
         payload = self.new_plant_request.copy()
         response = self._build_post_response(payload)
@@ -102,18 +92,18 @@ class TestPost(TestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         self.assertIn("plant_id", model_data)
-        self.assertEqual(SAMPLE_PLANT.get("scientific_name"), model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT.get("common_name"), model_data.get("common_name"))
-        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual(PLANT_DATA.get("scientific_name"), model_data.get("scientific_name"))
+        self.assertEqual(PLANT_DATA.get("common_name"), model_data.get("common_name"))
+        self.assertEqual(PLANT_DATA.get("duration"), model_data.get("duration"))
+        self.assertEqual(PLANT_DATA.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(PLANT_DATA.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(PLANT_DATA.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(PLANT_DATA.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(PLANT_DATA.get("moisture_use"), model_data.get("moisture_use"))
         self.assertEqual(
-            SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
+            PLANT_DATA.get("family_common_name"), model_data.get("family_common_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
-        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
+        self.assertEqual(PLANT_DATA.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_unsuccessful_create_plant_from_invalid_payload(self):
         payload = self.new_plant_request.copy()
@@ -179,7 +169,7 @@ class TestPut(TestCase):
         self.addCleanup(patcher.stop)
 
     def _build_put_response(self):
-        existing_plant = SAMPLE_PLANT.copy()
+        existing_plant = PLANT_DATA.copy()
         existing_plant["garden"] = TEST_GARDEN
         plant = Plant.objects.create(**existing_plant)
         plant_id = plant.plant_id
@@ -190,7 +180,7 @@ class TestPut(TestCase):
         return self.view(request, plant_id=plant_id)
 
     def test_successful_update_plant(self):
-        updated_plant = SAMPLE_PLANT.copy()
+        updated_plant = PLANT_DATA.copy()
         updated_plant["scientific_name"] = "Fooupdated"
         self.mock_trefle.return_value = updated_plant
 
@@ -202,17 +192,17 @@ class TestPut(TestCase):
 
         self.assertIn("plant_id", model_data)
         self.assertEqual("Fooupdated", model_data.get("scientific_name"))
-        self.assertEqual(SAMPLE_PLANT.get("common_name"), model_data.get("common_name"))
-        self.assertEqual(SAMPLE_PLANT.get("duration"), model_data.get("duration"))
-        self.assertEqual(SAMPLE_PLANT.get("bloom_period"), model_data.get("bloom_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_period"), model_data.get("growth_period"))
-        self.assertEqual(SAMPLE_PLANT.get("growth_rate"), model_data.get("growth_rate"))
-        self.assertEqual(SAMPLE_PLANT.get("shade_tolerance"), model_data.get("shade_tolerance"))
-        self.assertEqual(SAMPLE_PLANT.get("moisture_use"), model_data.get("moisture_use"))
+        self.assertEqual(PLANT_DATA.get("common_name"), model_data.get("common_name"))
+        self.assertEqual(PLANT_DATA.get("duration"), model_data.get("duration"))
+        self.assertEqual(PLANT_DATA.get("bloom_period"), model_data.get("bloom_period"))
+        self.assertEqual(PLANT_DATA.get("growth_period"), model_data.get("growth_period"))
+        self.assertEqual(PLANT_DATA.get("growth_rate"), model_data.get("growth_rate"))
+        self.assertEqual(PLANT_DATA.get("shade_tolerance"), model_data.get("shade_tolerance"))
+        self.assertEqual(PLANT_DATA.get("moisture_use"), model_data.get("moisture_use"))
         self.assertEqual(
-            SAMPLE_PLANT.get("family_common_name"), model_data.get("family_common_name"))
+            PLANT_DATA.get("family_common_name"), model_data.get("family_common_name"))
         self.assertEqual(TEST_GARDEN.garden_id, UUID(model_data.get("garden")))
-        self.assertEqual(SAMPLE_PLANT.get("trefle_id"), model_data.get("trefle_id"))
+        self.assertEqual(PLANT_DATA.get("trefle_id"), model_data.get("trefle_id"))
 
     def test_unsuccessful_update_plant_from_trefle_exception(self):
         self.mock_trefle.side_effect = TrefleConnectionError
@@ -226,7 +216,7 @@ class TestPut(TestCase):
         )
 
     def test_unsuccessful_update_plant_from_invalid_id(self):
-        new_plant_details = SAMPLE_PLANT.copy()
+        new_plant_details = PLANT_DATA.copy()
         new_plant_details["scientific_name"] = "Fooupdated"
         new_plant_details["garden"] = str(TEST_GARDEN.garden_id)
 

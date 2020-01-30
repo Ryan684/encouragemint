@@ -8,18 +8,12 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Profile
 from encouragemint.encouragemint.serializers import GardenSerializer
-from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden
+from encouragemint.encouragemint.tests.unit_tests.viewsets.helpers import create_test_garden, SAMPLE_GARDEN, \
+    SAMPLE_GARDEN_SUNLIGHT, SAMPLE_GARDEN_GEOCODE_LOCATION
 from encouragemint.encouragemint.views import GardenViewSet
 
 GARDEN_URL = "/garden/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
-SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
-SAMPLE_GARDEN_SUNLIGHT = "low"
-SAMPLE_GARDEN_GEOCODE_LOCATION = {
-    'address': SAMPLE_GARDEN.get("location"),
-    'latitude': 50.263195,
-    'longitude': -5.051041
-}
 
 
 class TestGardenViewsetParameters(TestCase):
