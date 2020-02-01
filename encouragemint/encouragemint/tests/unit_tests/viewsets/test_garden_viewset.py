@@ -141,9 +141,12 @@ class TestPost(TestCase):
         self.assertEqual(SAMPLE_GARDEN.get("garden_name"), model_data.get("garden_name"))
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"), model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"), model_data.get("longitude"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"), model_data.get("latitude"))
+        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"),
+                         model_data.get("location"))
+        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"),
+                         model_data.get("longitude"))
+        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"),
+                         model_data.get("latitude"))
 
     def test_unsuccessful_create_garden_from_invalid_payload(self):
         response = self._build_post_response({
@@ -232,9 +235,12 @@ class TestPut(TestCase):
         self.assertEqual("Fooupdated", model_data.get("garden_name"))
         self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
         self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"), model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"), model_data.get("longitude"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"), model_data.get("latitude"))
+        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"),
+                         model_data.get("location"))
+        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"),
+                         model_data.get("longitude"))
+        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"),
+                         model_data.get("latitude"))
 
     def test_unsuccessful_update_garden_from_invalid_payload(self):
         response = self._build_put_response({

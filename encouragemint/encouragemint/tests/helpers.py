@@ -456,7 +456,8 @@ TREFLE_ID_LOOKUP_RESPONSE = {
             "family_common_name": "Aster family",
             "complete_data": False,
             "common_name": "common woolly sunflower",
-            "bibliography": "A Manual of the Flowering Plants of California . . . 1118. 1925. (Man. Fl. Pl. Calif.) ",
+            "bibliography": "A Manual of the Flowering Plants of California"
+                            " . . . 1118. 1925. (Man. Fl. Pl. Calif.) ",
             "author": "Jeps."
         }
     ],
@@ -552,7 +553,8 @@ TREFLE_ID_LOOKUP_RESPONSE = {
         "is_main_species": True,
         "images": [
             {
-                "url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Eriophyllum_lanatum_3575.JPG"
+                "url": "https://upload.wikimedia.org/wikipedia/commons"
+                       "/b/b9/Eriophyllum_lanatum_3575.JPG"
             }
         ],
         "id": 134845,
@@ -623,7 +625,8 @@ TREFLE_ID_LOOKUP_RESPONSE = {
     },
     "images": [
         {
-            "url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Eriophyllum_lanatum_3575.JPG"
+            "url": "https://upload.wikimedia.org/wikipedia/commons"
+                   "/b/b9/Eriophyllum_lanatum_3575.JPG"
         }
     ],
     "id": 134845,

@@ -14,5 +14,3 @@ class TestUrlRouting(TestCase):
     def test_plant_url(self):
         viewset = resolve("/plant/")
         self.assertEqual(viewset.func.__name__, "PlantViewSet")
-
-

@@ -37,8 +37,9 @@ class TestMeteostat(TestCase):
         mock.json.return_value = self.station_search_matches
         self.mock_post.return_value = mock
 
-        stations = self.meteostat.search_for_nearest_weather_stations(self.sample_latitude, self.sample_longitude)
-        
+        stations = self.meteostat.search_for_nearest_weather_stations(
+            self.sample_latitude, self.sample_longitude)
+
         self.assertEqual(self.station_search_matches.get("data"), stations)
 
     def test_unsuccessful_search_for_nearest_weather_stations(self):
@@ -46,7 +47,8 @@ class TestMeteostat(TestCase):
         mock.json.return_value = self.station_search_no_matches
         self.mock_post.return_value = mock
 
-        stations = self.meteostat.search_for_nearest_weather_stations(self.sample_latitude, self.sample_longitude)
+        stations = self.meteostat.search_for_nearest_weather_stations(
+            self.sample_latitude, self.sample_longitude)
 
         self.assertEqual(self.station_search_no_matches.get("data"), stations)
 

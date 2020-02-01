@@ -1,7 +1,7 @@
 import json
 from unittest.mock import patch, Mock
-from requests.exceptions import ConnectionError
 
+import requests
 from django.test import TestCase, override_settings
 
 from encouragemint.lib.trefle.exceptions import TrefleConnectionError
@@ -26,7 +26,7 @@ class TestTrefle(TestCase):
         self.addCleanup(patcher.stop)
 
     def test_trefle_unreachable(self):
-        self.mock_get.side_effect = ConnectionError
+        self.mock_get.side_effect = requests.RequestException
 
         self.assertRaises(
             TrefleConnectionError,

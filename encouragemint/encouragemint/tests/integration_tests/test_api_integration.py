@@ -6,8 +6,9 @@ from rest_framework import status
 
 from encouragemint.encouragemint.models import Profile, Plant, Garden
 from encouragemint.encouragemint.tests.helpers import create_test_garden, \
-    SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, TREFLE_ID_LOOKUP_RESPONSE, \
-    METEOSTAT_STATION_SEARCH_RESPONSE, METEOSTAT_STATION_WEATHER_RESPONSE
+    SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, \
+    TREFLE_ID_LOOKUP_RESPONSE, METEOSTAT_STATION_SEARCH_RESPONSE, \
+    METEOSTAT_STATION_WEATHER_RESPONSE
 
 
 class TestProfile(TestCase):
@@ -21,7 +22,8 @@ class TestProfile(TestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_retrieve_profile(self):
-        response = self.client.get(self.url + f"{self.test_profile.profile_id}/", content_type="application/json")
+        response = self.client.get(self.url + f"{self.test_profile.profile_id}/",
+                                   content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_list_profiles(self):
@@ -30,16 +32,19 @@ class TestProfile(TestCase):
 
     def test_patch_profile(self):
         response = self.client.patch(
-            self.url + f"{self.test_profile.profile_id}/", self.data, content_type="application/json")
+            self.url + f"{self.test_profile.profile_id}/", self.data,
+            content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_update_profile(self):
         response = self.client.put(
-            self.url + f"{self.test_profile.profile_id}/", self.data, content_type="application/json")
+            self.url + f"{self.test_profile.profile_id}/", self.data,
+            content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_delete_profile(self):
-        response = self.client.delete(self.url + f"{self.test_profile.profile_id}/", content_type="application/json")
+        response = self.client.delete(self.url + f"{self.test_profile.profile_id}/",
+                                      content_type="application/json")
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
 
@@ -63,17 +68,20 @@ class TestGarden(TestCase):
 
     def test_delete_garden(self):
         response = self.client.delete(
-            self.url + f"{self.test_garden.get('garden_id')}/", content_type="application/json")
+            self.url + f"{self.test_garden.get('garden_id')}/",
+            content_type="application/json")
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_patch_garden(self):
         response = self.client.patch(
-            self.url + f"{self.test_garden.get('garden_id')}/", self.data, content_type="application/json")
+            self.url + f"{self.test_garden.get('garden_id')}/", self.data,
+            content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_update_garden(self):
         response = self.client.put(
-            self.url + f"{self.test_garden.get('garden_id')}/", self.data, content_type="application/json")
+            self.url + f"{self.test_garden.get('garden_id')}/", self.data,
+            content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
 
@@ -107,7 +115,8 @@ class TestPlant(TestCase):
 
     def test_update_plant(self):
         response = self.client.put(
-            self.url + f"{self.test_plant.plant_id}/", self.plant_data, content_type="application/json")
+            self.url + f"{self.test_plant.plant_id}/", self.plant_data,
+            content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
 
@@ -135,5 +144,6 @@ class TestRecommend(TestCase):
 
     def test_recommend_plants_for_garden(self):
         response = self.client.get(
-            self.url + f"{self.test_garden.get('garden_id')}/?season=Spring", content_type="application/json")
+            self.url + f"{self.test_garden.get('garden_id')}/?season=Spring",
+            content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
