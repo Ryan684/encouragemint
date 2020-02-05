@@ -143,6 +143,9 @@ class RecommendViewSet(generics.RetrieveAPIView):
     meteostat = MeteostatAPI()
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        garden = self.get_object()
+        query = {"shade_tolerance": self._get_shade_tolerance(garden)}
+
         try:
             assert "season" in request.GET
         except AssertionError:
@@ -151,9 +154,8 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        season = request.GET["season"].upper()
-
         try:
+            season = request.GET["season"].upper()
             assert season in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
         except AssertionError:
             return Response(
@@ -161,12 +163,46 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        garden = self.get_object()
-        query = {"shade_tolerance": self._get_shade_tolerance(garden)}
         moisture_use = get_garden_moisture(garden, season)
 
         if moisture_use:
             query["moisture_use"] = moisture_use
+
+        if "duration" in request.GET:
+            try:
+                duration = request.GET["duration"].upper()
+                assert duration in ["PERENNIAL", "ANNUAL", "BIENNIAL"]
+                duration = duration.lower().capitalize()
+                query["duration"] = duration
+            except AssertionError:
+                return Response(
+                    {"Message": "The duration must be either Perennial, Annual or Biennial."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if "bloom_period" in request.GET:
+            allowed_bloom_periods = None
+            try:
+                bloom_period = request.GET["bloom_period"].upper()
+                if season == "SPRING":
+                    allowed_bloom_periods = ["EARLY SPRING", "MID SPRING", "SPRING", "LATE SPRING"]
+                    assert bloom_period in allowed_bloom_periods
+                elif season == "SUMMER":
+                    allowed_bloom_periods = ["EARLY SUMMER", "MID SUMMER", "SUMMER", "LATE SUMMER"]
+                    assert bloom_period in allowed_bloom_periods
+                elif season == "AUTUMN":
+                    allowed_bloom_periods = ["EARLY AUTUMN", "MID AUTUMN", "AUTUMN", "LATE AUTUMN"]
+                    assert bloom_period in allowed_bloom_periods
+                else:
+                    allowed_bloom_periods = ["EARLY WINTER", "MID WINTER", "WINTER", "LATE WINTER"]
+                    assert bloom_period in allowed_bloom_periods
+                bloom_period = bloom_period .lower().title()
+                query["bloom_period"] = bloom_period
+            except AssertionError:
+                return Response(
+                    {"Message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         try:
             plants = TREFLE.lookup_plants(query)

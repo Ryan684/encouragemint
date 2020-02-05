@@ -40,7 +40,8 @@ class TrefleAPI:
 
     def _compile_parameters(self, extra_parameters=None):
         url_parameters = {
-            "token": self.TOKEN
+            "token": self.TOKEN,
+            "page_size": 100
         }
 
         if extra_parameters:

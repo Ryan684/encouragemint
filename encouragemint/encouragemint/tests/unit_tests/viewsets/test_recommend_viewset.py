@@ -62,6 +62,33 @@ class TestRecommendViewsetParameters(TestCase):
             response.data
         )
 
+    def test_unsuccessful_recommendation_from_invalid_duration_parameter(self):
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=Spring&duration=yearly", format="json")
+        response = self.view(request, garden_id=GARDEN_ID)
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            {
+                "Message": "The duration must be either Perennial, Annual or Biennial."
+            },
+            response.data
+        )
+
+    def test_unsuccessful_recommendation_from_invalid_bloom_period_parameter(self):
+        request = self.factory.get(f"{RECOMMEND_URL}/?season=Spring&bloom_period=Summer", format="json")
+        allowed_bloom_periods = ["EARLY SPRING", "MID SPRING", "SPRING", "LATE SPRING"]
+        response = self.view(request, garden_id=GARDEN_ID)
+        response.render()
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            {
+                "Message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"
+            },
+            response.data
+        )
+
     def test_successful_recommendation(self):
         self.mock_trefle.return_value = self.recommend_many_results
 
