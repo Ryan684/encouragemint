@@ -184,19 +184,9 @@ class RecommendViewSet(generics.RetrieveAPIView):
             allowed_bloom_periods = None
             try:
                 bloom_period = request.GET["bloom_period"].upper()
-                if season == "SPRING":
-                    allowed_bloom_periods = ["EARLY SPRING", "MID SPRING", "SPRING", "LATE SPRING"]
-                    assert bloom_period in allowed_bloom_periods
-                elif season == "SUMMER":
-                    allowed_bloom_periods = ["EARLY SUMMER", "MID SUMMER", "SUMMER", "LATE SUMMER"]
-                    assert bloom_period in allowed_bloom_periods
-                elif season == "AUTUMN":
-                    allowed_bloom_periods = ["EARLY AUTUMN", "MID AUTUMN", "AUTUMN", "LATE AUTUMN"]
-                    assert bloom_period in allowed_bloom_periods
-                else:
-                    allowed_bloom_periods = ["EARLY WINTER", "MID WINTER", "WINTER", "LATE WINTER"]
-                    assert bloom_period in allowed_bloom_periods
-                bloom_period = bloom_period .lower().title()
+                allowed_bloom_periods = [f"EARLY {season}", f"MID {season}", f"{season}", f"LATE {season}"]
+                assert bloom_period in allowed_bloom_periods
+                bloom_period = bloom_period.lower().title()
                 query["bloom_period"] = bloom_period
             except AssertionError:
                 return Response(
