@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: encouragemint-api
+  labels:
+    name: encouragemint-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      encouragemint-component: api-backend
+  template:
+    metadata:
+      labels:
+        encouragemint-component: api-backend
+    spec:
+      containers:
+        - name: encouragemint-api
+          image: encouragemint:0.0.1
+          ports:
+            - containerPort: 8000
