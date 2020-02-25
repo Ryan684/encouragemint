@@ -1,7 +1,7 @@
 import datetime
 
-from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
-from encouragemint.lib.meteostat.meteostat import MeteostatAPI
+from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
+from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
 
 METEOSTAT = MeteostatAPI()
 

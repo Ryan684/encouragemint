@@ -4,8 +4,8 @@ from unittest.mock import patch, Mock
 import requests
 from django.test import override_settings, TestCase
 
-from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
-from encouragemint.lib.meteostat.meteostat import MeteostatAPI
+from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
+from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
 
 
 @override_settings(METEOSTAT_API_KEY="Foo")

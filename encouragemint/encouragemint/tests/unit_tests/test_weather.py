@@ -6,7 +6,7 @@ from django.test import TestCase
 from encouragemint.encouragemint import weather
 from encouragemint.encouragemint.models import Garden
 from encouragemint.encouragemint.tests.helpers import create_test_garden
-from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
+from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
 
 
 class TestWeather(TestCase):

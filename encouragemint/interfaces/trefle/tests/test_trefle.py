@@ -4,8 +4,8 @@ from unittest.mock import patch, Mock
 import requests
 from django.test import TestCase, override_settings
 
-from encouragemint.lib.trefle.exceptions import TrefleConnectionError
-from encouragemint.lib.trefle.trefle import TrefleAPI
+from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
+from encouragemint.interfaces.trefle.trefle import TrefleAPI
 
 
 @override_settings(TREFLE_API_KEY="Foo")

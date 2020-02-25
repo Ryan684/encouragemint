@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 
-from encouragemint.lib.meteostat.exceptions import MeteostatConnectionError
+from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
 
 
 class MeteostatAPI:

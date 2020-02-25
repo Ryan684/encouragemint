@@ -11,7 +11,7 @@ from encouragemint.encouragemint import models
 from encouragemint.encouragemint.models import Plant, Garden, Profile
 from encouragemint.encouragemint.tests.helpers import SAMPLE_PLANT
 from encouragemint.encouragemint.views import PlantViewSet
-from encouragemint.lib.trefle.exceptions import TrefleConnectionError
+from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 PLANT_URL = "/plant/"
 TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})

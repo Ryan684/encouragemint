@@ -10,9 +10,9 @@ from encouragemint.encouragemint.serializers import (
     ProfileSerializer, PlantSerializer, GardenSerializer,
     NewPlantRequestSerializer)
 from encouragemint.encouragemint.weather import get_garden_moisture
-from encouragemint.lib.meteostat.meteostat import MeteostatAPI
-from encouragemint.lib.trefle.trefle import TrefleAPI
-from encouragemint.lib.trefle.exceptions import TrefleConnectionError
+from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
+from encouragemint.interfaces.trefle.trefle import TrefleAPI
+from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 TREFLE = TrefleAPI()
 
@@ -193,8 +193,8 @@ class RecommendViewSet(generics.RetrieveAPIView):
             except AssertionError:
                 return Response(
                     {
-                        "Message": "The bloom_period must be one of "
-                        f"the following: {allowed_bloom_periods}"
+                        "Message": f"The bloom_period must be one of the following: "
+                        f"{allowed_bloom_periods}"
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )

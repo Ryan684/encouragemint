@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 
-from encouragemint.lib.trefle.exceptions import TrefleConnectionError
+from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 
 class TrefleAPI:

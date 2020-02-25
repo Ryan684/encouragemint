@@ -7,7 +7,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.tests.helpers import create_test_garden
 from encouragemint.encouragemint.views import RecommendViewSet
-from encouragemint.lib.trefle.exceptions import TrefleConnectionError
+from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 RECOMMEND_URL = "/recommend/"
 SAMPLE_GARDEN = create_test_garden()
