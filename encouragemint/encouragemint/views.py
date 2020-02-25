@@ -194,7 +194,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 return Response(
                     {
                         "Message": f"The bloom_period must be one of the following: "
-                        f"{allowed_bloom_periods}"
+                                   f"{allowed_bloom_periods}"
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
