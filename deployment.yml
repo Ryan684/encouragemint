@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: encouragemint-api
-          image: encouragemint:0.0.1
+          image: encouragemint:latest
           ports:
             - containerPort: 8000

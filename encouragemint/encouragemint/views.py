@@ -184,13 +184,17 @@ class RecommendViewSet(generics.RetrieveAPIView):
             allowed_bloom_periods = None
             try:
                 bloom_period = request.GET["bloom_period"].upper()
-                allowed_bloom_periods = [f"EARLY {season}", f"MID {season}", f"{season}", f"LATE {season}"]
+                allowed_bloom_periods = [
+                    f"EARLY {season}", f"MID {season}", f"{season}", f"LATE {season}"
+                ]
                 assert bloom_period in allowed_bloom_periods
                 bloom_period = bloom_period.lower().title()
                 query["bloom_period"] = bloom_period
             except AssertionError:
                 return Response(
-                    {"Message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"},
+                    {"Message": "The bloom_period must be one of "
+                     f"the following: {allowed_bloom_periods}"
+                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
