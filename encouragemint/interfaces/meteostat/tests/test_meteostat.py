@@ -18,7 +18,7 @@ class TestMeteostat(TestCase):
         self.sample_weather_start_date = "2019-01"
         self.sample_weather_end_date = "2019-12"
 
-        test_responses_dir = "encouragemint/lib/meteostat/tests/test_responses"
+        test_responses_dir = "encouragemint/interfaces/meteostat/tests/test_responses"
         with open(f"{test_responses_dir}/station_search_response_no_data.json", "r") as file:
             self.station_search_matches = json.load(file)
         with open(f"{test_responses_dir}/station_search_response_with_data.json", "r") as file:

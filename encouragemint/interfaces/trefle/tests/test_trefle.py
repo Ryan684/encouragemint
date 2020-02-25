@@ -13,7 +13,7 @@ class TestTrefle(TestCase):
     def setUp(self):
         self.trefle = TrefleAPI()
 
-        test_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        test_responses_dir = "encouragemint/interfaces/trefle/tests/test_responses"
         with open(f"{test_responses_dir}/plant_search_one_match.json", "r") as file:
             self.search_single_match = json.load(file)
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:

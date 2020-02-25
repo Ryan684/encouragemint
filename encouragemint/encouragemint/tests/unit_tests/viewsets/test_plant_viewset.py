@@ -131,7 +131,7 @@ class TestPost(TestCase):
         )
 
     def test_successful_create_plant_many_trefle_results(self):
-        test_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        test_responses_dir = "encouragemint/interfaces/trefle/tests/test_responses"
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             search_many_matches = json.load(file)
 

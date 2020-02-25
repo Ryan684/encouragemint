@@ -7,5 +7,6 @@ db.sqlite3
 README.md
 .circleci/
 encouragemint/encouragemint/tests/
-encouragemint/lib/trefle/tests/
+encouragemint/interfaces/trefle/tests/
+encouragemint/interfaces/meteostat/tests/
 build/

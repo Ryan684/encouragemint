@@ -23,7 +23,7 @@ class TestRecommendViewsetParameters(TestCase):
         self.factory = APIRequestFactory()
         self.view = RecommendViewSet.as_view()
 
-        test_responses_dir = "encouragemint/lib/trefle/tests/test_responses"
+        test_responses_dir = "encouragemint/interfaces/trefle/tests/test_responses"
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.recommend_many_results = json.load(file)
 
