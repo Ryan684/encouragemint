@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: encouragemint-api
   labels:
-    name: encouragemint-api
+    name: api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      encouragemint-component: api-backend
+      encouragemint-component: api
   template:
     metadata:
       labels:
-        encouragemint-component: api-backend
+        encouragemint-component: api
     spec:
       containers:
         - name: encouragemint-api
-          image: encouragemint:latest
+          image: ryan684/encouragemint:latest
           ports:
             - containerPort: 8000

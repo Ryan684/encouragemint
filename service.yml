@@ -4,7 +4,7 @@ metadata:
   name: encouragemint-api-service
 spec:
   selector:
-    encouragemint-component: api-backend
+    encouragemint-component: api
   ports:
     - protocol: TCP
       port: 8000
