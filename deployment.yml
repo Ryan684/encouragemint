@@ -19,3 +19,5 @@ spec:
           image: ryan684/encouragemint:latest
           ports:
             - containerPort: 8000
+      imagePullSecrets:
+        - name: regcred
