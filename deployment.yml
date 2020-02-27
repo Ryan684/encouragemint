@@ -1,9 +1,9 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: encouragemint-api
   labels:
-    name: api
+    encouragemint-component: api
 spec:
   replicas: 1
   selector:
