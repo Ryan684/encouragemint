@@ -1,18 +1,21 @@
-MVP2: Recommend plants for a garden based on season, specifically for rainfall.
-     - Average rainfall of a location for a whole year isn't a fair reading.
+<h1>Encouragemint<h1>
+This API allows you to hold an inventory of plants of interest in your garden, and can make recommendations
+on plants that will thrive in your garden based on key pieces of information that can be gleaned from public
+APIs and databases. For example, it can make recommendations on plants for specific seasons based on:</br>
+<li>Average rainfall for your garden</li>
+<li>The shade/sunlight your garden gets by it's direction</li>
 
-    - recommend/spring (march, april, may)
-    - recommend/summer (june, july, august)
-    - recommend/autumn (september, october, november)
-    - recommend/winter (december, january, february)
+You can also filter plants by:</br>
+<li>The desired bloom period</li>
+<li>The desired duration (Perennial, Annual, Biennial)</li>
 
-datasource: Weather API of some sort that accepts season/months and co-cordinates as input for average weather?
-    - last 12 months datasource is fine. probably most accurate instead of a bigger dataset.
-    - filter moisture_use on trefle params with average rainfall for that season at that location
-        - need to find moisture_use possible values on Trefle, then transform that rainfall data into those classifications.
-    return works the same way, just dump the trefle response to encouragemint resonse data for now.
+<h2>Features in the pipeline</h2>
+<li>More intelligent garden recommendations (Soil toxicity, temperatures etc).</li>
+<li>More optional filters for plant attributes as part of garden recomendations.</li>
 
-
-potential API - https://api.meteostat.net/#introduction . have to query for stations near garden latlong, then historical weather
-                for that station in the history/monthly and filter? use normals endpoint to look at weather readings from nearest station?
+<h2>Endpoints (MORE DETAIL REQUIRED. SWAGGER DEFINITION?)</h2>
+<li>/profile [POST, PUT, PATCH, GET]</li>
+<li>/garden [POST, PUT]</li>
+<li>/plants [POST, PUT]</li>
+<li>/recommend/<garden_id> [GET]</li>
 
