@@ -1,7 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: encouragemint-backend
+  name: encouragemint-backend-deployment
+  labels:
+    app: encouragemint-backend
 spec:
   replicas: 1
   selector:
@@ -15,6 +17,7 @@ spec:
       containers:
         - name: encouragemint-backend
           image: ryan684/encouragemint:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
       imagePullSecrets:
