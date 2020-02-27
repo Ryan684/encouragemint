@@ -1,4 +1,4 @@
-<h1>Encouragemint<h1>
+<h1>Encouragemint</h1>
 This API allows you to hold an inventory of plants of interest in your garden, and can make recommendations
 on plants that will thrive in your garden based on key pieces of information that can be gleaned from public
 APIs and databases. For example, it can make recommendations on plants for specific seasons based on:</br>
