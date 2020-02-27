@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: encouragemint-api-service
+  name: encouragemint-svc
+  labels:
+    app: encouragemint
 spec:
-  selector:
-    encouragemint-component: api
-  ports:
-    - protocol: TCP
-      port: 8000
-      targetPort: 8000
   type: NodePort
+  ports:
+    - port: 80
+      nodePort: 30080
+  selector:
+    app: encouragemint

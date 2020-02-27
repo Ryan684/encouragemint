@@ -1,23 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: encouragemint-api
-  labels:
-    encouragemint-component: api
+  name: encouragemint
 spec:
   replicas: 1
   selector:
     matchLabels:
-      encouragemint-component: api
+      app: encouragemint
   template:
     metadata:
       labels:
-        encouragemint-component: api
+        app: encouragemint
     spec:
       containers:
-        - name: encouragemint-api
+        - name: encouragemint
           image: ryan684/encouragemint:latest
           ports:
-            - containerPort: 8000
+            - containerPort: 80
       imagePullSecrets:
         - name: regcred
