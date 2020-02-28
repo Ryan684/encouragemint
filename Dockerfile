@@ -5,4 +5,4 @@ RUN mkdir /encouragemint
 WORKDIR /encouragemint
 ADD . /encouragemint/
 RUN pip install -r encouragemint/requirements.txt
-RUN python manage.py runserver 0.0.0.0:8000
+CMD python manage.py runserver 0.0.0.0:8000
