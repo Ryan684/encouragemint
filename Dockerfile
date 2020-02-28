@@ -8,5 +8,6 @@ ADD . /encouragemint/
 RUN pip install -r encouragemint/requirements.txt
 
 # Server Initialization
+EXPOSE 8000
 RUN python manage.py migrate
 CMD python manage.py runserver 0.0.0.0:8000
