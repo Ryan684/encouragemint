@@ -18,6 +18,13 @@ spec:
         - name: encouragemint-backend
           image: ryan684/encouragemint:latest
           imagePullPolicy: IfNotPresent
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: DJANGO_ALLOWED_HOSTS
+              value: '$(POD_IP)'
           ports:
             - containerPort: 8000
       imagePullSecrets:
