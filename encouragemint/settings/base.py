@@ -34,8 +34,7 @@ except ImportError:
     METEOSTAT_API_KEY = None
 
 ALLOWED_HOSTS = [
-    '192.168.99.100', '127.0.0.1'
-]
+    '192.168.99.101', '127.0.0.1']
 
 # Application definition
 
