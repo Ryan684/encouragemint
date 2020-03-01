@@ -33,9 +33,7 @@ except ImportError:
     GOOGLE_API_KEY = None
     METEOSTAT_API_KEY = None
 
-ALLOWED_HOSTS = [
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = [os.environ.get('LOAD_BALANCER_IP', '127.0.0.1')]
 
 # Application definition
 
