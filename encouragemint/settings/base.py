@@ -33,7 +33,7 @@ except ImportError:
     GOOGLE_API_KEY = None
     METEOSTAT_API_KEY = None
 
-ALLOWED_HOSTS = [os.environ.get('POD_IP', '*')]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
