@@ -25,13 +25,10 @@ SECRET_KEY = '=%j0^@01(s-h5g7=rba&3j%&-h=u*ypjqpfth6l8(u+*m-#q^t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Import local_settings file not checked into GIT (I.E, external API keys).
-try:
-    from encouragemint.settings.local_settings import *
-except ImportError:
-    TREFLE_API_KEY = None
-    GOOGLE_API_KEY = None
-    METEOSTAT_API_KEY = None
+# Import external API keys.
+TREFLE_API_KEY = os.getenv("TREFLE_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 
 ALLOWED_HOSTS = [os.getenv("NODE_IP", "127.0.0.1")]
 

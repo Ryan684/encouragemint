@@ -25,16 +25,19 @@ spec:
                   fieldPath: status.hostIP
             - name: TREFLE_API_KEY
                 valueFrom:
-                  fieldRef:
-                    fieldPath: {{ .Values.trefleApiKey }}
+                  secretKeyRef:
+                    name: apikeys
+                    key: trefle
             - name: GOOGLE_API_KEY
                 valueFrom:
-                  fieldRef:
-                    fieldPath: {{ .Values.googleApiKey }}
+                  secretKeyRef:
+                    name: apikeys
+                    key: google
             - name: METEOSTAT_API_KEY
                 valueFrom:
-                  fieldRef:
-                    fieldPath: {{ .Values.meteostatApiKey }}
+                  secretKeyRef:
+                    name: apikeys
+                    key: meteostat
           ports:
             - containerPort: 8000
       imagePullSecrets:

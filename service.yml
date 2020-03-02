@@ -5,8 +5,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - protocol: TCP
-    port: 8000
-    targetPort: 8000
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
   selector:
     app: encouragemint-backend
