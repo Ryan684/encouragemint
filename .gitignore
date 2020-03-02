@@ -4,4 +4,5 @@ db.sqlite3
 .coverage
 encouragemint/settings/local_settings.py
 regcred.yml
+api_keys.yml
 .env
