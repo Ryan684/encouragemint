@@ -1,7 +1,7 @@
 <h1>Encouragemint</h1>
 This API allows you to hold an inventory of plants of interest in your garden, and can make recommendations
 on plants that will thrive in your garden based on key pieces of information that can be gleaned from public
-APIs and databases. For example, it can make recommendations on plants for specific seasons based on:</br>
+APIs and databases. For example, it can make recommendations on plants for specific seasons based on:</br></br>
 <li>Average rainfall for your garden</li>
 <li>The shade/sunlight your garden gets by it's direction</li></br>
 
@@ -17,5 +17,5 @@ You can also filter plants by:</br>
 <li>/profile [POST, PUT, PATCH, GET]</li>
 <li>/garden [POST, PUT]</li>
 <li>/plants [POST, PUT]</li>
-<li>/recommend/<garden_id> [GET]</li>
+<li>/recommend/{garden_id} [GET]</li>
 
