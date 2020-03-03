@@ -143,9 +143,6 @@ class RecommendViewSet(generics.RetrieveAPIView):
     meteostat = MeteostatAPI()
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        garden = self.get_object()
-        query = {"shade_tolerance": self._get_shade_tolerance(garden)}
-
         try:
             assert "season" in request.GET
         except AssertionError:
@@ -162,6 +159,9 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 {"Message": "The season must be either Spring, Summer, Autumn or Winter."},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        garden = self.get_object()
+        query = {"shade_tolerance": self._get_shade_tolerance(garden)}
 
         moisture_use = get_garden_moisture(garden, season)
 
