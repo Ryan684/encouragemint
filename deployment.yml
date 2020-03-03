@@ -17,6 +17,8 @@ spec:
       containers:
       - name: encouragemint-backend
         image: ryan684/encouragemint:latest
+        command: ["/bin/sh", "-c"]
+        args: ["python manage.py migrate; python manage.py runserver 0.0.0.0:8000"]
         imagePullPolicy: IfNotPresent
         env:
         - name: NODE_IP
