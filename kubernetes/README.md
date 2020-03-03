@@ -27,7 +27,7 @@ cli in this order:<br><br>
 <li>kubectl apply -f deployment.yml</li><br>
 
 In the initial cut of this Kubernetes configuration, the Encouragemint service simply uses a Nodeport, so you
-can access the Encouragemint Django API root at https://<Node IP><Node Port>/.
+can access the Encouragemint Django API root at https://{Node IP}:{Node Port}/.
 
 <h2>Improvements to explore</h2>
 <li>Use of a package manager to slimline the deployment I.E Helm?</li>
