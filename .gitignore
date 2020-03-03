@@ -2,6 +2,6 @@ encouragemint.iml
 .idea/
 db.sqlite3
 .coverage
-regcred.yml
+docker_hub_credentials.yml
 api_keys.yml
 .env
