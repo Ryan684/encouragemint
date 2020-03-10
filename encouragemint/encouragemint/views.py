@@ -184,7 +184,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
             except AssertionError:
                 return Response(
                     {"Message": "The bloom_period must be one of the following: "
-                     f"{allowed_bloom_periods}"},
+                    f"{allowed_bloom_periods}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
