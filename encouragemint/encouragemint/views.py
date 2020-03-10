@@ -145,24 +145,17 @@ class RecommendViewSet(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         try:
             assert "season" in request.GET
-        except AssertionError:
-            return Response(
-                {"Message": "You must specify a season url parameter for plant recommendations."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        try:
             season = request.GET["season"].upper()
             assert season in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
         except AssertionError:
             return Response(
-                {"Message": "The season must be either Spring, Summer, Autumn or Winter."},
+                {"Message": "You must specify a season url parameter for plant recommendations. "
+                            "The season must be either Spring, Summer, Autumn or Winter."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         garden = self.get_object()
         query = {"shade_tolerance": garden.shade_tolerance}
-
         moisture_use = get_garden_moisture(garden, season)
 
         if moisture_use:
@@ -181,21 +174,16 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 )
 
         if "bloom_period" in request.GET:
-            allowed_bloom_periods = None
+            allowed_bloom_periods = [
+                f"EARLY {season}", f"MID {season}", f"{season}", f"LATE {season}"
+            ]
             try:
                 bloom_period = request.GET["bloom_period"].upper()
-                allowed_bloom_periods = [
-                    f"EARLY {season}", f"MID {season}", f"{season}", f"LATE {season}"
-                ]
                 assert bloom_period in allowed_bloom_periods
-                bloom_period = bloom_period.lower().title()
-                query["bloom_period"] = bloom_period
+                query["bloom_period"] = bloom_period.lower().title()
             except AssertionError:
                 return Response(
-                    {
-                        "Message": f"The bloom_period must be one of the following: "
-                                   f"{allowed_bloom_periods}"
-                    },
+                    {"Message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -203,10 +191,8 @@ class RecommendViewSet(generics.RetrieveAPIView):
             plants = TREFLE.lookup_plants(query)
         except TrefleConnectionError:
             return Response(
-                {
-                    "Message": "Encouragemint can't recommend plants for your garden right now. "
-                               "Try again later."
-                },
+                {"Message": "Encouragemint can't recommend plants for your garden right now. "
+                            "Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         print(f"{len(plants)} plants matched the search criteria: {query}")
