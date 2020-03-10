@@ -183,7 +183,8 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 query["bloom_period"] = bloom_period.lower().title()
             except AssertionError:
                 return Response(
-                    {"Message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"},
+                    {"Message": "The bloom_period must be one of the following: "
+                     f"{allowed_bloom_periods}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
