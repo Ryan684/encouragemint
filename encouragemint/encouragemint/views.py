@@ -192,7 +192,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
 
         return self.recommend_plants(query)
 
-    def recommend_plants(self, query):  # pylint: disable=unused-argument
+    def recommend_plants(self, query):  # pylint: disable=no-self-use
         try:
             plants = TREFLE.lookup_plants(query)
         except TrefleConnectionError:
