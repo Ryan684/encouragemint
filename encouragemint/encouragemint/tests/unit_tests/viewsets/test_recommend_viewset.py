@@ -72,7 +72,7 @@ class TestRecommendViewsetParameters(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": "The duration must be either Perennial, Annual or Biennial."
+                "Message": "The duration must be one of the following: ['PERENNIAL', 'ANNUAL', 'BIENNIAL']"
             },
             response.data
         )

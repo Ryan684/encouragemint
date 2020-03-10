@@ -162,14 +162,16 @@ class RecommendViewSet(generics.RetrieveAPIView):
             query["moisture_use"] = moisture_use
 
         if "duration" in request.GET:
+            allowed_durations = ["PERENNIAL", "ANNUAL", "BIENNIAL"]
             try:
                 duration = request.GET["duration"].upper()
-                assert duration in ["PERENNIAL", "ANNUAL", "BIENNIAL"]
+                assert duration in allowed_durations
                 duration = duration.lower().capitalize()
                 query["duration"] = duration
             except AssertionError:
                 return Response(
-                    {"Message": "The duration must be either Perennial, Annual or Biennial."},
+                    {"Message": "The duration must be one of the following: "
+                                f"{allowed_durations}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -188,6 +190,9 @@ class RecommendViewSet(generics.RetrieveAPIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
+        return self.recommend_plants(query)
+
+    def recommend_plants(self, query):  # pylint: disable=unused-argument
         try:
             plants = TREFLE.lookup_plants(query)
         except TrefleConnectionError:
