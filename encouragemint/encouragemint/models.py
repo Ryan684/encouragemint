@@ -26,6 +26,14 @@ class Garden(models.Model):
             return "high"
         return "medium"
 
+    @property
+    def shade_tolerance(self):
+        if self.sunlight == "north":
+            return "Tolerant"
+        if self.sunlight == "south":
+            return "Intolerant"
+        return "Intermediate"
+
 
 class Plant(models.Model):
     plant_id = models.UUIDField(default=uuid.uuid4)

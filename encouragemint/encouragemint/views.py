@@ -161,7 +161,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
             )
 
         garden = self.get_object()
-        query = {"shade_tolerance": self._get_shade_tolerance(garden)}
+        query = {"shade_tolerance": garden.shade_tolerance}
 
         moisture_use = get_garden_moisture(garden, season)
 
@@ -211,10 +211,3 @@ class RecommendViewSet(generics.RetrieveAPIView):
             )
         print(f"{len(plants)} plants matched the search criteria: {query}")
         return Response(plants, status=status.HTTP_200_OK)
-
-    def _get_shade_tolerance(self, garden):  # pylint: disable=no-self-use
-        if garden.sunlight == "north":
-            return "Tolerant"
-        if garden.sunlight == "south":
-            return "Intolerant"
-        return "Intermediate"
