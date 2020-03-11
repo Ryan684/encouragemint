@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from geopy import GoogleV3
 from geopy.exc import GeopyError
@@ -15,6 +17,7 @@ from encouragemint.interfaces.trefle.trefle import TrefleAPI
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 TREFLE = TrefleAPI()
+logger = logging.getLogger(__name__)
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -36,14 +39,18 @@ class GardenViewSet(viewsets.ModelViewSet):
         return self.perform_create(serializer)
 
     def perform_create(self, serializer):
+        profile = self.request["GET"]["profile_id"]
         try:
             latitude, longitude, location = self._lookup_garden_coordinates()
-        except GeocoderConnectionError:
+        except GeocoderConnectionError as exception:
+            logger.error(f"Adding garden failed for profile {profile}: {exception}")
             return Response(
                 {"Message": "Encouragemint can't create new gardens right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-        except GeocoderNoResultsError:
+        except GeocoderNoResultsError as exception:
+            logger.error(
+                f"Adding garden failed for profile {profile}. No results found: {exception}")
             return Response(
                 {"Message": "Encouragemint couldn't find that location. Try to be more accurate."},
                 status=status.HTTP_400_BAD_REQUEST
@@ -51,6 +58,7 @@ class GardenViewSet(viewsets.ModelViewSet):
 
         serializer.save(latitude=latitude, longitude=longitude, location=location)
         headers = self.get_success_headers(serializer.data)
+        logger.error(f"Added garden {serializer.data.garden_id} to profile {profile} successfully.")
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def _lookup_garden_coordinates(self):
@@ -83,13 +91,16 @@ class PlantViewSet(viewsets.ModelViewSet):
 
         try:
             result = self._lookup_plant_by_name("common_name", plant_name, garden)
-        except TrefleConnectionError:
+        except TrefleConnectionError as exception:
+            logger.error(f"Adding plant failed for garden {garden}: {exception}")
             return Response(
                 {"Message": "Encouragemint can't add new plants right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
         if not result:
+            logger.error(
+                f"Adding plant failed for garden {garden}: No plants found for {plant_name}")
             return Response(
                 {"Message": "Encouragemint couldn't find any plants with that name."},
                 status=status.HTTP_400_BAD_REQUEST
@@ -100,6 +111,7 @@ class PlantViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
+            logger.error(f"Added plant {serializer.data.plant_id} to garden {garden} successfully.")
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         return Response(
@@ -115,7 +127,8 @@ class PlantViewSet(viewsets.ModelViewSet):
 
         try:
             result = self._lookup_plant_by_name("scientific_name", plant_name, garden)
-        except TrefleConnectionError:
+        except TrefleConnectionError as exception:
+            logger.error(f"Update failed for plant {plant} in garden {garden}: {exception}")
             return Response(
                 {"Message": "Encouragemint can't update plants right now. Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -125,6 +138,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         headers = self.get_success_headers(serializer.data)
+        logger.error(f"Updated plant {plant} in garden {garden} successfully.")
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
     def _lookup_plant_by_name(self, query, plant_name, garden):  # pylint: disable=no-self-use
@@ -143,18 +157,21 @@ class RecommendViewSet(generics.RetrieveAPIView):
     meteostat = MeteostatAPI()
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        garden = self.get_object()
+
         try:
             assert "season" in request.GET
             season = request.GET["season"].upper()
             assert season in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
         except AssertionError:
+            logger.error(
+                f"Recommendation failed for garden {garden}: User did not supply a season.")
             return Response(
                 {"Message": "You must specify a season url parameter for plant recommendations. "
                             "The season must be either Spring, Summer, Autumn or Winter."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        garden = self.get_object()
         query = {"shade_tolerance": garden.shade_tolerance}
         moisture_use = get_garden_moisture(garden, season)
 
@@ -163,12 +180,14 @@ class RecommendViewSet(generics.RetrieveAPIView):
 
         if "duration" in request.GET:
             allowed_durations = ["PERENNIAL", "ANNUAL", "BIENNIAL"]
+            duration = request.GET["duration"].upper()
             try:
-                duration = request.GET["duration"].upper()
                 assert duration in allowed_durations
                 duration = duration.lower().capitalize()
                 query["duration"] = duration
             except AssertionError:
+                logger.error(f"Recommendation failed for garden {garden}: "
+                             f"User supplied invalid duration {duration}")
                 return Response(
                     {"Message": "The duration must be one of the following: "
                                 f"{allowed_durations}"},
@@ -179,27 +198,32 @@ class RecommendViewSet(generics.RetrieveAPIView):
             allowed_bloom_periods = [
                 f"EARLY {season}", f"MID {season}", f"{season}", f"LATE {season}"
             ]
+            bloom_period = request.GET["bloom_period"].upper()
             try:
-                bloom_period = request.GET["bloom_period"].upper()
                 assert bloom_period in allowed_bloom_periods
                 query["bloom_period"] = bloom_period.lower().title()
             except AssertionError:
+                logger.error(f"Recommendation failed for garden {garden}: "
+                             f"User supplied invalid bloom period {bloom_period}")
                 return Response(
                     {"Message": "The bloom_period must be one of the following: "
                                 f"{allowed_bloom_periods}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-        return self.recommend_plants(query)
+        return self.recommend_plants(query, garden)
 
-    def recommend_plants(self, query):  # pylint: disable=no-self-use
+    def recommend_plants(self, query, garden):  # pylint: disable=no-self-use
         try:
             plants = TREFLE.lookup_plants(query)
-        except TrefleConnectionError:
+        except TrefleConnectionError as exception:
+            logger.error(f"Recommendation failed for garden {garden}: {exception}")
             return Response(
                 {"Message": "Encouragemint can't recommend plants for your garden right now. "
                             "Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-        print(f"{len(plants)} plants matched the search criteria: {query}")
+
+        logger.info(
+            f"{len(plants)} plants matched the search criteria {query} for garden {garden}")
         return Response(plants, status=status.HTTP_200_OK)
