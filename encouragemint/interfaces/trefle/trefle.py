@@ -18,8 +18,8 @@ class TrefleAPI:
                 return self._extract_plant_data(plant)
 
             return results
-        except requests.RequestException:
-            raise TrefleConnectionError()
+        except requests.RequestException as exception:
+            raise TrefleConnectionError(exception)
 
     def _lookup_plants_by_name(self, trefle_query):
         results = self._send_trefle_request(

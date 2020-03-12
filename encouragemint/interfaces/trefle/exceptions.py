@@ -1,4 +1,3 @@
 class TrefleConnectionError(Exception):
-    def __init__(self):
-        message = "Could not connect to the Trefle API."
+    def __init__(self, message):
         super().__init__(message)
