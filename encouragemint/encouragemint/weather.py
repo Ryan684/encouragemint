@@ -23,6 +23,10 @@ def get_garden_moisture(garden, season):
         else:
             moisture_use = "Low"
 
+        logger.info(
+            f"Meteostat found garden {garden.garden_id} had an average rainfall of "
+            f"{average_rainfall}mm in {season.lower().title()}, giving it a "
+            f"{moisture_use.lower()} level of moisture.")
         return moisture_use
 
     logger.info(
