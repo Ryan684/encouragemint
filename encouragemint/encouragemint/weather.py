@@ -30,7 +30,8 @@ def get_garden_moisture(garden, season):
         return moisture_use
 
     logger.info(
-        f"No rainfall data could be gathered from Meteostat for garden {garden.garden_id} in the {season} season.")
+        "No rainfall data could be gathered from Meteostat for garden "
+        f"{garden.garden_id} in the {season} season.")
     return None
 
 
