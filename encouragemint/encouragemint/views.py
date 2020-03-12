@@ -17,8 +17,7 @@ from encouragemint.interfaces.trefle.trefle import TrefleAPI
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 TREFLE = TrefleAPI()
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("django")
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

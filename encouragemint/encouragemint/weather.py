@@ -5,8 +5,7 @@ from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionErr
 from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
 
 METEOSTAT = MeteostatAPI()
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("django")
 
 
 def get_garden_moisture(garden, season):
