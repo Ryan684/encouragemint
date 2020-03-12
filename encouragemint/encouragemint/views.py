@@ -116,7 +116,8 @@ class PlantViewSet(viewsets.ModelViewSet):
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             logger.info(
-                f"Added plant {serializer.data['plant_id']} to garden {garden.garden_id} successfully.")
+                f"Added plant {serializer.data['plant_id']} "
+                f"to garden {garden.garden_id} successfully.")
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         return Response(
@@ -243,5 +244,6 @@ class RecommendViewSet(generics.RetrieveAPIView):
             )
 
         logger.info(
-            f"{len(plants)} plants matched the search criteria {query} for garden {garden.garden_id}.")
+            f"{len(plants)} plants matched the search criteria {query} "
+            f"for garden {garden.garden_id}.")
         return Response(plants, status=status.HTTP_200_OK)
