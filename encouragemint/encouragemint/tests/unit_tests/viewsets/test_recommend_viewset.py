@@ -44,9 +44,7 @@ class TestRecommendViewsetParameters(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": "You must specify a season url parameter for plant recommendations. "
-                           "The season must be either Spring, Summer, Autumn or Winter."
-            },
+                "Message": "You must specify a season url parameter for plant recommendations."},
             response.data
         )
 
@@ -58,8 +56,8 @@ class TestRecommendViewsetParameters(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": "You must specify a season url parameter for plant recommendations. "
-                           "The season must be either Spring, Summer, Autumn or Winter."
+                "Message": "The season parameter must be one of the following: ['SPRING', "
+                           "'SUMMER', 'AUTUMN', 'WINTER']"
             },
             response.data
         )
