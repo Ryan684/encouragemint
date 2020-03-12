@@ -60,7 +60,8 @@ class GardenViewSet(viewsets.ModelViewSet):
 
         serializer.save(latitude=latitude, longitude=longitude, location=location)
         headers = self.get_success_headers(serializer.data)
-        logger.info(f"Added garden {serializer.data['garden_id']} to profile {profile} successfully.")
+        logger.info(
+            f"Added garden {serializer.data['garden_id']} to profile {profile} successfully.")
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def _lookup_garden_coordinates(self):
@@ -102,7 +103,8 @@ class PlantViewSet(viewsets.ModelViewSet):
 
         if not result:
             logger.error(
-                f"Adding plant failed for garden {garden.garden_id}: No plants found for {plant_name}")
+                f"Adding plant failed for garden {garden.garden_id}: "
+                f"No plants found for {plant_name}.")
             return Response(
                 {"Message": "Encouragemint couldn't find any plants with that name."},
                 status=status.HTTP_400_BAD_REQUEST
@@ -203,7 +205,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 query["duration"] = duration
             except AssertionError:
                 logger.error(f"Recommendation failed for garden {garden.garden_id}: "
-                             f"User supplied invalid duration: {duration}")
+                             f"User supplied invalid duration: {duration}.")
                 return Response(
                     {"Message": "The duration must be one of the following: "
                                 f"{allowed_durations}"},
@@ -220,7 +222,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 query["bloom_period"] = bloom_period.lower().title()
             except AssertionError:
                 logger.error(f"Recommendation failed for garden {garden.garden_id}: "
-                             f"User supplied invalid bloom period: {bloom_period}")
+                             f"User supplied invalid bloom period: {bloom_period}.")
                 return Response(
                     {"Message": "The bloom_period must be one of the following: "
                                 f"{allowed_bloom_periods}"},
@@ -241,5 +243,5 @@ class RecommendViewSet(generics.RetrieveAPIView):
             )
 
         logger.info(
-            f"{len(plants)} plants matched the search criteria {query} for garden {garden.garden_id}")
+            f"{len(plants)} plants matched the search criteria {query} for garden {garden.garden_id}.")
         return Response(plants, status=status.HTTP_200_OK)

@@ -1,9 +1,12 @@
 import datetime
+import logging
 
 from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
 from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
 
 METEOSTAT = MeteostatAPI()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def get_garden_moisture(garden, season):
@@ -19,8 +22,11 @@ def get_garden_moisture(garden, season):
             moisture_use = "Medium"
         else:
             moisture_use = "Low"
+
         return moisture_use
 
+    logger.info(
+        f"No rainfall data could be gathered from Meteostat for garden {garden.garden_id} in the {season} season.")
     return None
 
 
