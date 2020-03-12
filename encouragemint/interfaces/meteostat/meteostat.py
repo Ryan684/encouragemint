@@ -25,8 +25,8 @@ class MeteostatAPI:
             ).json()
 
             return stations.get("data")
-        except requests.exceptions.RequestException:
-            raise MeteostatConnectionError()
+        except requests.exceptions.RequestException as exception:
+            raise MeteostatConnectionError(exception)
 
     def get_station_weather_record(self, start_date, end_date, station):
         parameters = {
@@ -43,5 +43,5 @@ class MeteostatAPI:
                 params=parameters
             ).json()
             return weather_report.get("data")
-        except requests.exceptions.RequestException:
-            raise MeteostatConnectionError()
+        except requests.exceptions.RequestException as exception:
+            raise MeteostatConnectionError(exception)

@@ -12,7 +12,10 @@ logger = logging.getLogger(__name__)
 def get_garden_moisture(garden, season):
     try:
         average_rainfall = _get_historical_rainfall_data(garden, season)
-    except MeteostatConnectionError:
+    except MeteostatConnectionError as exception:
+        logger.error(
+            "Rainfall data could not be gathered from Meteostat due to "
+            f"an error: {exception}")
         return None
 
     if average_rainfall:
