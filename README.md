@@ -19,3 +19,14 @@ You can also filter plants by:</br>
 <li>/plants [POST, PUT]</li>
 <li>/recommend/{garden_id} [GET]</li>
 
+<h2>Logs</h2>
+
+<h2>deployment</h2>
+To run this app locally, you can use manage.py runserver or docker-compose to run it locally in a container using
+'docker-compose up' from the root directory of the project. In either case, the API will run locally at
+http://127.0.0.1:8000/.</br></br>
+
+To run this application external to your local machine on a Kubernetes cluster, follow the steps in the
+/kubernetes directory README.
+
+
