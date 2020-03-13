@@ -22,9 +22,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=%j0^@01(s-h5g7=rba&3j%&-h=u*ypjqpfth6l8(u+*m-#q^t'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 # Import external API keys.
 TREFLE_API_KEY = os.getenv("TREFLE_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -134,15 +131,9 @@ LOGGING = {
             'style': '{',
         }
     },
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        }
-    },
     'handlers': {
         'console': {
             'level': 'INFO',
-            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },

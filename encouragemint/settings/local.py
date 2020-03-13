@@ -1,5 +1,7 @@
 from encouragemint.settings.base import *
 
+DEBUG = True
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
