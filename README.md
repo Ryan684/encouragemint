@@ -20,6 +20,7 @@ You can also filter plants by:</br>
 <li>/recommend/{garden_id} [GET]</li>
 
 <h2>Logs</h2>
+Currently, the app writes it's logs both to a console and a debug.log file in the root directory of the project.
 
 <h2>deployment</h2>
 To run this app locally, you can use manage.py runserver or docker-compose to run it locally in a container using
