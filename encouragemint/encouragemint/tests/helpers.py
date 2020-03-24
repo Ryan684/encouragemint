@@ -5,7 +5,7 @@ from django.test import override_settings
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Profile
-from encouragemint.encouragemint.views import GardenViewSet
+from encouragemint.encouragemint.views.garden_viewset import GardenViewSet
 
 SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
 SAMPLE_GARDEN_SUNLIGHT = "low"

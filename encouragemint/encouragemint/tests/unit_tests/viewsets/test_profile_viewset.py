@@ -6,7 +6,7 @@ from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models import Profile
 from encouragemint.encouragemint.serializers import ProfileSerializer
-from encouragemint.encouragemint.views import ProfileViewSet
+from encouragemint.encouragemint.views.profile_viewset import ProfileViewSet
 
 PROFILE_URL = "/profile/"
 SAMPLE_PROFILE = {

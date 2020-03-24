@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.tests.helpers import create_test_garden
-from encouragemint.encouragemint.views import RecommendViewSet
+from encouragemint.encouragemint.views.recommend_viewset import RecommendViewSet
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 RECOMMEND_URL = "/recommend/"
@@ -28,11 +28,11 @@ class TestRecommendViewsetParameters(TestCase):
             self.recommend_many_results = json.load(file)
 
         weather_patcher = patch(
-            "encouragemint.encouragemint.views.get_garden_moisture", return_value="Medium")
+            "encouragemint.encouragemint.views.recommend_viewset.get_garden_moisture", return_value="Medium")
         self.mock_weather = weather_patcher.start()
         self.addCleanup(weather_patcher.stop)
 
-        trefle_patcher = patch("encouragemint.encouragemint.views.TREFLE.lookup_plants")
+        trefle_patcher = patch("encouragemint.encouragemint.views.recommend_viewset.TREFLE.lookup_plants")
         self.mock_trefle = trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 

@@ -10,7 +10,7 @@ from rest_framework.test import APIRequestFactory
 from encouragemint.encouragemint import models
 from encouragemint.encouragemint.models import Plant, Garden, Profile
 from encouragemint.encouragemint.tests.helpers import SAMPLE_PLANT
-from encouragemint.encouragemint.views import PlantViewSet
+from encouragemint.encouragemint.views.plant_viewset import PlantViewSet
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 PLANT_URL = "/plant/"
@@ -68,7 +68,7 @@ class TestPost(TestCase):
             "garden": str(TEST_GARDEN.garden_id)
         }
 
-        patcher = patch("encouragemint.encouragemint.views.TREFLE.lookup_plants")
+        patcher = patch("encouragemint.encouragemint.views.plant_viewset.TREFLE.lookup_plants")
         self.mock_trefle = patcher.start()
         self.addCleanup(patcher.stop)
 
@@ -164,7 +164,7 @@ class TestPut(TestCase):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"put": "update"})
 
-        patcher = patch("encouragemint.encouragemint.views.TREFLE.lookup_plants")
+        patcher = patch("encouragemint.encouragemint.views.plant_viewset.TREFLE.lookup_plants")
         self.mock_trefle = patcher.start()
         self.addCleanup(patcher.stop)
 
