@@ -44,7 +44,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                 f"User supplied an invalid season: {season}.")
             return Response(
                 {"Message": "The season parameter must be one of the following: "
-                 f"{allowed_seasons}"},
+                            f"{allowed_seasons}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -66,7 +66,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                              f"User supplied invalid duration: {duration}.")
                 return Response(
                     {"Message": "The duration must be one of the following: "
-                     f"{allowed_durations}"},
+                                f"{allowed_durations}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -83,7 +83,7 @@ class RecommendViewSet(generics.RetrieveAPIView):
                              f"User supplied invalid bloom period: {bloom_period}.")
                 return Response(
                     {"Message": "The bloom_period must be one of the following: "
-                     f"{allowed_bloom_periods}"},
+                                f"{allowed_bloom_periods}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
