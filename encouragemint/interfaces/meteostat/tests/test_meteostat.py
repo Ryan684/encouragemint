@@ -5,13 +5,12 @@ import requests
 from django.test import override_settings, TestCase
 
 from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
-from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
+from encouragemint.interfaces.meteostat.meteostat import get_station_weather_record, search_for_nearest_weather_stations
 
 
 @override_settings(METEOSTAT_API_KEY="Foo")
 class TestMeteostat(TestCase):
     def setUp(self):
-        self.meteostat = MeteostatAPI()
         self.sample_latitude = 50.98893
         self.sample_longitude = -1.49658
         self.sample_weather_station = "03865"
@@ -37,7 +36,7 @@ class TestMeteostat(TestCase):
         mock.json.return_value = self.station_search_matches
         self.mock_post.return_value = mock
 
-        stations = self.meteostat.search_for_nearest_weather_stations(
+        stations = search_for_nearest_weather_stations(
             self.sample_latitude, self.sample_longitude)
 
         self.assertEqual(self.station_search_matches.get("data"), stations)
@@ -47,7 +46,7 @@ class TestMeteostat(TestCase):
         mock.json.return_value = self.station_search_no_matches
         self.mock_post.return_value = mock
 
-        stations = self.meteostat.search_for_nearest_weather_stations(
+        stations = search_for_nearest_weather_stations(
             self.sample_latitude, self.sample_longitude)
 
         self.assertEqual(self.station_search_no_matches.get("data"), stations)
@@ -57,7 +56,7 @@ class TestMeteostat(TestCase):
 
         self.assertRaises(
             MeteostatConnectionError,
-            self.meteostat.search_for_nearest_weather_stations,
+            search_for_nearest_weather_stations,
             self.sample_latitude,
             self.sample_longitude
         )
@@ -67,7 +66,7 @@ class TestMeteostat(TestCase):
         mock.json.return_value = self.station_weather_data
         self.mock_post.return_value = mock
 
-        weather_report = self.meteostat.get_station_weather_record(
+        weather_report = get_station_weather_record(
             self.sample_weather_start_date,
             self.sample_weather_end_date,
             self.sample_weather_station
@@ -80,7 +79,7 @@ class TestMeteostat(TestCase):
         mock.json.return_value = self.station_weather_no_data
         self.mock_post.return_value = mock
 
-        weather_report = self.meteostat.get_station_weather_record(
+        weather_report = get_station_weather_record(
             self.sample_weather_start_date,
             self.sample_weather_end_date,
             self.sample_weather_station
@@ -93,7 +92,7 @@ class TestMeteostat(TestCase):
 
         self.assertRaises(
             MeteostatConnectionError,
-            self.meteostat.get_station_weather_record,
+            get_station_weather_record,
             self.sample_weather_start_date,
             self.sample_weather_end_date,
             self.sample_weather_station

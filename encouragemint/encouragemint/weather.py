@@ -2,9 +2,9 @@ import datetime
 import logging
 
 from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
-from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
+from encouragemint.interfaces.meteostat.meteostat import \
+    search_for_nearest_weather_stations, get_station_weather_record
 
-METEOSTAT = MeteostatAPI()
 logger = logging.getLogger("django")
 
 
@@ -70,13 +70,13 @@ def _get_historical_rainfall_data(garden, season):
 
 
 def _get_average_rainfall_for_season(garden, start_time, end_time):
-    nearby_weather_stations = METEOSTAT.search_for_nearest_weather_stations(
+    nearby_weather_stations = search_for_nearest_weather_stations(
         garden.latitude, garden.longitude)
     weather_data = None
 
     for station in nearby_weather_stations:
 
-        station_weather_report = METEOSTAT.get_station_weather_record(
+        station_weather_report = get_station_weather_record(
             start_time, end_time, station.get("id"))
 
         if station_weather_report:

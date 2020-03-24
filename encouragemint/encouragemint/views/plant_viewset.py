@@ -7,9 +7,8 @@ from encouragemint.encouragemint.models import Plant, Garden
 from encouragemint.encouragemint.serializers import (
     PlantSerializer, NewPlantRequestSerializer)
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
-from encouragemint.interfaces.trefle.trefle import TrefleAPI
+from encouragemint.interfaces.trefle.trefle import lookup_plants
 
-TREFLE = TrefleAPI()
 logger = logging.getLogger("django")
 
 
@@ -85,7 +84,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
     def _lookup_plant_by_name(self, query, plant_name, garden):  # pylint: disable=no-self-use
-        result = TREFLE.lookup_plants({query: plant_name})
+        result = lookup_plants({query: plant_name})
 
         if isinstance(result, dict):
             result["garden"] = garden.garden_id

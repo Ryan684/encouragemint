@@ -32,7 +32,7 @@ class TestRecommendViewsetParameters(TestCase):
         self.mock_weather = weather_patcher.start()
         self.addCleanup(weather_patcher.stop)
 
-        trefle_patcher = patch("encouragemint.encouragemint.views.recommend_viewset.TREFLE.lookup_plants")
+        trefle_patcher = patch("encouragemint.encouragemint.views.recommend_viewset.lookup_plants")
         self.mock_trefle = trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 

@@ -5,11 +5,9 @@ from rest_framework.response import Response
 
 from encouragemint.encouragemint.models import Garden
 from encouragemint.encouragemint.weather import get_garden_moisture
-from encouragemint.interfaces.meteostat.meteostat import MeteostatAPI
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
-from encouragemint.interfaces.trefle.trefle import TrefleAPI
+from encouragemint.interfaces.trefle.trefle import lookup_plants
 
-TREFLE = TrefleAPI()
 logger = logging.getLogger("django")
 
 
@@ -17,7 +15,6 @@ class RecommendViewSet(generics.RetrieveAPIView):
     queryset = Garden.objects.all()
     lookup_field = "garden_id"
     http_method_names = ["get"]
-    meteostat = MeteostatAPI()
 
     def retrieve(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         garden = self.get_object()
@@ -87,11 +84,11 @@ class RecommendViewSet(generics.RetrieveAPIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-        return self.recommend_plants(query, garden)
+        return self._recommend_plants(query, garden)
 
-    def recommend_plants(self, query, garden):  # pylint: disable=no-self-use
+    def _recommend_plants(self, query, garden):  # pylint: disable=no-self-use
         try:
-            plants = TREFLE.lookup_plants(query)
+            plants = lookup_plants(query)
         except TrefleConnectionError as exception:
             logger.error(f"Recommendation failed for garden {garden.garden_id}: {exception}")
             return Response(

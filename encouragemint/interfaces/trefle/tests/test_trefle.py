@@ -5,14 +5,12 @@ import requests
 from django.test import TestCase, override_settings
 
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
-from encouragemint.interfaces.trefle.trefle import TrefleAPI
+from encouragemint.interfaces.trefle.trefle import lookup_plants
 
 
 @override_settings(TREFLE_API_KEY="Foo")
 class TestTrefle(TestCase):
     def setUp(self):
-        self.trefle = TrefleAPI()
-
         test_responses_dir = "encouragemint/interfaces/trefle/tests/test_responses"
         with open(f"{test_responses_dir}/plant_search_one_match.json", "r") as file:
             self.search_single_match = json.load(file)
@@ -30,13 +28,13 @@ class TestTrefle(TestCase):
 
         self.assertRaises(
             TrefleConnectionError,
-            self.trefle.lookup_plants, {"q": "Fooflower"}
+            lookup_plants, {"q": "Fooflower"}
         )
 
     def test_search_plants_no_results(self):
         self.mock_get.return_value = []
 
-        response = self.trefle.lookup_plants({"q": "Barflower"})
+        response = lookup_plants({"q": "Barflower"})
 
         self.assertEqual([], response)
 
@@ -58,20 +56,20 @@ class TestTrefle(TestCase):
             "scientific_name": "Eriophyllum lanatum"
         }
 
-        response = self.trefle.lookup_plants({"scientific_name": "common woolly sunflower"})
+        response = lookup_plants({"scientific_name": "common woolly sunflower"})
 
         self.assertEqual(test_plant, response)
 
     def test_lookup_plants_many_results(self):
         self.mock_get.return_value = self.search_many_matches
 
-        response = self.trefle.lookup_plants({"q": "grass"})
+        response = lookup_plants({"q": "grass"})
 
         self.assertEqual(self.search_many_matches, response)
 
     def test_lookup_plants_by_multiple_properties(self):
         self.mock_get.return_value = self.search_many_matches
 
-        response = self.trefle.lookup_plants({"shade_tolerance": "High", "moisture_use": "High"})
+        response = lookup_plants({"shade_tolerance": "High", "moisture_use": "High"})
 
         self.assertEqual(self.search_many_matches, response)
