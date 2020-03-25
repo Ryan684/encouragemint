@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from encouragemint.encouragemint.models import Profile
+from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.serializers import ProfileSerializer
 
 

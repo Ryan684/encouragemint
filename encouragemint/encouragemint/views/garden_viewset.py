@@ -7,7 +7,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from encouragemint.encouragemint.exceptions import GeocoderConnectionError, GeocoderNoResultsError
-from encouragemint.encouragemint.models import Garden
+from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.serializers import GardenSerializer
 
 logger = logging.getLogger("django")

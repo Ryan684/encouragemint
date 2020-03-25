@@ -3,7 +3,7 @@ import logging
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from encouragemint.encouragemint.models import Garden
+from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.weather import get_garden_moisture
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 from encouragemint.interfaces.trefle.trefle import lookup_plants

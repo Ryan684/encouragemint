@@ -4,7 +4,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from encouragemint.encouragemint.models import Profile
+from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.serializers import ProfileSerializer
 from encouragemint.encouragemint.views.profile_viewset import ProfileViewSet
 

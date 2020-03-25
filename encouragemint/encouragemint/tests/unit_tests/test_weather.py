@@ -4,7 +4,7 @@ from unittest.mock import patch
 from django.test import TestCase
 
 from encouragemint.encouragemint import weather
-from encouragemint.encouragemint.models import Garden
+from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.tests.helpers import create_test_garden
 from encouragemint.interfaces.meteostat.exceptions import MeteostatConnectionError
 

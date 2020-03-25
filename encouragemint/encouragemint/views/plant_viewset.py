@@ -3,7 +3,8 @@ import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from encouragemint.encouragemint.models import Plant, Garden
+from encouragemint.encouragemint.models.garden import Garden
+from encouragemint.encouragemint.models.plant import Plant
 from encouragemint.encouragemint.serializers import (
     PlantSerializer, NewPlantRequestSerializer)
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError

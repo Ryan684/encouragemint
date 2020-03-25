@@ -2,7 +2,9 @@ import re
 
 from rest_framework import serializers
 
-from encouragemint.encouragemint.models import Profile, Plant, Garden
+from encouragemint.encouragemint.models.garden import Garden
+from encouragemint.encouragemint.models.plant import Plant
+from encouragemint.encouragemint.models.profile import Profile
 
 
 class NewPlantRequestSerializer(serializers.Serializer):

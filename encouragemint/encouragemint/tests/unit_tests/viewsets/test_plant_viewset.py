@@ -8,7 +8,9 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint import models
-from encouragemint.encouragemint.models import Plant, Garden, Profile
+from encouragemint.encouragemint.models.garden import Garden
+from encouragemint.encouragemint.models.plant import Plant
+from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.tests.helpers import SAMPLE_PLANT
 from encouragemint.encouragemint.views.plant_viewset import PlantViewSet
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
@@ -227,4 +229,4 @@ class TestPut(TestCase):
         )
 
         self.assertRaises(exceptions.ValidationError, self.view, request, plant_id="Foo")
-        self.assertRaises(models.Plant.DoesNotExist, self.view, request, plant_id=uuid4())
+        self.assertRaises(models.plant.Plant.DoesNotExist, self.view, request, plant_id=uuid4())

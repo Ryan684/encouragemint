@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework import serializers
 
-from encouragemint.encouragemint.models import Profile
+from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.serializers import ProfileSerializer
 
 
