@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.models.plant import Plant
-from encouragemint.encouragemint.serializers.new_plant_request_serializer import NewPlantRequestSerializer
+from encouragemint.encouragemint.serializers.new_plant_request_serializer import \
+    NewPlantRequestSerializer
 from encouragemint.encouragemint.serializers.plant_serializer import PlantSerializer
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 from encouragemint.interfaces.trefle.trefle import lookup_plants
