@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.models.profile import Profile
-from encouragemint.encouragemint.serializers import GardenSerializer
+from encouragemint.encouragemint.serializers.garden_serializer import GardenSerializer
 
 
 class TestGardenSerializerValidators(TestCase):

@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from encouragemint.encouragemint.exceptions import GeocoderConnectionError, GeocoderNoResultsError
 from encouragemint.encouragemint.models.garden import Garden
-from encouragemint.encouragemint.serializers import GardenSerializer
+from encouragemint.encouragemint.serializers.garden_serializer import GardenSerializer
 
 logger = logging.getLogger("django")
 
