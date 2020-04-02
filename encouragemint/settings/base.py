@@ -22,11 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=%j0^@01(s-h5g7=rba&3j%&-h=u*ypjqpfth6l8(u+*m-#q^t'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Import external API keys.
+TREFLE_API_KEY = os.getenv("TREFLE_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [os.getenv("NODE_IP", "127.0.0.1")]
 
 # Application definition
 
@@ -37,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'encouragemint'
 ]
 
 MIDDLEWARE = [
@@ -118,3 +121,33 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime}: {message}',
+            'style': '{',
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'propagate': True,
+        }
+    }
+}

@@ -1,0 +1,2 @@
+class TrefleConnectionError(Exception):
+    pass

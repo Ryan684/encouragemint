@@ -1,0 +1,12 @@
+encouragemint.iml
+.idea/
+db.sqlite3
+.coverage
+.coveragerc
+.gitignore
+README.md
+.circleci/
+encouragemint/encouragemint/tests/
+encouragemint/interfaces/trefle/tests/
+encouragemint/interfaces/meteostat/tests/
+build/

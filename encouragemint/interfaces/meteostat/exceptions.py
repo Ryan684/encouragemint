@@ -1,0 +1,2 @@
+class MeteostatConnectionError(Exception):
+    pass

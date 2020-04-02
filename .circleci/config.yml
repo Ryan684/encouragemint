@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.3
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r build/requirements.txt
+            pip install -r encouragemint/requirements.txt
+            sudo pip install pylint
+      - run:
+          name: run pylint
+          command: pylint encouragemint/ --disable=E0401,C0103,C0114,C0115,C0116,R0903 --ignore=migrations,settings,tests
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            python manage.py test --settings=encouragemint.settings.local

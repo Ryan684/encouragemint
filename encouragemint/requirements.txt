@@ -1,0 +1,12 @@
+certifi==2019.11.28
+chardet==3.0.4
+decorator==4.4.1
+Django==2.2.7
+djangorestframework==3.10.3
+idna==2.8
+pytz==2019.3
+requests==2.22.0
+sqlparse==0.3.0
+urllib3==1.25.7
+geographiclib==1.50
+geopy==1.20.0
