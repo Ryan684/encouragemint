@@ -18,4 +18,5 @@ class GardenViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return add_garden(serializer.data)
+        test = serializer.data
+        return add_garden(test)
