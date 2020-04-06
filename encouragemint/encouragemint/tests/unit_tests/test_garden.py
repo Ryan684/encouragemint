@@ -4,7 +4,7 @@ from django.test import TestCase
 from geopy.exc import GeocoderServiceError
 
 from encouragemint.encouragemint.exceptions import GardenUserError, GardenSystemError
-from encouragemint.encouragemint.garden import create_garden
+from encouragemint.encouragemint.garden_generator import create_garden
 from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.tests.helpers import SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_GARDEN

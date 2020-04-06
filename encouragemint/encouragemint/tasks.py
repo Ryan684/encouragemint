@@ -2,7 +2,7 @@ import logging
 
 from encouragemint.celery import app
 from encouragemint.encouragemint.exceptions import GardenUserError, GardenSystemError
-from encouragemint.encouragemint.garden import create_garden
+from encouragemint.encouragemint.garden_generator import create_garden
 
 logger = logging.getLogger("django")
 
