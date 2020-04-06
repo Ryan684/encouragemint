@@ -13,11 +13,11 @@ class TestAddGarden(TestCase):
         self.garden_data = SAMPLE_GARDEN.copy()
 
         patcher = patch("encouragemint.encouragemint.tasks.create_garden")
-        self.mock_google = patcher.start()
+        self.mock_create_garden = patcher.start()
         self.addCleanup(patcher.stop)
 
     def test_successful_add_garden(self):
-        self.mock_google.return_value = {}
+        self.mock_create_garden.return_value = {}
 
         task = add_garden.s(self.garden_data).apply()
 
@@ -25,13 +25,13 @@ class TestAddGarden(TestCase):
 
     @patch("encouragemint.encouragemint.tasks.add_garden.retry")
     def test_add_garden_retries_on_GardenSystemError_raise(self, mock_retry):
-        self.mock_google.side_effect = error = GardenSystemError(None)
+        self.mock_create_garden.side_effect = error = GardenSystemError(None)
         mock_retry.side_effect = Retry
 
         self.assertRaises(Retry, add_garden, self.garden_data)
         mock_retry.assert_called_with(countdown=ANY, exc=error)
 
     def test_add_garden_raises_GardenUserError(self):
-        self.mock_google.side_effect = GardenUserError(None)
+        self.mock_create_garden.side_effect = GardenUserError(None)
 
         self.assertRaises(GardenUserError, add_garden, self.garden_data)

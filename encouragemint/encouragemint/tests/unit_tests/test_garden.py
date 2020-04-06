@@ -25,7 +25,6 @@ class TestGarden(TestCase):
     def test_successful_create_garden(self):
         mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
         self.mock_google.return_value = mock
-
         self.garden_data["garden_name"] = "test_garden"
 
         create_garden(self.garden_data)
