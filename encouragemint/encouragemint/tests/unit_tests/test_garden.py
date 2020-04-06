@@ -2,13 +2,12 @@ from unittest.mock import patch, Mock
 
 from django.test import TestCase
 from geopy.exc import GeocoderServiceError
-from rest_framework import status
 
 from encouragemint.encouragemint.exceptions import GardenUserError, GardenSystemError
 from encouragemint.encouragemint.garden import create_garden
+from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.models.profile import Profile
-from encouragemint.encouragemint.tests.helpers import SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_GARDEN, \
-    SAMPLE_GARDEN_SUNLIGHT
+from encouragemint.encouragemint.tests.helpers import SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_GARDEN
 
 
 class TestGarden(TestCase):
@@ -27,20 +26,11 @@ class TestGarden(TestCase):
         mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
         self.mock_google.return_value = mock
 
-        response = create_garden(self.garden_data)
+        self.garden_data["garden_name"] = "task_test_garden"
 
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        self.assertIn("garden_id", response.data)
-        self.assertIn("profile", response.data)
-        self.assertEqual(SAMPLE_GARDEN.get("garden_name"), response.data.get("garden_name"))
-        self.assertEqual(SAMPLE_GARDEN.get("direction"), response.data.get("direction"))
-        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, response.data.get("sunlight"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"),
-                         response.data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"),
-                         response.data.get("longitude"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"),
-                         response.data.get("latitude"))
+        create_garden(self.garden_data)
+
+        self.assertTrue(Garden.objects.get(garden_name="task_test_garden"))
 
     def test_unsuccessful_create_garden_from_geocoder_exception(self):
         self.mock_google.side_effect = GeocoderServiceError
