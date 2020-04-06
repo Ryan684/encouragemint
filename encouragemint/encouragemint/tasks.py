@@ -8,7 +8,7 @@ logger = logging.getLogger("django")
 
 
 @app.task(bind=True, autoretry_for=(GardenSystemError,), retry_backoff=True, max_retries=None)
-def add_garden(self, garden_data):
+def add_garden(self, garden_data):  # pylint: disable=unused-argument
     try:
         return create_garden(garden_data)
     except (GardenSystemError, GardenUserError) as exception:

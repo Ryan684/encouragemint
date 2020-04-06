@@ -23,7 +23,8 @@ def create_garden(garden_data):
         garden_data["latitude"], garden_data["longitude"], garden_data["location"] \
             = _lookup_garden_coordinates(location)
     except GeopyError as exception:
-        raise GardenSystemError(f"Adding garden failed for profile {profile.profile_id}: {exception}")
+        raise GardenSystemError(
+            f"Adding garden failed for profile {profile.profile_id}: {exception}")
     except GeocoderNoResultsError:
         raise GardenUserError(
             f"Adding garden failed for profile {profile.profile_id}. "
