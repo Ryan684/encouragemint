@@ -32,8 +32,10 @@ def create_garden(garden_data):
     garden_data["profile"] = profile
     garden = Garden.objects.create(**garden_data)
     garden_data = model_to_dict(garden)
+    garden_data["profile"] = profile.profile_id
     garden_data["shade_tolerance"] = garden.shade_tolerance
     garden_data["sunlight"] = garden.sunlight
+    garden_data.pop("id")
 
     logger.info(
         f"Added garden {garden.garden_id} to profile {profile.profile_id} successfully.")

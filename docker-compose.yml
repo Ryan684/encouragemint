@@ -6,7 +6,7 @@ services:
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     container_name: encouragemint
     environment:
-      - DJANGO_SETTINGS_MODULE=encouragemint.settings.local
+      - DJANGO_SETTINGS_MODULE=encouragemint.settings.production
     volumes:
       - .:/encouragemint
     ports:
