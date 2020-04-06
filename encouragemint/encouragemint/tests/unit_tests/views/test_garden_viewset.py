@@ -1,9 +1,9 @@
 import json
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
 from django.test import TestCase, override_settings
-from geopy.exc import GeocoderServiceError
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models.profile import Profile
@@ -113,14 +113,6 @@ class TestPost(TestCase):
         self.factory = APIRequestFactory()
         self.view = GardenViewSet.as_view({"post": "create"})
 
-        patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-        self.mock_google = patcher.start()
-        self.addCleanup(patcher.stop)
-
-        # patcher2 = patch("encouragemint.encouragemint.views.garden_viewset.create_garden")
-        # self.mock_foo = patcher2.start()
-        # self.addCleanup(patcher2.stop)
-
     def _build_post_response(self, payload):
         request = self.factory.post(
             GARDEN_URL,
@@ -130,30 +122,18 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    def test_successful_create_garden(self):
-        mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
-        self.mock_google.return_value = mock
+    @patch("encouragemint.encouragemint.views.garden_viewset.create_garden")
+    def test_successful_create_garden(self, mock_create_garden):
+        mock_response = Response()
+        mock_response.status_code = status.HTTP_201_CREATED
+        mock_create_garden.return_value = mock_response
 
         payload = SAMPLE_GARDEN
         payload["profile"] = str(TEST_PROFILE.profile_id)
         response = self._build_post_response(payload)
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-
-#        self.assertIn("plants", model_data)
-        self.assertIn("garden_id", model_data)
-        self.assertIn("profile", model_data)
-        self.assertEqual(SAMPLE_GARDEN.get("garden_name"), model_data.get("garden_name"))
-        self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
-        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"),
-                         model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"),
-                         model_data.get("longitude"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"),
-                         model_data.get("latitude"))
+        mock_create_garden.assert_called_once()
 
     def test_unsuccessful_create_garden_from_invalid_payload(self):
         response = self._build_post_response({
