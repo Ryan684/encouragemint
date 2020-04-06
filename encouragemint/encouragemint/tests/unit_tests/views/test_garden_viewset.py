@@ -122,7 +122,7 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    @patch("encouragemint.encouragemint.views.garden_viewset.create_garden")
+    @patch("encouragemint.encouragemint.views.garden_viewset.add_garden")
     def test_successful_create_garden(self, mock_create_garden):
         mock_response = Response()
         mock_response.status_code = status.HTTP_201_CREATED

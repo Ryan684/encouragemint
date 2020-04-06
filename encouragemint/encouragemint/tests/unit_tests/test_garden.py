@@ -4,6 +4,7 @@ from django.test import TestCase
 from geopy.exc import GeocoderServiceError
 from rest_framework import status
 
+from encouragemint.encouragemint.exceptions import GardenUserError, GardenSystemError
 from encouragemint.encouragemint.garden import create_garden
 from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.tests.helpers import SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_GARDEN, \
@@ -44,21 +45,9 @@ class TestGarden(TestCase):
     def test_unsuccessful_create_garden_from_geocoder_exception(self):
         self.mock_google.side_effect = GeocoderServiceError
 
-        response = create_garden(self.garden_data)
-
-        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
-        self.assertEqual(
-            {"Message": "Encouragemint can't create new gardens right now. Try again later."},
-            response.data
-        )
+        self.assertRaises(GardenSystemError, create_garden, self.garden_data)
 
     def test_unsuccessful_create_garden_from_geocoder_location_not_found(self):
         self.mock_google.return_value = None
 
-        response = create_garden(self.garden_data)
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(
-            {"Message": "Encouragemint couldn't find that location. Try to be more accurate."},
-            response.data
-        )
+        self.assertRaises(GardenUserError, create_garden, self.garden_data)

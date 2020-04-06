@@ -2,9 +2,9 @@ import logging
 
 from rest_framework import viewsets
 
-from encouragemint.encouragemint.garden import create_garden
 from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.serializers.garden_serializer import GardenSerializer
+from encouragemint.encouragemint.tasks import add_garden
 
 logger = logging.getLogger("django")
 
@@ -18,4 +18,4 @@ class GardenViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return create_garden(self.request.data)
+        return add_garden(self.request.data)
