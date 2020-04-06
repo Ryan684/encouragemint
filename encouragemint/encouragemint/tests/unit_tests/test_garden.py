@@ -26,11 +26,11 @@ class TestGarden(TestCase):
         mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
         self.mock_google.return_value = mock
 
-        self.garden_data["garden_name"] = "task_test_garden"
+        self.garden_data["garden_name"] = "test_garden"
 
         create_garden(self.garden_data)
 
-        self.assertTrue(Garden.objects.get(garden_name="task_test_garden"))
+        self.assertTrue(Garden.objects.get(garden_name="test_garden"))
 
     def test_unsuccessful_create_garden_from_geocoder_exception(self):
         self.mock_google.side_effect = GeocoderServiceError
