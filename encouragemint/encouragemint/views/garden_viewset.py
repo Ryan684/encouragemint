@@ -15,7 +15,7 @@ class GardenViewSet(viewsets.ModelViewSet):
     lookup_field = "garden_id"
     http_method_names = ["post", "put", "patch", "delete"]
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer):  # pylint: disable=no-self-use
         garden_data = serializer.save()
         logger.info(f"Garden {garden_data.garden_id} has been created and added to "
                     f"profile {garden_data.profile.profile_id}.")
