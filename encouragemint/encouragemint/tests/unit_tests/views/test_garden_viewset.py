@@ -122,18 +122,18 @@ class TestPost(TestCase):
         response = self.view(request)
         return response
 
-    @patch("encouragemint.encouragemint.views.garden_viewset.add_garden")
-    def test_successful_create_garden(self, mock_create_garden):
+    @patch("encouragemint.encouragemint.views.garden_viewset.add_garden_location")
+    def test_successful_create_garden(self, add_garden_location):
         mock_response = Response()
         mock_response.status_code = status.HTTP_201_CREATED
-        mock_create_garden.return_value = mock_response
+        add_garden_location.return_value = mock_response
 
         payload = SAMPLE_GARDEN
         payload["profile"] = str(TEST_PROFILE.profile_id)
         response = self._build_post_response(payload)
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        mock_create_garden.assert_called_once()
+        add_garden_location.delay.assert_called_once()
 
     def test_unsuccessful_create_garden_from_invalid_payload(self):
         response = self._build_post_response({

@@ -64,9 +64,9 @@ class TestGarden(TestCase):
         geocoder_patcher.start()
         self.addCleanup(geocoder_patcher.stop)
 
-    def test_create_garden(self):
-        response = self.client.post(self.url, self.data, content_type="application/json")
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+    # def test_create_garden(self):
+    #     response = self.client.post(self.url, self.data, content_type="application/json")
+    #     self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_delete_garden(self):
         response = self.client.delete(

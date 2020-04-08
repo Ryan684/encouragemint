@@ -4,34 +4,34 @@ from celery.exceptions import Retry
 from django.test import TestCase
 
 from encouragemint.encouragemint.exceptions import GardenSystemError, GardenUserError
-from encouragemint.encouragemint.tasks import add_garden
+from encouragemint.encouragemint.tasks import add_garden_location
 from encouragemint.encouragemint.tests.helpers import SAMPLE_GARDEN
 
 
-class TestAddGarden(TestCase):
+class TestAddGardenLocation(TestCase):
     def setUp(self):
         self.garden_data = SAMPLE_GARDEN.copy()
 
-        patcher = patch("encouragemint.encouragemint.tasks.create_garden")
-        self.mock_create_garden = patcher.start()
+        patcher = patch("encouragemint.encouragemint.tasks.register_garden_coordinates")
+        self.mock_register_garden_coordinates = patcher.start()
         self.addCleanup(patcher.stop)
 
-    def test_successful_add_garden(self):
-        self.mock_create_garden.return_value = {}
+    def test_successful_add_garden_location(self):
+        self.mock_register_garden_coordinates.return_value = {}
 
-        task = add_garden.s(self.garden_data).apply()
+        task = add_garden_location.s(self.garden_data).apply()
 
         self.assertEqual("SUCCESS", task.status)
 
-    @patch("encouragemint.encouragemint.tasks.add_garden.retry")
-    def test_add_garden_retries_on_GardenSystemError_raise(self, mock_retry):
-        self.mock_create_garden.side_effect = error = GardenSystemError(None)
+    @patch("encouragemint.encouragemint.tasks.add_garden_location.retry")
+    def test_add_garden_location_retries_on_GardenSystemError_raise(self, mock_retry):
+        self.mock_register_garden_coordinates.side_effect = error = GardenSystemError(None)
         mock_retry.side_effect = Retry
 
-        self.assertRaises(Retry, add_garden, self.garden_data)
+        self.assertRaises(Retry, add_garden_location, self.garden_data)
         mock_retry.assert_called_with(countdown=ANY, exc=error)
 
-    def test_add_garden_raises_GardenUserError(self):
-        self.mock_create_garden.side_effect = GardenUserError(None)
+    def test_add_garden_location_raises_GardenUserError(self):
+        self.mock_register_garden_coordinates.side_effect = GardenUserError(None)
 
-        self.assertRaises(GardenUserError, add_garden, self.garden_data)
+        self.assertRaises(GardenUserError, add_garden_location, self.garden_data)

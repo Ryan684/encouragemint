@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from kombu import Queue, Exchange
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -151,3 +153,20 @@ LOGGING = {
         }
     }
 }
+
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_IGNORE_RESULT = True
+CELERY_TASK_QUEUES = (
+    Queue(name="encouragemint",
+          exchange=Exchange("encouragemint", type="direct"),
+          routing_key="encouragemint"),
+    Queue(name="encouragemint", exchange=Exchange("encouragemint", type="direct"))
+)
+CELERY_TASK_DEFAULT_QUEUE = "encouragemint"
+CELERY_TASK_ROUTES = {
+    "encouragemint.*": {"queue": "encouragemint"}
+}
+CELERY_TASK_SERIALIZER = "json"
+CELERY_TIMEZONE = "Europe/London"
+CELERY_BROKER_URL = "amqp://broker"

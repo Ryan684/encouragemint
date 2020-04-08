@@ -1,9 +1,31 @@
 version: '3'
 
 services:
-  web:
+  broker:
+    image: rabbitmq:3.8.3
+    container_name: broker
+    networks:
+      - backend
+    ports:
+      - "15672:15672"
+
+  encouragemint-worker:
+    image: encouragemint
+    container_name: encouragemint-worker
+    volumes:
+      - .:/encouragemint
+    env_file:
+      - .env
+    depends_on:
+      - broker
+      - encouragemint
+    networks:
+      - backend
+    command: ./wait-for-it.sh web:8000 -t 15 -- /bin/bash -c "./start_worker.sh "
+
+  encouragemint:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    image: encouragemint
     container_name: encouragemint
     environment:
       - DJANGO_SETTINGS_MODULE=encouragemint.settings.production
@@ -11,5 +33,11 @@ services:
       - .:/encouragemint
     ports:
       - "8000:8000"
+    networks:
+      - backend
     env_file:
       - .env
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+networks:
+  backend:
