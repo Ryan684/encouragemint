@@ -21,7 +21,7 @@ services:
       - encouragemint
     networks:
       - backend
-    command: ./wait-for-it.sh web:8000 -t 15 -- /bin/bash -c "./start_worker.sh "
+    command: ./wait-for-it.sh encouragemint:8000 -t 15 -- /bin/bash -c "./start_worker.sh "
 
   encouragemint:
     build: .
