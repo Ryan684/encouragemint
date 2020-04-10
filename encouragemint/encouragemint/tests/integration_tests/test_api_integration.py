@@ -75,6 +75,7 @@ class TestGarden(TestCase):
             content_type="application/json")
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True)
     def test_patch_garden(self):
         response = self.client.patch(
             self.url + f"{self.test_garden.get('garden_id')}/", self.data,

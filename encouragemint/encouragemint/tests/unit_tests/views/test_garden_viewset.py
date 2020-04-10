@@ -3,13 +3,11 @@ from unittest.mock import patch
 
 from django.test import TestCase, override_settings
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.test import APIRequestFactory
 
 from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.serializers.garden_serializer import GardenSerializer
-from encouragemint.encouragemint.tests.helpers import create_test_garden, SAMPLE_GARDEN, \
-    SAMPLE_GARDEN_SUNLIGHT, SAMPLE_GARDEN_GEOCODE_LOCATION
+from encouragemint.encouragemint.tests.helpers import create_test_garden, SAMPLE_GARDEN
 from encouragemint.encouragemint.views.garden_viewset import GardenViewSet
 
 GARDEN_URL = "/garden/"
@@ -64,25 +62,12 @@ class TestPatch(TestCase):
         response = self.view(request, garden_id=garden_id)
         return response
 
-    def test_successful_partial_update_garden(self):
+    @patch("encouragemint.encouragemint.views.garden_viewset.add_garden_location")
+    def test_successful_partial_update_garden(self, mock_add_garden_location):
         response = self._build_patch_response({"garden_name": "Fooupdated", "direction": "north"})
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        self.assertIn("plants", model_data)
-        self.assertIn("garden_id", model_data)
-        self.assertIn("profile", model_data)
-        self.assertEqual("Fooupdated", model_data.get("garden_name"))
-        self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
-        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"),
-                         model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"),
-                         model_data.get("longitude"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"),
-                         model_data.get("latitude"))
+        mock_add_garden_location.delay.assert_called_once()
 
     def test_unsuccessful_partial_update_garden_from_invalid_payload(self):
         response = self._build_patch_response({"garden_name": "Foo_updated", "direction": "north"})
@@ -123,17 +108,13 @@ class TestPost(TestCase):
         return response
 
     @patch("encouragemint.encouragemint.views.garden_viewset.add_garden_location")
-    def test_successful_create_garden(self, add_garden_location):
-        mock_response = Response()
-        mock_response.status_code = status.HTTP_201_CREATED
-        add_garden_location.return_value = mock_response
-
+    def test_successful_create_garden(self, mock_add_garden_location):
         payload = SAMPLE_GARDEN
         payload["profile"] = str(TEST_PROFILE.profile_id)
         response = self._build_post_response(payload)
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        add_garden_location.delay.assert_called_once()
+        mock_add_garden_location.delay.assert_called_once()
 
     def test_unsuccessful_create_garden_from_invalid_payload(self):
         response = self._build_post_response({

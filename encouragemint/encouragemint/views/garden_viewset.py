@@ -20,3 +20,9 @@ class GardenViewSet(viewsets.ModelViewSet):
         logger.info(f"Garden {garden_data.garden_id} has been created and added to "
                     f"profile {garden_data.profile.profile_id}.")
         add_garden_location.delay(garden_data.garden_id)
+
+    def perform_update(self, serializer):
+        garden_data = serializer.save()
+        logger.info(f"Updated garden {garden_data.garden_id} with the following data: {self.request.data}")
+        add_garden_location.delay(garden_data.garden_id)
+
