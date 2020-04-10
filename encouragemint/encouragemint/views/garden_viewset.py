@@ -13,7 +13,7 @@ class GardenViewSet(viewsets.ModelViewSet):
     queryset = Garden.objects.all()
     serializer_class = GardenSerializer
     lookup_field = "garden_id"
-    http_method_names = ["post", "put", "patch", "delete"]
+    http_method_names = ["post", "patch", "delete"]
 
     def perform_create(self, serializer):  # pylint: disable=no-self-use
         garden_data = serializer.save()

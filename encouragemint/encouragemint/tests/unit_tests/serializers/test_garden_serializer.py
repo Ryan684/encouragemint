@@ -17,9 +17,9 @@ class TestSerializerParameters(TestGardenSerializerValidators):
     def test_serializer_parameters(self):
         self.assertEqual(
             ["garden_id", "garden_name", "plants", "profile", "direction",
-             "sunlight", "location", "latitude", "longitude"],
+             "sunlight", "shade_tolerance", "location", "latitude", "longitude"],
             self.test_obj.Meta.fields)
-        self.assertEqual(["garden_id", "profile", "sunlight"],
+        self.assertEqual(["garden_id", "profile", "sunlight", "shade_tolerance"],
                          self.test_obj.Meta.read_only_fields)
         self.assertEqual(Garden, self.test_obj.Meta.model)
 

@@ -18,7 +18,7 @@ TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"
 
 class TestGardenViewsetParameters(TestCase):
     def test_viewset_parameters(self):
-        self.assertEqual(["post", "put", "patch", "delete"], GardenViewSet.http_method_names)
+        self.assertEqual(["post", "patch", "delete"], GardenViewSet.http_method_names)
         self.assertEqual("garden_id", GardenViewSet.lookup_field)
         self.assertEqual(GardenSerializer, GardenViewSet.serializer_class)
 
@@ -154,78 +154,3 @@ class TestPost(TestCase):
                 ]
             }
         )
-
-
-class TestPut(TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.view = GardenViewSet.as_view({"put": "update"})
-
-    def _build_put_response(self, update_payload):
-        garden = create_test_garden()
-        garden_id = garden.get("garden_id")
-        request = self.factory.put(
-            GARDEN_URL,
-            update_payload,
-            format="json"
-        )
-        response = self.view(request, garden_id=garden_id)
-        return response
-
-    def test_successful_update_garden(self):
-        new_garden_details = SAMPLE_GARDEN.copy()
-        new_garden_details["garden_name"] = "Fooupdated"
-        new_garden_details["profile"] = str(TEST_PROFILE.profile_id)
-        response = self._build_put_response(new_garden_details)
-        response.render()
-        model_data = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        self.assertIn("plants", model_data)
-        self.assertIn("profile", model_data)
-        self.assertIn("garden_id", model_data)
-        self.assertEqual("Fooupdated", model_data.get("garden_name"))
-        self.assertEqual(SAMPLE_GARDEN.get("direction"), model_data.get("direction"))
-        self.assertEqual(SAMPLE_GARDEN_SUNLIGHT, model_data.get("sunlight"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("address"),
-                         model_data.get("location"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("longitude"),
-                         model_data.get("longitude"))
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION.get("latitude"),
-                         model_data.get("latitude"))
-
-    def test_unsuccessful_update_garden_from_invalid_payload(self):
-        response = self._build_put_response({
-            "garden_name": "Foo_updated",
-            "direction": SAMPLE_GARDEN.get("direction"),
-            "profile": str(TEST_PROFILE.profile_id),
-            "location": SAMPLE_GARDEN.get("location")
-        })
-        response.render()
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertDictEqual(
-            json.loads(response.content.decode("utf-8")),
-            {
-                "garden_name": [
-                    "Invalid entry for the garden's name. A garden's name can "
-                    "only contain letters, numbers, hyphens, spaces and apostrophes."
-                ]
-            }
-        )
-
-    def test_unsuccessful_update_garden_from_invalid_id(self):
-        request = self.factory.put(
-            GARDEN_URL,
-            {
-                "garden_name": "Fooupdated",
-                "direction": SAMPLE_GARDEN.get("direction"),
-                "profile": str(TEST_PROFILE.profile_id),
-                "location": SAMPLE_GARDEN.get("location")
-            },
-            format="json"
-        )
-        response = self.view(request, garden_id="Foo")
-
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)

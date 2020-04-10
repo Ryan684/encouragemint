@@ -81,12 +81,6 @@ class TestGarden(TestCase):
             content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_update_garden(self):
-        response = self.client.put(
-            self.url + f"{self.test_garden.get('garden_id')}/", self.data,
-            content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
 
 class TestPlant(TestCase):
     def setUp(self):
