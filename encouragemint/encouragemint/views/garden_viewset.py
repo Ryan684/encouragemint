@@ -23,6 +23,6 @@ class GardenViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         garden_data = serializer.save()
-        logger.info(f"Updated garden {garden_data.garden_id} with the following data: {self.request.data}")
+        logger.info(f"Updated garden {garden_data.garden_id} with the following data: "
+                    f"{self.request.data}")
         add_garden_location.delay(garden_data.garden_id)
-
