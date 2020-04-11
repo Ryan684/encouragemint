@@ -5,6 +5,7 @@ from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
+from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.models.profile import Profile
 from encouragemint.encouragemint.serializers.garden_serializer import GardenSerializer
 from encouragemint.encouragemint.tests.helpers import create_test_garden, SAMPLE_GARDEN
@@ -16,7 +17,7 @@ TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"
 
 class TestGardenViewsetParameters(TestCase):
     def test_viewset_parameters(self):
-        self.assertEqual(["post", "patch", "delete"], GardenViewSet.http_method_names)
+        self.assertEqual(["get", "post", "patch", "delete"], GardenViewSet.http_method_names)
         self.assertEqual("garden_id", GardenViewSet.lookup_field)
         self.assertEqual(GardenSerializer, GardenViewSet.serializer_class)
 
@@ -44,6 +45,60 @@ class TestDelete(TestCase):
         response.render()
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+
+class TestGetRetrieve(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
+
+    def test_successful_get_garden(self):
+        garden = Garden.objects.create(profile=TEST_PROFILE, **SAMPLE_GARDEN)
+        garden_id = garden.garden_id
+        request = self.factory.get(GARDEN_URL, format="json")
+        response = self.get_by_id_view(request, garden_id=garden_id)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIn("garden_id", model_data)
+        self.assertEqual(garden.location, model_data.get("location"))
+        self.assertEqual(str(garden.profile.profile_id), model_data.get("profile"))
+        self.assertEqual(garden.direction, model_data.get("direction"))
+        self.assertEqual(garden.garden_name, model_data.get("garden_name"))
+        self.assertIsNone(garden.latitude)
+        self.assertIsNone(garden.longitude)
+
+    def test_unsuccessful_get_garden_from_invalid_id(self):
+        request = self.factory.get(GARDEN_URL, format="json")
+        response = self.get_by_id_view(request, garden_id="Foo")
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+
+class TestGetList(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.get_all_view = GardenViewSet.as_view({"get": "list"})
+
+    def test_successful_get_all_gardens(self):
+        Garden.objects.create(profile=TEST_PROFILE, **SAMPLE_GARDEN)
+        Garden.objects.create(profile=TEST_PROFILE, **SAMPLE_GARDEN)
+        request = self.factory.get(GARDEN_URL, format="json")
+        response = self.get_all_view(request)
+        response.render()
+        model_data = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        for garden in model_data:
+            self.assertIn("garden_id", garden)
+            self.assertIn("location", garden)
+            self.assertIn("profile", garden)
+            self.assertIn("direction", garden)
+            self.assertIn("garden_id", garden)
+            self.assertIn("latitude", garden)
+            self.assertIn("longitude", garden)
 
 
 class TestPatch(TestCase):
