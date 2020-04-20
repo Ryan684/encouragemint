@@ -8,8 +8,8 @@ from encouragemint.encouragemint.models.plant import Plant
 from encouragemint.encouragemint.serializers.new_plant_request_serializer import \
     NewPlantRequestSerializer
 from encouragemint.encouragemint.serializers.plant_serializer import PlantSerializer
+from encouragemint.encouragemint.tasks import lookup_plant_by_name
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
-from encouragemint.interfaces.trefle.trefle import lookup_plants
 
 logger = logging.getLogger("django")
 
@@ -31,7 +31,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         garden = Garden.objects.get(garden_id=self.request.data["garden"])
 
         try:
-            result = self._lookup_plant_by_name("common_name", plant_name, garden)
+            result = lookup_plant_by_name("common_name", plant_name, garden)
         except TrefleConnectionError as exception:
             logger.error(f"Adding plant failed for garden {garden.garden_id}: {exception}")
             return Response(
@@ -70,7 +70,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         plant_name = plant.scientific_name
 
         try:
-            result = self._lookup_plant_by_name("scientific_name", plant_name, garden)
+            result = lookup_plant_by_name("scientific_name", plant_name, garden)
         except TrefleConnectionError as exception:
             logger.error(f"Update failed for plant {plant} in garden {garden}: {exception}")
             return Response(
@@ -84,11 +84,3 @@ class PlantViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         logger.info(f"Updated plant {plant} in garden {garden} successfully.")
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
-
-    def _lookup_plant_by_name(self, query, plant_name, garden):  # pylint: disable=no-self-use
-        result = lookup_plants({query: plant_name})
-
-        if isinstance(result, dict):
-            result["garden"] = garden.garden_id
-
-        return result

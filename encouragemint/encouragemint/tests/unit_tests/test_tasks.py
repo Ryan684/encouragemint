@@ -35,3 +35,7 @@ class TestAddGardenLocation(TestCase):
         self.mock_register_garden_coordinates.side_effect = GardenUserError(None)
 
         self.assertRaises(GardenUserError, add_garden_location, self.garden_data)
+
+
+class TestLookupPlantByName(TestCase):
+    pass
