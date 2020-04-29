@@ -70,7 +70,7 @@ class TestPost(TestCase):
             "garden": str(TEST_GARDEN.garden_id)
         }
 
-        patcher = patch("encouragemint.encouragemint.tasks.lookup_plants")
+        patcher = patch("encouragemint.encouragemint.views.plant_viewset.lookup_plants")
         self.mock_trefle = patcher.start()
         self.addCleanup(patcher.stop)
 
@@ -166,7 +166,7 @@ class TestPut(TestCase):
         self.factory = APIRequestFactory()
         self.view = PlantViewSet.as_view({"put": "update"})
 
-        patcher = patch("encouragemint.encouragemint.tasks.lookup_plants")
+        patcher = patch("encouragemint.encouragemint.views.plant_viewset.lookup_plants")
         self.mock_trefle = patcher.start()
         self.addCleanup(patcher.stop)
 
