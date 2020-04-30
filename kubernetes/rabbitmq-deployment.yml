@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker
+  template:
+    metadata:
+      labels:
+        app: broker
+      name: broker
+    spec:
+      containers:
+      - image: rabbitmq:3.8.3
+        imagePullPolicy: IfNotPresent
+        name: broker
+        ports:
+        - containerPort: 15672
+          name: broker
+          protocol: TCP

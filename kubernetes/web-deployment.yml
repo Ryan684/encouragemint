@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: encouragemint-backend-deployment
+  name: encouragemint
   labels:
-    app: encouragemint-backend
+    app: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: encouragemint-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: encouragemint-backend
+        app: backend
     spec:
       containers:
-      - name: encouragemint-backend
+      - name: backend
         image: ryan684/encouragemint:latest
         imagePullPolicy: IfNotPresent
         env:

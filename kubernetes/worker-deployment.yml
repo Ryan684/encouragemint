@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encouragemint-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: encouragemint-worker
+      name: encouragemint-worker
+    spec:
+      containers:
+      - image: ryan684/encouragemint:latest
+        command:
+          - ./start_worker.sh
+        imagePullPolicy: IfNotPresent
+        name: encouragemint-worker
+      env:
+      - name: NODE_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.hostIP
+      - name: TREFLE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: apikeys
+            key: trefle
+      - name: GOOGLE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: apikeys
+            key: google
+      - name: METEOSTAT_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: apikeys
+            key: meteostat
+      ports:
+      - containerPort: 8000
+        name: encouragemint-worker
+        protocol: TCP
+      imagePullSecrets:
+        - name: docker_hub_credentials
