@@ -25,9 +25,9 @@ cli in this order:<br><br>
 <li>kubectl apply -f api_keys.yml</li>
 <li>kubectl apply -f rabbitmq-deployment.yml</li>
 <li>kubectl apply -f rabbitmq-service.yml</li>
-<li>kubectl apply -f web-deployment.yml</li><br>
+<li>kubectl apply -f web-deployment.yml</li>
 <li>kubectl apply -f worker-deployment.yml</li>
-<li>kubectl apply -f web-service.yml</li>
+<li>kubectl apply -f web-service.yml</li><br>
 
 In the initial cut of this Kubernetes configuration, the Encouragemint service simply uses a Nodeport, so you
 can access the Encouragemint Django API root at https://{Node IP}:{Node Port}/.
