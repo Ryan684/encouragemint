@@ -2,7 +2,7 @@ encouragemint.iml
 .idea/
 db.sqlite3
 .coverage
-docker_hub_credentials.yml
-api_keys.yml
+docker-hub-credentials.yml
+api-keys.yml
 .env
 debug.log
