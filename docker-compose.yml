@@ -1,6 +1,18 @@
 version: '3'
 
 services:
+  db:
+    image: mysql:8.0.20
+    container_name: db
+    volumes:
+      - "mysql_data_dir:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+    env_file:
+      - ./.env
+
   broker:
     image: rabbitmq:3.8.3
     container_name: broker
@@ -38,6 +50,10 @@ services:
     env_file:
       - .env
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  mysql_data_dir:
+    driver: local
 
 networks:
   backend:
