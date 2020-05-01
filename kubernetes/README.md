@@ -23,8 +23,8 @@ cli in this order:<br><br>
 
 <li>kubectl apply -f docker-hub-credentials.yml</li>
 <li>kubectl apply -f api_keys.yml</li>
-<li>kubectl apply -f rabbitmq-deployment.yml</li>
-<li>kubectl apply -f rabbitmq-service.yml</li>
+<li>kubectl apply -f broker-deployment.yml</li>
+<li>kubectl apply -f broker-service.yml</li>
 <li>kubectl apply -f web-deployment.yml</li>
 <li>kubectl apply -f worker-deployment.yml</li>
 <li>kubectl apply -f web-service.yml</li><br>
