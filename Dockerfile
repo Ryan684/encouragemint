@@ -1,6 +1,5 @@
 FROM python:3.6
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE encouragemint.settings.production
 RUN mkdir /encouragemint
 WORKDIR /encouragemint
 ADD . /encouragemint/

@@ -22,7 +22,7 @@ To deploy Encouragemint to a Kubernetes cluster, execute these kubectl commands 
 cli in this order:<br><br>
 
 <li>kubectl apply -f docker-hub-credentials.yml</li>
-<li>kubectl apply -f api_keys.yml</li>
+<li>kubectl apply -f api-keys.yml</li>
 <li>kubectl apply -f broker-deployment.yml</li>
 <li>kubectl apply -f broker-service.yml</li>
 <li>kubectl apply -f web-deployment.yml</li>

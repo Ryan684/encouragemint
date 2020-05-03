@@ -38,6 +38,8 @@ spec:
             secretKeyRef:
               name: apikeys
               key: meteostat
+        - name: DJANGO_SETTINGS_MODULE
+          value: "encouragemint.settings.production"
         ports:
           - containerPort: 8000
       imagePullSecrets:
