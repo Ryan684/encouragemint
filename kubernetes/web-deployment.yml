@@ -15,8 +15,10 @@ spec:
         app: backend
     spec:
       containers:
-      - name: backend
+      - name: encouragemint
         image: ryan684/encouragemint:latest
+        command:
+          - ./run_web.sh
         imagePullPolicy: IfNotPresent
         env:
         - name: NODE_IP
@@ -43,4 +45,4 @@ spec:
         ports:
           - containerPort: 8000
       imagePullSecrets:
-        - name: docker_hub_credentials
+        - name: docker-hub-credentials

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   db:
@@ -33,14 +33,12 @@ services:
       - encouragemint
     networks:
       - backend
-    command: ./wait-for-it.sh encouragemint:8000 -t 15 -- /bin/bash -c "./start_worker.sh "
+    command: ./wait-for-it.sh broker:15672 -t 30 -- /bin/bash -c "./start_worker.sh "
 
   encouragemint:
     build: .
     image: encouragemint
     container_name: encouragemint
-    environment:
-      - DJANGO_SETTINGS_MODULE=encouragemint.settings.production
     volumes:
       - .:/encouragemint
     ports:
@@ -49,7 +47,7 @@ services:
       - backend
     env_file:
       - .env
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: ./wait-for-it.sh db:3306 -t 30 -- /bin/bash -c "./run_web.sh "
 
 volumes:
   mysql_data_dir:
