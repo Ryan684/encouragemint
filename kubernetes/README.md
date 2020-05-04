@@ -13,18 +13,21 @@ run Encouragemint:<br>
 <li>Firstly create a secret for your dockerhub credentials (see
 https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually). Label this .yml file
 'docker-hub-credentials' with a matching metadata name.</li>
-<li>Secondly, create an opaque secret yml file for your api keys named 'api_keys'
+<li>Secondly, create an opaque secret yml file for your api keys named 'keys'
 (see https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually, note that you'll need
-to base64 your api keys just like they do for the example with credentials).</li>
+to base64 your keys just like they do for the example with credentials).</li>
 
 <h2>How do I deploy Encouragemint to a Kubernetes Cluster?</h2>
 To deploy Encouragemint to a Kubernetes cluster, execute these kubectl commands from your cluster's
 cli in this order:<br><br>
 
 <li>kubectl apply -f docker-hub-credentials.yml</li>
-<li>kubectl apply -f api-keys.yml</li>
+<li>kubectl apply -f keys.yml</li>
 <li>kubectl apply -f broker-deployment.yml</li>
 <li>kubectl apply -f broker-service.yml</li>
+<li>kubectl apply -f database-persistent-volume-claim.yml</li>
+<li>kubectl apply -f database-deployment.yml</li>
+<li>kubectl apply -f database-service.yml</li>
 <li>kubectl apply -f web-deployment.yml</li>
 <li>kubectl apply -f worker-deployment.yml</li>
 <li>kubectl apply -f web-service.yml</li><br>
