@@ -28,18 +28,18 @@ spec:
         - name: TREFLE_API_KEY
           valueFrom:
             secretKeyRef:
-              name: apikeys
-              key: trefle
+              name: keys
+              key: trefle_api_key
         - name: GOOGLE_API_KEY
           valueFrom:
             secretKeyRef:
-              name: apikeys
-              key: google
+              name: keys
+              key: google_api_key
         - name: METEOSTAT_API_KEY
           valueFrom:
             secretKeyRef:
-              name: apikeys
-              key: meteostat
+              name: keys
+              key: meteostat_api_key
         - name: DJANGO_SETTINGS_MODULE
           value: "encouragemint.settings.production"
         ports:
