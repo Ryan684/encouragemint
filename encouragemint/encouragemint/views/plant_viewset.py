@@ -28,7 +28,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         serializer = NewPlantRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         plant_name = request.data["plant_name"]
-        garden = Garden.objects.get(garden_id=self.request.data["garden"])
+        garden = Garden.objects.get(garden_id=request.data["garden"])
 
         try:
             result = self._lookup_plant_by_name("common_name", plant_name, garden)

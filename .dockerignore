@@ -4,6 +4,7 @@ db.sqlite3
 .coverage
 .coveragerc
 .gitignore
+.env
 README.md
 .circleci/
 encouragemint/encouragemint/tests/

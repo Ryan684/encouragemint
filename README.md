@@ -15,9 +15,9 @@ You can also filter plants by:</br>
 
 <h2>Endpoints (MORE DETAIL REQUIRED. SWAGGER DEFINITION?)</h2>
 <li>/profile [POST, PUT, PATCH, GET]</li>
-<li>/garden [POST, PUT]</li>
+<li>/garden [POST, GET]</li>
+<li>/garden/{garden_id}/recommend/ [GET]</li>
 <li>/plants [POST, PUT]</li>
-<li>/recommend/{garden_id} [GET]</li>
 
 <h2>Logs</h2>
 Currently, the app writes it's logs both to a console and a debug.log file in the root directory of the project.

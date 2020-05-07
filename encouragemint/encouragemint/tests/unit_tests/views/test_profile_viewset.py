@@ -88,10 +88,10 @@ class TestGetList(TestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-        for plant in model_data:
-            self.assertIn("gardens", plant)
-            self.assertIn("first_name", plant)
-            self.assertIn("last_name", plant)
+        for profile in model_data:
+            self.assertIn("gardens", profile)
+            self.assertIn("first_name", profile)
+            self.assertIn("last_name", profile)
 
 
 class TestPatch(TestCase):

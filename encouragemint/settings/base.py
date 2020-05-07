@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from kombu import Queue, Exchange
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -71,18 +73,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'encouragemint.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -151,3 +141,21 @@ LOGGING = {
         }
     }
 }
+
+CELERY_WORKER_HIJACK_ROOT_LOGGER = False
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_IGNORE_RESULT = True
+CELERY_TASK_QUEUES = (
+    Queue(name="encouragemint",
+          exchange=Exchange("encouragemint", type="direct"),
+          routing_key="encouragemint"),
+    Queue(name="encouragemint", exchange=Exchange("encouragemint", type="direct"))
+)
+CELERY_TASK_DEFAULT_QUEUE = "encouragemint"
+CELERY_TASK_ROUTES = {
+    "encouragemint.*": {"queue": "encouragemint"}
+}
+CELERY_TASK_SERIALIZER = "json"
+CELERY_TIMEZONE = "Europe/London"
+CELERY_BROKER_URL = "amqp://broker"

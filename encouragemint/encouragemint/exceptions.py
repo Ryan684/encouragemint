@@ -1,6 +1,10 @@
-class GeocoderConnectionError(Exception):
+class GeocoderNoResultsError(Exception):
     pass
 
 
-class GeocoderNoResultsError(Exception):
+class GardenSystemError(Exception):
+    pass
+
+
+class GardenUserError(Exception):
     pass

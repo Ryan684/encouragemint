@@ -1,11 +1,7 @@
-import json
-from unittest.mock import patch, Mock
+from django.forms import model_to_dict
 
-from django.test import override_settings
-from rest_framework.test import APIRequestFactory
-
+from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.models.profile import Profile
-from encouragemint.encouragemint.views.garden_viewset import GardenViewSet
 
 SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
 SAMPLE_GARDEN_SUNLIGHT = "low"
@@ -28,29 +24,13 @@ SAMPLE_PLANT = {
 }
 
 
-@override_settings(GOOGLE_API_KEY="Foo")
-@patch("geopy.geocoders.googlev3.GoogleV3.geocode")
-def create_test_garden(mock_google):
+def create_test_garden():
     profile = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
     garden = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK",
-              "profile": str(profile.profile_id)}
-    mock = Mock(**{
-        "address": garden.get("location"),
-        "latitude": 50.263195,
-        "longitude": -5.051041
-    })
-    mock_google.return_value = mock
+              "profile": profile, "latitude": 50.263195, "longitude": -5.051041}
 
-    request = APIRequestFactory().post(
-        "/garden/",
-        garden,
-        format="json"
-    )
-    view = GardenViewSet.as_view({"post": "create"})
-    response = view(request)
-    response.render()
-    model_data = json.loads(response.content.decode("utf-8"))
-    return model_data
+    test_garden = Garden.objects.create(**garden)
+    return model_to_dict(test_garden)
 
 
 TREFLE_NAME_LOOKUP_RESPONSE = [

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encouragemint-worker
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: encouragemint-worker
+        image: ryan684/encouragemint:latest
+        command:
+          - ./start_worker.sh
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: TREFLE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: trefle_api_key
+        - name: GOOGLE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: google_api_key
+        - name: METEOSTAT_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: meteostat_api_key
+        - name: DJANGO_SETTINGS_MODULE
+          value: "encouragemint.settings.production"
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: mysql-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: mysql-password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: mysql-database
+        ports:
+          - containerPort: 8000
+      imagePullSecrets:
+        - name: docker-hub-credentials

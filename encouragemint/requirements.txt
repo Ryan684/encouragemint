@@ -10,3 +10,5 @@ sqlparse==0.3.0
 urllib3==1.25.7
 geographiclib==1.50
 geopy==1.20.0
+celery==4.3.0
+pymysql==0.9.2

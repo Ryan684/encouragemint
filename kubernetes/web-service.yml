@@ -9,4 +9,4 @@ spec:
       port: 8000
       targetPort: 8000
   selector:
-    app: encouragemint-backend
+    app: backend
