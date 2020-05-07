@@ -5,13 +5,13 @@ services:
     image: mysql:8.0.20
     container_name: db
     volumes:
-      - "mysql_data_dir:/var/lib/mysql"
+      - "/var/lib/mysql"
     ports:
       - "3306:3306"
     networks:
       - backend
     env_file:
-      - ./.env
+      - .env
 
   broker:
     image: rabbitmq:3.8.3
@@ -47,7 +47,7 @@ services:
       - backend
     env_file:
       - .env
-    command: ./wait-for-it.sh db:3306 -t 30 -- /bin/bash -c "./run_web.sh "
+    command: ./wait-for-it.sh db:3306 -t 30 -- /bin/bash -c "./start_web.sh "
 
 volumes:
   mysql_data_dir:

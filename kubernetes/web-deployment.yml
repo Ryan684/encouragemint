@@ -18,7 +18,7 @@ spec:
       - name: encouragemint
         image: ryan684/encouragemint:latest
         command:
-          - ./run_web.sh
+          - ./start_web.sh
         imagePullPolicy: IfNotPresent
         env:
         - name: NODE_IP
@@ -42,11 +42,6 @@ spec:
               key: meteostat_api_key
         - name: DJANGO_SETTINGS_MODULE
           value: "encouragemint.settings.production"
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: keys
-              key: mysql-root-password
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
