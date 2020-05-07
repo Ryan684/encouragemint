@@ -42,6 +42,26 @@ spec:
               key: meteostat_api_key
         - name: DJANGO_SETTINGS_MODULE
           value: "encouragemint.settings.production"
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: mysql-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: mysql-password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: mysql-database
         ports:
           - containerPort: 8000
       imagePullSecrets:

@@ -1,23 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-mysql
-  labels:
-    app: backend
+  name: db
 spec:
   selector:
     matchLabels:
-      app: backend
+      app: db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: backend
+        app: db
     spec:
       containers:
       - image: mysql:8.0.20
-        name: mysql
+        name: db
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -41,7 +39,7 @@ spec:
               key: mysql-database
         ports:
         - containerPort: 3306
-          name: mysql
+          name: db
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql

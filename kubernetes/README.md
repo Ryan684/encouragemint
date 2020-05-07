@@ -18,19 +18,8 @@ https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manu
 to base64 your keys just like they do for the example with credentials).</li>
 
 <h2>How do I deploy Encouragemint to a Kubernetes Cluster?</h2>
-To deploy Encouragemint to a Kubernetes cluster, execute these kubectl commands from your cluster's
-cli in this order:<br><br>
-
-<li>kubectl apply -f docker-hub-credentials.yml</li>
-<li>kubectl apply -f keys.yml</li>
-<li>kubectl apply -f broker-deployment.yml</li>
-<li>kubectl apply -f broker-service.yml</li>
-<li>kubectl apply -f database-persistent-volume-claim.yml</li>
-<li>kubectl apply -f database-deployment.yml</li>
-<li>kubectl apply -f database-service.yml</li>
-<li>kubectl apply -f web-deployment.yml</li>
-<li>kubectl apply -f worker-deployment.yml</li>
-<li>kubectl apply -f web-service.yml</li><br>
+Currently, there is no integration with Kubernetes deployment tools like helm, but you can use the 'deploy_app.sh'
+script to run all the kubectl apply commands in the correct order to deploy Encouragemint onto your Kubernetes cluster.
 
 In the initial cut of this Kubernetes configuration, the Encouragemint service simply uses a Nodeport, so you
 can access the Encouragemint Django API root at https://{Node IP}:{Node Port}/.
