@@ -8,7 +8,7 @@ from encouragemint.encouragemint.models.garden import Garden
 class Plant(models.Model):
     plant_id = models.UUIDField(default=uuid.uuid4)
     garden = models.ForeignKey(Garden, on_delete=models.CASCADE, related_name="plants")
-    common_name = models.CharField(max_length=50)
+    common_name = models.CharField(max_length=50, null=True)
     trefle_id = models.IntegerField()
     scientific_name = models.CharField(max_length=50)
     duration = models.CharField(max_length=25, null=True)
