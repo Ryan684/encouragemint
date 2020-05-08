@@ -31,7 +31,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         garden = Garden.objects.get(garden_id=request.data["garden"])
 
         try:
-            result = self._lookup_plant_by_name("common_name", plant_name, garden)
+            result = self._lookup_plant_by_name(plant_name, garden)
         except TrefleConnectionError as exception:
             logger.error(f"Adding plant failed for garden {garden.garden_id}: {exception}")
             return Response(
@@ -70,7 +70,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         plant_name = plant.scientific_name
 
         try:
-            result = self._lookup_plant_by_name("scientific_name", plant_name, garden)
+            result = self._lookup_plant_by_name(plant_name, garden)
         except TrefleConnectionError as exception:
             logger.error(f"Update failed for plant {plant} in garden {garden}: {exception}")
             return Response(
@@ -85,8 +85,9 @@ class PlantViewSet(viewsets.ModelViewSet):
         logger.info(f"Updated plant {plant} in garden {garden} successfully.")
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
-    def _lookup_plant_by_name(self, query, plant_name, garden):  # pylint: disable=no-self-use
-        result = lookup_plants({query: plant_name})
+    def _lookup_plant_by_name(self, plant_name, garden):  # pylint: disable=no-self-use
+        formatted_plant_name = plant_name.lower().capitalize()
+        result = lookup_plants({"scientific_name": formatted_plant_name})
 
         if isinstance(result, dict):
             result["garden"] = garden.garden_id
