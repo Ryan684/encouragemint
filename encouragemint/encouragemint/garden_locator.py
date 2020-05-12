@@ -32,7 +32,8 @@ def register_garden_coordinates(garden_id):
     garden.save()
 
     logger.info(f"Added coordinates to garden {garden.garden_id} successfully.")
-    email.send_garden_registered_email(garden.profile.email_address, garden.garden_name, garden.profile.first_name)
+    email.send_garden_registered_email(
+        garden.profile.email_address, garden.garden_name, garden.profile.first_name)
 
 
 def _lookup_garden_coordinates(location):
