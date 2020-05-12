@@ -22,6 +22,7 @@ def register_garden_coordinates(garden_id):
         raise GardenSystemError(
             f"Adding coordinates failed for garden {garden.garden_id}: {exception}")
     except GeocoderNoResultsError:
+        garden.delete()
         raise GardenUserError(
             f"Adding coordinates failed for garden {garden.garden_id}. "
             "Could not find a location for that address.")
