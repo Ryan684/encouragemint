@@ -25,7 +25,7 @@ SAMPLE_PLANT = {
 
 
 def create_test_garden():
-    profile = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
+    profile = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar", "email_address": "foo@bar.com"})
     garden = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK",
               "profile": profile, "latitude": 50.263195, "longitude": -5.051041}
 

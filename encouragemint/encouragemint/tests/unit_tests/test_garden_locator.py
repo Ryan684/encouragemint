@@ -1,5 +1,6 @@
 from unittest.mock import patch, Mock
 
+from django.core import mail
 from django.test import TestCase
 from geopy.exc import GeocoderServiceError
 
@@ -24,6 +25,7 @@ class TestGardenLocator(TestCase):
         register_garden_coordinates(self.garden_id)
 
         self.assertTrue(Garden.objects.get(garden_id=self.garden_id))
+        self.assertEqual(1, len(mail.outbox))
 
     def test_unsuccessful_register_garden_coordinates_from_geocoder_exception(self):
         self.mock_google.side_effect = GeocoderServiceError

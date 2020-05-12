@@ -15,7 +15,7 @@ class TestProfileSerializerValidators(TestCase):
 class TestSerializerParameters(TestProfileSerializerValidators):
     def test_serializer_parameters(self):
         self.assertEqual(
-            ["profile_id", "first_name", "last_name", "gardens"], self.test_obj.Meta.fields)
+            ["profile_id", "first_name", "last_name", "gardens", "email_address"], self.test_obj.Meta.fields)
         self.assertEqual(["profile_id"], self.test_obj.Meta.read_only_fields)
         self.assertEqual(Profile, self.test_obj.Meta.model)
 

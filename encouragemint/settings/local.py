@@ -23,3 +23,5 @@ NOSE_ARGS = [
 INSTALLED_APPS += [
     'django_nose'
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

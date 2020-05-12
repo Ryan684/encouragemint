@@ -7,6 +7,7 @@ from geopy.exc import GeopyError
 from encouragemint.encouragemint.exceptions import GeocoderNoResultsError, GardenSystemError, \
     GardenUserError
 from encouragemint.encouragemint.models.garden import Garden
+from encouragemint.encouragemint.notifications import email
 
 logger = logging.getLogger("django")
 
@@ -31,6 +32,7 @@ def register_garden_coordinates(garden_id):
     garden.save()
 
     logger.info(f"Added coordinates to garden {garden.garden_id} successfully.")
+    email.send_garden_registered_email(garden.profile.email_address, garden.garden_name, garden.profile.first_name)
 
 
 def _lookup_garden_coordinates(location):

@@ -1,7 +1,6 @@
 from unittest.mock import patch, Mock
 
 from django.test import TestCase, override_settings
-
 from rest_framework import status
 
 from encouragemint.encouragemint.models.garden import Garden
@@ -16,7 +15,7 @@ from encouragemint.encouragemint.tests.helpers import create_test_garden, \
 class TestProfile(TestCase):
     def setUp(self):
         self.url = "/profile/"
-        self.data = {"first_name": "Foo", "last_name": "Bar"}
+        self.data = {"first_name": "Foo", "last_name": "Bar", "email_address": "FooBar@Whizzbang.com"}
         self.test_profile = Profile.objects.create(**self.data)
 
     def test_create_profile(self):
