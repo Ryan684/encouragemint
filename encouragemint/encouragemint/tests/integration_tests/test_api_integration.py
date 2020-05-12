@@ -68,16 +68,25 @@ class TestGarden(TestCase):
         response = self.client.post(self.url, self.data, content_type="application/json")
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
+    def test_retrieve_garden(self):
+        response = self.client.get(self.url + f"{self.test_garden['garden_id']}/",
+                                   content_type="application/json")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_list_gardens(self):
+        response = self.client.get(self.url, content_type="application/json")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
     def test_delete_garden(self):
         response = self.client.delete(
-            self.url + f"{self.test_garden.get('garden_id')}/",
+            self.url + f"{self.test_garden['garden_id']}/",
             content_type="application/json")
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     @override_settings(CELERY_TASK_ALWAYS_EAGER=True)
     def test_patch_garden(self):
         response = self.client.patch(
-            self.url + f"{self.test_garden.get('garden_id')}/", self.data,
+            self.url + f"{self.test_garden['garden_id']}/", self.data,
             content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
