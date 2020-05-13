@@ -43,7 +43,7 @@ class TestSendGardenRegisteredEmail(EmailTestCase):
     def test_email_notification(self):
         expected_body = (
             f"Hey {self.user_first_name},\n\n"
-            f"Your garden, {self.user_garden_name}, is now ready for plants.\n\n"
+            f"Your garden {self.user_garden_name} is now ready for plants.\n\n"
             "Thanks,\n"
             "Encouragemint"
         )

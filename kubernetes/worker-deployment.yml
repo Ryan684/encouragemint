@@ -57,11 +57,6 @@ spec:
             secretKeyRef:
               name: keys
               key: mysql-database
-        - name: EMAIL_ACCOUNT_ADDRESS
-          valueFrom:
-            secretKeyRef:
-              name: keys
-              key: email-account-address
         - name: EMAIL_ACCOUNT_PASSWORD
           valueFrom:
             secretKeyRef:

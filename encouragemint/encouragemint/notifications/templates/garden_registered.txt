@@ -1,6 +1,6 @@
 Hey {{ first_name }},
 
-Your garden, {{ garden_name }}, is now ready for plants.
+Your garden {{ garden_name }} is now ready for plants.
 
 Thanks,
 Encouragemint
