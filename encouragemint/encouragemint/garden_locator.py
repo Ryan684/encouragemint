@@ -8,6 +8,7 @@ from encouragemint.encouragemint.exceptions import GeocoderNoResultsError, Garde
     GardenUserError
 from encouragemint.encouragemint.models.garden import Garden
 from encouragemint.encouragemint.notifications import email
+from encouragemint.encouragemint.notifications.email import send_garden_location_not_found_email
 
 logger = logging.getLogger("django")
 
@@ -22,19 +23,12 @@ def register_garden_coordinates(garden_id):
         raise GardenSystemError(
             f"Adding coordinates failed for garden {garden.garden_id}: {exception}")
     except GeocoderNoResultsError:
-        garden.delete()
+        _rollback_garden_creation(garden)
         raise GardenUserError(
             f"Adding coordinates failed for garden {garden.garden_id}. "
             "Could not find a location for that address.")
 
-    garden.latitude = latitude
-    garden.longitude = longitude
-    garden.location = location
-    garden.save()
-
-    logger.info(f"Added coordinates to garden {garden.garden_id} successfully.")
-    email.send_garden_registered_email(
-        garden.profile.email_address, garden.garden_name, garden.profile.first_name)
+    _register_garden(garden, latitude, location, longitude)
 
 
 def _lookup_garden_coordinates(location):
@@ -44,3 +38,24 @@ def _lookup_garden_coordinates(location):
     if geo_location:
         return geo_location.latitude, geo_location.longitude, geo_location.address
     raise GeocoderNoResultsError()
+
+
+def _rollback_garden_creation(garden):
+    garden.delete()
+    send_garden_location_not_found_email(
+        garden.profile.email_address,
+        garden.garden_name,
+        garden.profile.first_name,
+        garden.location
+    )
+
+
+def _register_garden(garden, latitude, location, longitude):
+    garden.latitude = latitude
+    garden.longitude = longitude
+    garden.location = location
+    garden.save()
+
+    logger.info(f"Added coordinates to garden {garden.garden_id} successfully.")
+    email.send_garden_registered_email(
+        garden.profile.email_address, garden.garden_name, garden.profile.first_name)

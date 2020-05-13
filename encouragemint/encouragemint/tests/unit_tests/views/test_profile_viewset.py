@@ -1,5 +1,6 @@
 import json
 
+from django.core import mail
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
@@ -166,6 +167,7 @@ class TestPost(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual("Foo", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
+        self.assertEqual(1, len(mail.outbox))  # assert welcome email was sent.
 
     def test_unsuccessful_create_profile_from_invalid_payload(self):
         response = self._build_post_response(
