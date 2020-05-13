@@ -1,0 +1,8 @@
+Hey {{ first_name }},
+
+The location for your new garden {{ garden_location }} couldn't be found.
+
+Please double check the address you gave us and try again.
+
+Thanks,
+Encouragemint

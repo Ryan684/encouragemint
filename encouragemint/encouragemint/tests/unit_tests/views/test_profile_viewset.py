@@ -1,5 +1,6 @@
 import json
 
+from django.core import mail
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
@@ -11,7 +12,8 @@ from encouragemint.encouragemint.views.profile_viewset import ProfileViewSet
 PROFILE_URL = "/profile/"
 SAMPLE_PROFILE = {
     "first_name": "Foo",
-    "last_name": "Bar"
+    "last_name": "Bar",
+    "email_address": "FooBar@Whizzbang.com"
 }
 
 
@@ -165,15 +167,17 @@ class TestPost(TestCase):
         self.assertIn("profile_id", model_data)
         self.assertEqual("Foo", model_data.get("first_name"))
         self.assertEqual("Bar", model_data.get("last_name"))
+        self.assertEqual(1, len(mail.outbox))  # assert welcome email was sent.
 
     def test_unsuccessful_create_profile_from_invalid_payload(self):
-        response = self._build_post_response({"first_name": "F00", "last_name": "Bar"})
+        response = self._build_post_response(
+            {"first_name": "Foo", "last_name": "Bar", "email_address": "FooBar.com"})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"first_name": ["Your first name can only contain letters."]}
+            {"email_address": ["Enter a valid email address."]}
         )
 
 
@@ -194,7 +198,8 @@ class TestPut(TestCase):
         return response
 
     def test_successful_update_profile(self):
-        response = self._build_put_response({"first_name": "Fooupdated", "last_name": "Bar"})
+        response = self._build_put_response(
+            {"first_name": "Fooupdated", "last_name": "Bar", "email_address": "FooBar@Whizzbang.com"})
         response.render()
         model_data = json.loads(response.content.decode("utf-8"))
 
@@ -206,7 +211,8 @@ class TestPut(TestCase):
         self.assertEqual("Bar", model_data.get("last_name"))
 
     def test_unsuccessful_update_profile_from_invalid_payload(self):
-        response = self._build_put_response({"first_name": "Foo_updated", "last_name": "Bar"})
+        response = self._build_put_response(
+            {"first_name": "Foo_updated", "last_name": "Bar", "email_address": "FooBar@Whizzbang.com"})
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)

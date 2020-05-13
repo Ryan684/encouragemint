@@ -1,5 +1,6 @@
 from unittest.mock import patch, Mock
 
+from django.core import mail
 from django.test import TestCase
 from geopy.exc import GeocoderServiceError
 
@@ -23,14 +24,19 @@ class TestGardenLocator(TestCase):
 
         register_garden_coordinates(self.garden_id)
 
-        self.assertTrue(Garden.objects.get(garden_id=self.garden_id))
+        self.assertTrue(Garden.objects.filter(garden_id=self.garden_id))
+        self.assertEqual(1, len(mail.outbox))  # assert garden registered email was sent.
 
     def test_unsuccessful_register_garden_coordinates_from_geocoder_exception(self):
         self.mock_google.side_effect = GeocoderServiceError
 
         self.assertRaises(GardenSystemError, register_garden_coordinates, self.garden_id)
+        self.assertEqual(0, len(mail.outbox))  # assert no email was sent - this is a retry scenario.
 
     def test_unsuccessful_register_garden_coordinates_from_geocoder_location_not_found(self):
         self.mock_google.return_value = None
 
+        self.assertTrue(Garden.objects.filter(garden_id=self.garden_id))
         self.assertRaises(GardenUserError, register_garden_coordinates, self.garden_id)
+        self.assertFalse(Garden.objects.filter(garden_id=self.garden_id))
+        self.assertEqual(1, len(mail.outbox))  # assert garden not found email was sent.

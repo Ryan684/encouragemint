@@ -15,7 +15,9 @@ https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manu
 'docker-hub-credentials' with a matching metadata name.</li>
 <li>Secondly, create an opaque secret yml file for your api keys named 'keys'
 (see https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually, note that you'll need
-to base64 your keys just like they do for the example with credentials).</li>
+to base64 your keys just like they do for the example with credentials). This will need to contain the encoded
+secrets for the email account password for Encouragemint, the API keys for Trefle, Meteostat and Google Geocoder, and
+finally the database credentials.</li>
 
 <h2>How do I deploy Encouragemint to a Kubernetes Cluster?</h2>
 Currently, there is no integration with Kubernetes deployment tools like helm, but you can use the 'deploy_app.sh'

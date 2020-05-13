@@ -11,7 +11,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ["profile_id", "first_name", "last_name", "gardens"]
+        fields = ["profile_id", "first_name", "last_name", "gardens", "email_address"]
         read_only_fields = ["profile_id"]
 
     @staticmethod

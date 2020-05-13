@@ -1,0 +1,6 @@
+Welcome to Encouragemint {{ first_name }}!
+
+Get started by adding a garden to your profile.
+
+Thanks,
+Encouragemint
