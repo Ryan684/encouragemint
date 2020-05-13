@@ -11,6 +11,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
     lookup_field = "profile_id"
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer):  # pylint: disable=no-self-use
         new_user = serializer.save()
         send_profile_created_email(new_user.email_address, new_user.first_name)

@@ -27,7 +27,11 @@ def send_garden_registered_email(recipient, garden_name, first_name):
 def send_garden_location_not_found_email(recipient, garden_name, first_name, garden_location):
     template = "garden_not_found"
     subject = f"{garden_name} couldn't be created"
-    content = {"garden_name": garden_name, "first_name": first_name, "garden_location": garden_location}
+    content = {
+        "garden_name": garden_name,
+        "first_name": first_name,
+        "garden_location": garden_location
+    }
 
     _send_user_notification(content, subject, template, recipient)
 
