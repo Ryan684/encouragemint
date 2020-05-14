@@ -114,7 +114,8 @@ class GardenViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+        number_of_records_returned = (len(plants) if len(plants) != 100 else "100+")
         logger.info(
-            f"{len(plants)} plants matched the search criteria {query} "
+            f"{number_of_records_returned} plants matched the search criteria {query} "
             f"for garden {garden.garden_id}.")
         return Response(plants, status=status.HTTP_200_OK)
