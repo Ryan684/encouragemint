@@ -11,13 +11,14 @@ You can also filter plants by:</br>
 
 <h2>Features in the pipeline</h2>
 <li>More intelligent garden recommendations (Soil toxicity, temperatures etc).</li>
-<li>More optional filters for plant attributes as part of garden recomendations.</li>
+<li>More optional filters for plant attributes as part of garden recommendations.</li>
 
-<h2>Endpoints (MORE DETAIL REQUIRED. SWAGGER DEFINITION?)</h2>
+<h2>Endpoints</h2>
 <li>/profile [POST, PUT, PATCH, GET]</li>
 <li>/garden [POST, GET]</li>
 <li>/garden/{garden_id}/recommend/ [GET]</li>
-<li>/plants [POST, PUT]</li>
+<li>/plants/ [POST, PUT]</li>
+<li>/plant_detail/{trefle_id} [GET]</li>
 
 <h2>Logs</h2>
 Currently, the app writes it's logs both to a console and a debug.log file in the root directory of the project.
