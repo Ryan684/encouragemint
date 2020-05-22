@@ -14,7 +14,7 @@ def lookup_plants(trefle_query):
         results = _lookup_plants_by_name(trefle_query)
 
         if len(results) == 1:
-            plant = _lookup_plant_by_id(results[0].get("id"))
+            plant = lookup_plant_by_id(results[0].get("id"))
             return _extract_plant_data(plant)
 
         return results
@@ -34,7 +34,7 @@ def _lookup_plants_by_name(trefle_query):
     return results.json()
 
 
-def _lookup_plant_by_id(plant_id):
+def lookup_plant_by_id(plant_id):
     return _send_trefle_request(
         _compile_parameters(),
         _compile_url(plant_id)
