@@ -10,7 +10,7 @@ from encouragemint.encouragemint.views.garden_viewset import GardenViewSet
 from encouragemint.interfaces.trefle.exceptions import TrefleConnectionError
 
 
-class TestGardenViwSetRecommendAction(TestCase):
+class TestGardenViewSetRecommendAction(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = GardenViewSet.as_view({"get": "recommend"})
@@ -40,7 +40,7 @@ class TestGardenViwSetRecommendAction(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": "You must specify a season url parameter for plant recommendations."},
+                "message": "You must specify a season query parameter for plant recommendations."},
             response.data
         )
 
@@ -52,7 +52,7 @@ class TestGardenViwSetRecommendAction(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": "The season parameter must be one of the following: ['SPRING', "
+                "message": "The season must be one of the following: ['SPRING', "
                            "'SUMMER', 'AUTUMN', 'WINTER']"
             },
             response.data
@@ -66,7 +66,7 @@ class TestGardenViwSetRecommendAction(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": "The duration must be one of the following: ['PERENNIAL', 'ANNUAL', 'BIENNIAL']"
+                "message": "The duration must be one of the following: ['PERENNIAL', 'ANNUAL', 'BIENNIAL']"
             },
             response.data
         )
@@ -80,7 +80,7 @@ class TestGardenViwSetRecommendAction(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             {
-                "Message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"
+                "message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"
             },
             response.data
         )
@@ -150,7 +150,7 @@ class TestGardenViwSetRecommendAction(TestCase):
         self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
         self.assertEqual(
             {
-                "Message": "Encouragemint can't recommend plants for your garden right now. "
+                "message": "Encouragemint can't recommend plants for your garden right now. "
                            "Try again later."
             },
             response.data

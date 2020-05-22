@@ -23,7 +23,7 @@ class TestProfile(TestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_retrieve_profile(self):
-        response = self.client.get(self.url + f"{self.test_profile.profile_id}/",
+        response = self.client.get(f"{self.url}{self.test_profile.profile_id}/",
                                    content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
@@ -33,19 +33,19 @@ class TestProfile(TestCase):
 
     def test_patch_profile(self):
         response = self.client.patch(
-            self.url + f"{self.test_profile.profile_id}/", self.data,
+            f"{self.url}{self.test_profile.profile_id}/", self.data,
             content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_update_profile(self):
         response = self.client.put(
-            self.url + f"{self.test_profile.profile_id}/", self.data,
+            f"{self.url}{self.test_profile.profile_id}/", self.data,
             content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_delete_profile(self):
-        response = self.client.delete(self.url + f"{self.test_profile.profile_id}/",
-                                      content_type="application/json")
+        response = self.client.delete(
+            f"{self.url}{self.test_profile.profile_id}/", content_type="application/json")
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
 
@@ -69,8 +69,8 @@ class TestGarden(TestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_retrieve_garden(self):
-        response = self.client.get(self.url + f"{self.test_garden['garden_id']}/",
-                                   content_type="application/json")
+        response = self.client.get(
+            f"{self.url}{self.test_garden['garden_id']}/", content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_list_gardens(self):
@@ -79,14 +79,14 @@ class TestGarden(TestCase):
 
     def test_delete_garden(self):
         response = self.client.delete(
-            self.url + f"{self.test_garden['garden_id']}/",
+            f"{self.url}{self.test_garden['garden_id']}/",
             content_type="application/json")
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     @override_settings(CELERY_TASK_ALWAYS_EAGER=True)
     def test_patch_garden(self):
         response = self.client.patch(
-            self.url + f"{self.test_garden['garden_id']}/", self.data,
+            f"{self.url}{self.test_garden['garden_id']}/", self.data,
             content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
@@ -95,7 +95,7 @@ class TestGarden(TestCase):
     @patch("requests.get")
     def test_recommend_plants_for_garden(self, mock_trefle, mock_meteostat):
         self.test_garden = create_test_garden()
-        self.url = f"/garden/{self.test_garden['garden_id']}/recommend/"
+        self.url = f"{self.url}{self.test_garden['garden_id']}/recommend/"
 
         mock_trefle_responses = [Mock(), Mock()]
         mock_trefle_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
@@ -109,9 +109,7 @@ class TestGarden(TestCase):
 
         mock_meteostat.side_effect = mock_meteostat_responses
 
-        response = self.client.get(
-            self.url + "?season=Spring",
-            content_type="application/json")
+        response = self.client.get(f"{self.url}?season=Spring", content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
 
@@ -136,15 +134,33 @@ class TestPlant(TestCase):
             "garden": self.test_garden.garden_id
         }
         response = self.client.post(self.url, data, content_type="application/json")
+
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_delete_plant(self):
         response = self.client.delete(
-            self.url + f"{self.test_plant.plant_id}/", content_type="application/json")
+            f"{self.url}{self.test_plant.plant_id}/", content_type="application/json")
+
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_update_plant(self):
         response = self.client.put(
-            self.url + f"{self.test_plant.plant_id}/", self.plant_data,
+            f"{self.url}{self.test_plant.plant_id}/", self.plant_data,
             content_type="application/json")
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+
+class TestPlantDetail(TestCase):
+    @patch("requests.get")
+    def test_get_plant_detail(self, mock_trefle):
+        mock_trefle_response = Mock()
+        mock_trefle_response.json.return_value = TREFLE_ID_LOOKUP_RESPONSE
+        mock_trefle.return_value = mock_trefle_response
+        arbitrary_trefle_id = "123456"
+
+        response = self.client.get(
+            f"/plant_detail/{arbitrary_trefle_id}/", content_type="application/json"
+        )
+
         self.assertEqual(status.HTTP_200_OK, response.status_code)

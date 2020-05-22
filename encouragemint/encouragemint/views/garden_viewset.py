@@ -41,9 +41,9 @@ class GardenViewSet(viewsets.ModelViewSet):
         except AssertionError:
             logger.info(
                 f"Recommendation failed for garden {garden_id}: "
-                "User did not supply a season parameter.")
+                "User did not supply a season query parameter.")
             return Response(
-                {"Message": "You must specify a season url parameter for plant recommendations."},
+                {"message": "You must specify a season query parameter for plant recommendations."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -57,7 +57,7 @@ class GardenViewSet(viewsets.ModelViewSet):
                 f"Recommendation failed for garden {garden_id}: "
                 f"User supplied an invalid season: {season}.")
             return Response(
-                {"Message": "The season parameter must be one of the following: "
+                {"message": "The season must be one of the following: "
                             f"{allowed_seasons}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -79,7 +79,7 @@ class GardenViewSet(viewsets.ModelViewSet):
                 logger.error(f"Recommendation failed for garden {garden_id}: "
                              f"User supplied invalid duration: {duration}.")
                 return Response(
-                    {"Message": "The duration must be one of the following: "
+                    {"message": "The duration must be one of the following: "
                                 f"{allowed_durations}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
@@ -96,7 +96,7 @@ class GardenViewSet(viewsets.ModelViewSet):
                 logger.error(f"Recommendation failed for garden {garden_id}: "
                              f"User supplied invalid bloom period: {bloom_period}.")
                 return Response(
-                    {"Message": "The bloom_period must be one of the following: "
+                    {"message": "The bloom_period must be one of the following: "
                                 f"{allowed_bloom_periods}"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
@@ -109,12 +109,13 @@ class GardenViewSet(viewsets.ModelViewSet):
         except TrefleConnectionError as exception:
             logger.error(f"Recommendation failed for garden {garden.garden_id}: {exception}")
             return Response(
-                {"Message": "Encouragemint can't recommend plants for your garden right now. "
+                {"message": "Encouragemint can't recommend plants for your garden right now. "
                             "Try again later."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+        number_of_records_returned = (len(plants) if len(plants) != 100 else "100+")
         logger.info(
-            f"{len(plants)} plants matched the search criteria {query} "
+            f"{number_of_records_returned} plants matched the search criteria {query} "
             f"for garden {garden.garden_id}.")
         return Response(plants, status=status.HTTP_200_OK)
