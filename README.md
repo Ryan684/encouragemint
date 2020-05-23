@@ -12,6 +12,7 @@ You can also filter plants by:</br>
 <h2>Features in the pipeline</h2>
 <li>More intelligent garden recommendations (Soil toxicity, temperatures etc).</li>
 <li>More optional filters for plant attributes as part of garden recommendations.</li>
+<li>Integration of Amazon Lookup API for recommended plants, so users can choose to buy the plant.</li>
 
 <h2>Endpoints</h2>
 <li>/profile [POST, PUT, PATCH, GET]</li>
@@ -23,7 +24,7 @@ You can also filter plants by:</br>
 <h2>Logs</h2>
 Currently, the app writes it's logs both to a console and a debug.log file in the root directory of the project.
 
-<h2>deployment</h2>
+<h2>Deployment</h2>
 To run this app locally, you can use manage.py runserver or docker-compose to run it locally in a container using
 'docker-compose up' from the root directory of the project. In either case, the API will run locally at
 http://127.0.0.1:8000/.</br></br>
