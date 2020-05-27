@@ -2,9 +2,9 @@ import re
 
 from rest_framework import serializers
 
-from backend.encouragemint.models.garden import Garden
-from backend.encouragemint.models.profile import Profile
-from backend.encouragemint.serializers.plant_serializer import PlantSerializer
+from backend.src.models.garden import Garden
+from backend.src.models.profile import Profile
+from backend.src.serializers.plant_serializer import PlantSerializer
 
 
 class GardenSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from backend.encouragemint.models.profile import Profile
+from backend.src.models.profile import Profile
 
 
 class Garden(models.Model):

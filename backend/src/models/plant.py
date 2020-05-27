@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from backend.encouragemint.models.garden import Garden
+from backend.src.models.garden import Garden
 
 
 class Plant(models.Model):

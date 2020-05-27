@@ -1,8 +1,8 @@
 import logging
 
 from backend.celery import app
-from backend.encouragemint.exceptions import GardenUserError, GardenSystemError
-from backend.encouragemint.garden_locator import register_garden_coordinates
+from backend.src.exceptions import GardenUserError, GardenSystemError
+from backend.src.garden_locator import register_garden_coordinates
 
 logger = logging.getLogger("django")
 

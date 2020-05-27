@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from backend.encouragemint.models.garden import Garden
-from backend.encouragemint.models.plant import Plant
+from backend.src.models.garden import Garden
+from backend.src.models.plant import Plant
 
 
 class PlantSerializer(serializers.ModelSerializer):

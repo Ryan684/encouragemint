@@ -3,11 +3,11 @@ import logging
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from backend.encouragemint.models.garden import Garden
-from backend.encouragemint.models.plant import Plant
-from backend.encouragemint.serializers.new_plant_request_serializer import \
+from backend.src.models.garden import Garden
+from backend.src.models.plant import Plant
+from backend.src.serializers.new_plant_request_serializer import \
     NewPlantRequestSerializer
-from backend.encouragemint.serializers.plant_serializer import PlantSerializer
+from backend.src.serializers.plant_serializer import PlantSerializer
 from backend.interfaces.trefle.exceptions import TrefleConnectionError
 from backend.interfaces.trefle.trefle import lookup_plants
 

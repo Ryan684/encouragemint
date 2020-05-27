@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 
-from backend.encouragemint.models.profile import Profile
-from backend.encouragemint.notifications.email import send_profile_created_email
-from backend.encouragemint.serializers.profile_serializer import ProfileSerializer
+from backend.src.models.profile import Profile
+from backend.src.notifications.email import send_profile_created_email
+from backend.src.serializers.profile_serializer import ProfileSerializer
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

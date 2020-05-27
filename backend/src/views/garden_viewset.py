@@ -4,10 +4,10 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from backend.encouragemint.models.garden import Garden
-from backend.encouragemint.serializers.garden_serializer import GardenSerializer
-from backend.encouragemint.tasks import add_garden_location
-from backend.encouragemint.weather import get_garden_moisture
+from backend.src.models.garden import Garden
+from backend.src.serializers.garden_serializer import GardenSerializer
+from backend.src.tasks import add_garden_location
+from backend.src.weather import get_garden_moisture
 from backend.interfaces.trefle.exceptions import TrefleConnectionError
 from backend.interfaces.trefle.trefle import lookup_plants
 

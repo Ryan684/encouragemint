@@ -64,7 +64,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, "encouragemint", "notifications", "templates")
+            os.path.join(BASE_DIR, "src", "notifications", "templates")
         ],
         "APP_DIRS": True,
         "OPTIONS": {

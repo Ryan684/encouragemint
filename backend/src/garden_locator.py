@@ -4,11 +4,11 @@ from django.conf import settings
 from geopy import GoogleV3
 from geopy.exc import GeopyError
 
-from backend.encouragemint.exceptions import GeocoderNoResultsError, GardenSystemError, \
+from backend.src.exceptions import GeocoderNoResultsError, GardenSystemError, \
     GardenUserError
-from backend.encouragemint.models.garden import Garden
-from backend.encouragemint.notifications import email
-from backend.encouragemint.notifications.email import send_garden_location_not_found_email
+from backend.src.models.garden import Garden
+from backend.src.notifications import email
+from backend.src.notifications.email import send_garden_location_not_found_email
 
 logger = logging.getLogger("django")
 

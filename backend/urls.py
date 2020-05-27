@@ -16,10 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 
-from backend.encouragemint.views.garden_viewset import GardenViewSet
-from backend.encouragemint.views.plant_detail_view import plant_detail
-from backend.encouragemint.views.plant_viewset import PlantViewSet
-from backend.encouragemint.views.profile_viewset import ProfileViewSet
+from backend.src.views.garden_viewset import GardenViewSet
+from backend.src.views.plant_detail_view import plant_detail
+from backend.src.views.plant_viewset import PlantViewSet
+from backend.src.views.profile_viewset import ProfileViewSet
 
 router = DefaultRouter()
 router.register(r"profile", ProfileViewSet)
