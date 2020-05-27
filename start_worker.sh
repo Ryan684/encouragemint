@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-pip install -r encouragemint/requirements.txt
-celery -A encouragemint worker --loglevel=info
+pip install -r backend/requirements.txt
+celery -A backend worker --loglevel=info
