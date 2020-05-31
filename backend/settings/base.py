@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "=%j0^@01(s-h5g7=rba&3j%&-h=u*ypjqpfth6l8(u+*m-#q^t"
+SECRET_KEY = "foo"
 
 # Import external API keys.
 TREFLE_API_KEY = os.getenv("TREFLE_API_KEY")
@@ -117,6 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 LOGGING = {
     "version": 1,
