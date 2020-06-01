@@ -40,7 +40,9 @@ services:
     image: encouragemint
     container_name: backend
     volumes:
-      - .:/encouragemint
+      - .:/encouragemint/backend
+    depends_on:
+      - db
     ports:
       - "8000:8000"
     networks:
@@ -56,7 +58,7 @@ services:
     container_name: frontend
     stdin_open: true
     volumes:
-      - .:/encouragemint
+      - .:/encouragemint/frontend
     ports:
       - "3000:3000"
     networks:
