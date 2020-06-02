@@ -19,17 +19,11 @@ RUN $HOME/.yarn/bin/yarn install
 # Add the rest of the code
 COPY . /app/
 
-# Build & collect static files static files
+# Build & collect static files
 RUN $HOME/.yarn/bin/yarn build
 RUN mkdir /app/backend/staticfiles
 
 WORKDIR /app
 
-# SECRET_KEY is only included here to avoid raising an error when generating static files.
 RUN DJANGO_SETTINGS_MODULE=backend.settings.production \
-  SECRET_KEY=foo \
   python3 manage.py collectstatic --noinput
-
-EXPOSE $PORT
-
-CMD python3 manage.py runserver 0.0.0.0:$PORT

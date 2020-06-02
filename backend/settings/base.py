@@ -22,16 +22,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "foo"
+SECRET_KEY = "=%j0^@01(s-h5g7=rba&3j%&-h=u*ypjqpfth6l8(u+*m-#q^t"
 
 # Import external API keys.
 TREFLE_API_KEY = os.getenv("TREFLE_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 
-ALLOWED_HOSTS = [os.getenv("NODE_IP", "127.0.0.1")]
+CURRENT_HOST = os.getenv("NODE_IP", "127.0.0.1")
+ALLOWED_HOSTS = [CURRENT_HOST]
 
-CORS_ORIGIN_WHITELIST = [f"https://{ALLOWED_HOSTS}:3000"]
+CORS_ORIGIN_WHITELIST = [f"https://{CURRENT_HOST}:3000"]
 
 # Application definition
 

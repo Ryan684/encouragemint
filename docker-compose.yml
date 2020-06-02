@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  db:
+  database:
     image: mysql:8.0.20
-    container_name: db
+    container_name: database
     volumes:
       - "/var/lib/mysql"
     ports:
@@ -42,14 +42,14 @@ services:
     volumes:
       - .:/encouragemint/backend
     depends_on:
-      - db
+      - database
     ports:
       - "8000:8000"
     networks:
       - encouragemint
     env_file:
       - .env
-    command: ./wait-for-it.sh db:3306 -t 60 -- /bin/bash -c "./start_web.sh"
+    command: ./wait-for-it.sh database:3306 -t 60 -- /bin/bash -c "./start_web.sh"
 
 
   frontend:
