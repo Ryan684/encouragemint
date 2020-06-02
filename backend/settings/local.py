@@ -1,6 +1,7 @@
 from backend.settings.base import *
 
 DEBUG = True
+SECRET_KEY = "dev"
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

@@ -25,6 +25,11 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: django-secret-key
         - name: TREFLE_API_KEY
           valueFrom:
             secretKeyRef:

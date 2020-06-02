@@ -3,6 +3,7 @@ import pymysql
 from backend.settings.base import *
 
 DEBUG = False
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 pymysql.version_info = (1, 3, 13, "final", 0)
 pymysql.install_as_MySQLdb()
@@ -17,6 +18,8 @@ DATABASES = {
         "PORT": "3306"
     }
 }
+
+
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
