@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ProfileRegistrationForm } from './profileForm';
+import { ProfileRegistrationForm } from './profileRegistrationForm';
 
 function App() {
   return (
