@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ProfileRegistrationForm } from './profileRegistrationForm';
 
-function App() {
+export function App() {
   return (
     <div className="App">
       <header className="App-header">
@@ -12,6 +12,3 @@ function App() {
     </div>
   );
 }
-
-
-export default App;
