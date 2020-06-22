@@ -13,7 +13,7 @@ RUN pip3 install --upgrade pip -r requirements.txt
 
 # Install JS dependencies
 WORKDIR /app/frontend
-COPY ./frontend/package.json ./frontend/yarn.lock /app/frontend/
+COPY ./frontend/package.json /app/frontend/
 RUN $HOME/.yarn/bin/yarn install
 
 # Add the rest of the code
@@ -24,6 +24,3 @@ RUN $HOME/.yarn/bin/yarn build
 RUN mkdir /app/backend/staticfiles
 
 WORKDIR /app
-
-RUN DJANGO_SETTINGS_MODULE=backend.settings.production \
-  python3 manage.py collectstatic --noinput

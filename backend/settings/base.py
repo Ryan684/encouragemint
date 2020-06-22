@@ -29,10 +29,11 @@ METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 CURRENT_HOST = os.getenv("NODE_IP", "127.0.0.1")
 ALLOWED_HOSTS = [CURRENT_HOST]
 
-CORS_ORIGIN_WHITELIST = [f"https://{CURRENT_HOST}:3000"]
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000"
+]
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -46,14 +47,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware"
+    "django.middleware.clickjacking.XFrameOptionsMiddleware"
 ]
 
 ROOT_URLCONF = "backend.urls"
