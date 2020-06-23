@@ -1,10 +1,9 @@
 FROM python:3.7
 
-# Install node & yarn
+# Install node
 RUN apt-get -y install curl \
   && curl -sL https://deb.nodesource.com/setup_12.x | bash \
-  && apt-get install nodejs \
-  && curl -o- -L https://yarnpkg.com/install.sh | bash
+  && apt-get install nodejs
 
 # Install Python dependencies
 WORKDIR /app/backend
@@ -14,13 +13,8 @@ RUN pip3 install --upgrade pip -r requirements.txt
 # Install JS dependencies
 WORKDIR /app/frontend
 COPY ./frontend/package.json /app/frontend/
-RUN $HOME/.yarn/bin/yarn install
+RUN npm install
 
 # Add the rest of the code
 COPY . /app/
-
-# Build & collect static files
-RUN $HOME/.yarn/bin/yarn build
-RUN mkdir /app/backend/staticfiles
-
 WORKDIR /app
