@@ -1,13 +1,11 @@
 import React from 'react';
 import './App.css';
-import SignUpFunc from './SignUp'
+import SignInFunc from './SignIn'
 
-function App() {
+export default function App() {
   return (
     <div>
-        <SignUpFunc />
+        <SignInFunc />
     </div>
   );
 }
-
-export default App;
