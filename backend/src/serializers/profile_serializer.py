@@ -16,14 +16,21 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_first_name(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z]{3,}$", value) is None:
             raise serializers.ValidationError(
-                "Your first name can only contain letters.")
+                "Your first name can only contain letters and must be 3 or more characters long.",)
         return value
 
     @staticmethod
     def validate_last_name(value):
-        if re.fullmatch(r"^[a-zA-Z]+$", value) is None:
+        if re.fullmatch(r"^[a-zA-Z]{3,}$", value) is None:
             raise serializers.ValidationError(
-                "Your last name can only contain letters.")
+                "Your last name can only contain letters and must be 3 or more characters long.",)
+        return value
+
+    @staticmethod
+    def validate_email_address(value):
+        if re.fullmatch(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", value) is None:
+            raise serializers.ValidationError(
+                "Your email address is invalid.")
         return value

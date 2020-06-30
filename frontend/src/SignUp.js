@@ -43,37 +43,136 @@ function SignUpFunc() {
 
 export default SignUpFunc;
 
+function ValidationMessage(props) {
+  if (!props.valid) {
+    return(
+      <div className='error-msg'>{props.message}</div>
+    )
+  }
+  return null;
+}
+
 class SignUp extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-         firstName: '',
-         lastName: '',
-         emailAddress: ''
+         password: '', passwordValid: false,
+         firstName: '', firstNameValid: false,
+         lastName: '', lastNameValid: false,
+         emailAddress: '', emailAddressValid: false,
+         formValid: false,
+         errorMsg: {}
       }
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = (event) => {
-    this.setState({[event.target.name]: event.target.value});
+  validateForm = () => {
+    const {emailAddressValid, passwordValid, firstNameValid, lastNameValid} = this.state;
+    this.setState({
+      formValid: emailAddressValid && passwordValid && firstNameValid && lastNameValid
+    })
+  }
+
+  updateFirstName = (firstName) => {
+    this.setState({firstName}, this.validateFirstName)
+  }
+
+  validateFirstName = () => {
+    const {firstName} = this.state;
+    let firstNameValid = true;
+    let errorMsg = {...this.state.errorMsg}
+
+    if (!/^[a-zA-Z]{3,}$/.test(firstName)) {
+      firstNameValid = false;
+      errorMsg.firstName = 'Must be at least 3 characters long and only contain letters'
+    }
+
+    this.setState({firstNameValid, errorMsg}, this.validateForm)
+  }
+
+  updateLastName = (lastName) => {
+    this.setState({lastName}, this.validateLastName)
+  }
+
+  validateLastName = () => {
+    const {lastName} = this.state;
+    let lastNameValid = true;
+    let errorMsg = {...this.state.errorMsg}
+
+    if (!/^[a-zA-Z]{3,}$/.test(lastName)) {
+      lastNameValid = false;
+      errorMsg.lastName = 'Must be at least 3 characters long and only contain letters'
+    }
+
+    this.setState({lastNameValid, errorMsg}, this.validateForm)
+  }
+
+  updateEmailAddress = (emailAddress) => {
+    this.setState({emailAddress}, this.validateEmailAddress)
+  }
+
+  validateEmailAddress = () => {
+    const {emailAddress} = this.state;
+    let emailAddressValid = true;
+    let errorMsg = {...this.state.errorMsg}
+
+    // checks for format _@_._
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress)) {
+      emailAddressValid = false;
+      errorMsg.emailAddress = 'Invalid email format'
+    }
+
+    this.setState({emailAddressValid, errorMsg}, this.validateForm)
+  }
+
+  updatePassword = (password) => {
+    this.setState({password}, this.validatePassword);
+  }
+
+  validatePassword = () => {
+    const {password} = this.state;
+    let passwordValid = true;
+    let errorMsg = {...this.state.errorMsg}
+
+    // must be 6 chars
+    // must contain a number
+    // must contain a special character
+
+    if (password.length < 6) {
+      passwordValid = false;
+      errorMsg.password = 'Password must be at least 6 characters long';
+    } else if (!/\d/.test(password)){
+      passwordValid = false;
+      errorMsg.password = 'Password must contain a digit';
+    } else if (!/[!@#$%^&*]/.test(password)){
+      passwordValid = false;
+      errorMsg.password = 'Password must contain special character: !@#$%^&*';
+    }
+
+    this.setState({passwordValid, errorMsg}, this.validateForm);
   }
 
   handleSubmit = (event) => {
-    fetch('http://127.0.0.1:8000/profile/', {
-        method: 'POST',
-        body: JSON.stringify({
-            'first_name': this.state.firstName,
-            'last_name': this.state.lastName,
-            'email_address': this.state.emailAddress
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function(response) {
-        console.log(response)
-        return response.json();
-      });
+    if (!this.state.formValid) {
+        event.preventDefault();
+    } else {
+        fetch('http://127.0.0.1:8000/profile/', {
+            method: 'POST',
+            body: JSON.stringify({
+                'first_name': this.state.firstName,
+                'last_name': this.state.lastName,
+                'email_address': this.state.emailAddress
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(function(response) {
+            console.log(response)
+            return response.json();
+          }).catch(function(err) {
+            console.log(err);
+          });
+      }
   }
 
   render() {
@@ -86,9 +185,9 @@ class SignUp extends React.Component {
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign up
-            </Typography>
-            <form onSubmit={this.handleSubmit} className={this.props.classes.form} noValidate>
-              <Grid container spacing={2}>
+              </Typography>
+              <form onSubmit={this.handleSubmit} className={this.props.classes.form} noValidate>
+                <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     autoComplete="fname"
@@ -100,8 +199,9 @@ class SignUp extends React.Component {
                     label="First Name"
                     autoFocus
                     value={this.state.firstName}
-                    onChange={this.handleChange}
+                    onChange={(e) => this.updateFirstName(e.target.value)}
                   />
+                  <ValidationMessage valid={this.state.firstNameValid} message={this.state.errorMsg.firstName} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -113,8 +213,9 @@ class SignUp extends React.Component {
                     name="lastName"
                     autoComplete="lname"
                     value={this.state.lastName}
-                    onChange={this.handleChange}
+                    onChange={(e) => this.updateLastName(e.target.value)}
                   />
+                  <ValidationMessage valid={this.state.lastNameValid} message={this.state.errorMsg.lastName} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -126,8 +227,9 @@ class SignUp extends React.Component {
                     name="emailAddress"
                     autoComplete="email"
                     value={this.state.emailAddress}
-                    onChange={this.handleChange}
+                    onChange={(e) => this.updateEmailAddress(e.target.value)}
                   />
+                  <ValidationMessage valid={this.state.emailAddressValid} message={this.state.errorMsg.emailAddress} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -139,10 +241,12 @@ class SignUp extends React.Component {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    value={this.state.password}
+                    onChange={(e) => this.updatePassword(e.target.value)}
                   />
+                  <ValidationMessage valid={this.state.passwordValid} message={this.state.errorMsg.password} />
                 </Grid>
                 <Grid item xs={12}>
-
                 </Grid>
               </Grid>
               <Button

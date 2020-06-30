@@ -131,7 +131,7 @@ class TestPatch(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"first_name": ["Your first name can only contain letters."]}
+            {"first_name": ["Your first name can only contain letters and must be 3 or more characters long."]}
         )
 
     def test_unsuccessful_partial_update_profile_from_invalid_id(self):
@@ -218,7 +218,7 @@ class TestPut(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertDictEqual(
             json.loads(response.content.decode("utf-8")),
-            {"first_name": ["Your first name can only contain letters."]}
+            {"first_name": ["Your first name can only contain letters and must be 3 or more characters long."]}
         )
 
     def test_unsuccessful_update_profile_from_invalid_id(self):

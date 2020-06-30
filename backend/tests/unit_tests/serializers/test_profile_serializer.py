@@ -34,7 +34,17 @@ class TestValidateFirstName(TestProfileSerializerValidators):
 
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"Your first name can only contain letters.",
+            "Your first name can only contain letters and must be 3 or more characters long.",
+            self.test_obj.validate_first_name,
+            first_name
+        )
+
+    def test_first_name_too_short(self):
+        first_name = "Ry"
+
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            "Your first name can only contain letters and must be 3 or more characters long.",
             self.test_obj.validate_first_name,
             first_name
         )
@@ -54,7 +64,37 @@ class TestValidateLastName(TestProfileSerializerValidators):
 
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"Your last name can only contain letters.",
+            "Your last name can only contain letters and must be 3 or more characters long.",
             self.test_obj.validate_last_name,
             last_name
+        )
+
+    def test_last_name_too_short(self):
+        last_name = "Ry"
+
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            "Your last name can only contain letters and must be 3 or more characters long.",
+            self.test_obj.validate_last_name,
+            last_name
+        )
+
+
+class TestValidateEmailAddress(TestProfileSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidateEmailAddress, cls).setUpClass()
+
+    def test_valid_email_address(self):
+        email_address = "foo@bar.com"
+        self.assertEqual(email_address, self.test_obj.validate_email_address(email_address))
+
+    def test_invalid_email_address(self):
+        invalid_email_address = "Foo_123.com"
+
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            "Your email address is invalid.",
+            self.test_obj.validate_email_address,
+            invalid_email_address
         )
