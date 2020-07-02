@@ -11,11 +11,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "password", "first_name", "last_name",  "email", "gardens"]
+        fields = ["username", "password", "first_name", "last_name", "email", "gardens"]
         read_only_fields = ["id"]
         extra_kwargs = {"password": {"write_only": True}}
 
-    def create(self, validated_data):
+    def create(self, validated_data):  # pylint: disable=no-self-use
         user = User.objects.create_user(
             email=validated_data["email"],
             username=validated_data["username"],
