@@ -1,18 +1,18 @@
 import json
 from unittest.mock import patch
 
+from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
 from backend.src.models.garden import Garden
-from backend.src.models.profile import Profile
 from backend.src.serializers.garden_serializer import GardenSerializer
-from backend.tests.helpers import create_test_garden, SAMPLE_GARDEN
+from backend.tests.helpers import create_test_garden, SAMPLE_GARDEN, generate_new_user_payload
 from backend.src.views.garden_viewset import GardenViewSet
 
 GARDEN_URL = "/garden/"
-TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
+TEST_USER = User.objects.create(**generate_new_user_payload())
 
 
 class TestGardenViewsetParameters(TestCase):
@@ -53,7 +53,7 @@ class TestGetRetrieve(TestCase):
         self.get_by_id_view = GardenViewSet.as_view({"get": "retrieve"})
 
     def test_successful_get_garden(self):
-        garden = Garden.objects.create(profile=TEST_PROFILE, **SAMPLE_GARDEN)
+        garden = Garden.objects.create(user=TEST_USER, **SAMPLE_GARDEN)
         garden_id = garden.garden_id
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_by_id_view(request, garden_id=garden_id)
@@ -63,7 +63,7 @@ class TestGetRetrieve(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn("garden_id", model_data)
         self.assertEqual(garden.location, model_data.get("location"))
-        self.assertEqual(str(garden.profile.profile_id), model_data.get("profile"))
+        self.assertEqual(garden.user.id, model_data.get("user"))
         self.assertEqual(garden.direction, model_data.get("direction"))
         self.assertEqual(garden.garden_name, model_data.get("garden_name"))
         self.assertIsNone(garden.latitude)
@@ -82,8 +82,8 @@ class TestGetList(TestCase):
         self.get_all_view = GardenViewSet.as_view({"get": "list"})
 
     def test_successful_get_all_gardens(self):
-        Garden.objects.create(profile=TEST_PROFILE, **SAMPLE_GARDEN)
-        Garden.objects.create(profile=TEST_PROFILE, **SAMPLE_GARDEN)
+        Garden.objects.create(user=TEST_USER, **SAMPLE_GARDEN)
+        Garden.objects.create(user=TEST_USER, **SAMPLE_GARDEN)
         request = self.factory.get(GARDEN_URL, format="json")
         response = self.get_all_view(request)
         response.render()
@@ -94,7 +94,7 @@ class TestGetList(TestCase):
         for garden in model_data:
             self.assertIn("garden_id", garden)
             self.assertIn("location", garden)
-            self.assertIn("profile", garden)
+            self.assertIn("user", garden)
             self.assertIn("direction", garden)
             self.assertIn("garden_id", garden)
             self.assertIn("latitude", garden)
@@ -165,7 +165,7 @@ class TestPost(TestCase):
     @patch("backend.src.views.garden_viewset.add_garden_location")
     def test_successful_create_garden(self, mock_add_garden_location):
         payload = SAMPLE_GARDEN
-        payload["profile"] = str(TEST_PROFILE.profile_id)
+        payload["user"] = str(TEST_USER.id)
         response = self._build_post_response(payload)
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -175,7 +175,7 @@ class TestPost(TestCase):
         response = self._build_post_response({
             "garden_name": "F00$",
             "direction": SAMPLE_GARDEN.get("direction"),
-            "profile": str(TEST_PROFILE.profile_id),
+            "user": str(TEST_USER.id),
             "location": SAMPLE_GARDEN.get("location")
         })
         response.render()

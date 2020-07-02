@@ -19,10 +19,10 @@ from rest_framework.routers import DefaultRouter
 from backend.src.views.garden_viewset import GardenViewSet
 from backend.src.views.plant_detail_view import plant_detail
 from backend.src.views.plant_viewset import PlantViewSet
-from backend.src.views.profile_viewset import ProfileViewSet
+from backend.src.views.user_viewset import UserViewSet
 
 router = DefaultRouter()
-router.register(r"profile", ProfileViewSet)
+router.register(r"user", UserViewSet)
 router.register(r"garden", GardenViewSet)
 router.register(r"plant", PlantViewSet)
 

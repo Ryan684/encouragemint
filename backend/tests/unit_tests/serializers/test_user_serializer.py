@@ -1,26 +1,28 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework import serializers
 
-from backend.src.models.profile import Profile
-from backend.src.serializers.profile_serializer import ProfileSerializer
+from backend.src.serializers.user_serializer import UserSerializer
 
 
-class TestProfileSerializerValidators(TestCase):
+class TestUserSerializerValidators(TestCase):
     @classmethod
     def setUpClass(cls):
-        super(TestProfileSerializerValidators, cls).setUpClass()
-        cls.test_obj = ProfileSerializer()
+        super(TestUserSerializerValidators, cls).setUpClass()
+        cls.test_obj = UserSerializer()
 
 
-class TestSerializerParameters(TestProfileSerializerValidators):
+class TestSerializerParameters(TestUserSerializerValidators):
     def test_serializer_parameters(self):
         self.assertEqual(
-            ["profile_id", "first_name", "last_name", "gardens", "email_address"], self.test_obj.Meta.fields)
-        self.assertEqual(["profile_id"], self.test_obj.Meta.read_only_fields)
-        self.assertEqual(Profile, self.test_obj.Meta.model)
+            ["username", "password", "first_name", "last_name", "email", "gardens"],
+            self.test_obj.Meta.fields
+        )
+        self.assertEqual(["id"], self.test_obj.Meta.read_only_fields)
+        self.assertEqual(User, self.test_obj.Meta.model)
 
 
-class TestValidateFirstName(TestProfileSerializerValidators):
+class TestValidateFirstName(TestUserSerializerValidators):
     @classmethod
     def setUpClass(cls):
         super(TestValidateFirstName, cls).setUpClass()
@@ -50,7 +52,7 @@ class TestValidateFirstName(TestProfileSerializerValidators):
         )
 
 
-class TestValidateLastName(TestProfileSerializerValidators):
+class TestValidateLastName(TestUserSerializerValidators):
     @classmethod
     def setUpClass(cls):
         super(TestValidateLastName, cls).setUpClass()
@@ -80,21 +82,21 @@ class TestValidateLastName(TestProfileSerializerValidators):
         )
 
 
-class TestValidateEmailAddress(TestProfileSerializerValidators):
+class TestValidateEmail(TestUserSerializerValidators):
     @classmethod
     def setUpClass(cls):
-        super(TestValidateEmailAddress, cls).setUpClass()
+        super(TestValidateEmail, cls).setUpClass()
 
-    def test_valid_email_address(self):
+    def test_valid_email(self):
         email_address = "foo@bar.com"
-        self.assertEqual(email_address, self.test_obj.validate_email_address(email_address))
+        self.assertEqual(email_address, self.test_obj.validate_email(email_address))
 
-    def test_invalid_email_address(self):
+    def test_invalid_email(self):
         invalid_email_address = "Foo_123.com"
 
         self.assertRaisesMessage(
             serializers.ValidationError,
             "Your email address is invalid.",
-            self.test_obj.validate_email_address,
+            self.test_obj.validate_email,
             invalid_email_address
         )

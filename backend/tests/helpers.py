@@ -1,7 +1,9 @@
+import uuid
+
+from django.contrib.auth.models import User
 from django.forms import model_to_dict
 
 from backend.src.models.garden import Garden
-from backend.src.models.profile import Profile
 
 SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
 SAMPLE_GARDEN_SUNLIGHT = "low"
@@ -23,11 +25,28 @@ SAMPLE_PLANT = {
     "trefle_id": 134845
 }
 
+SAMPLE_USER = {
+    "first_name": "Foo",
+    "last_name": "Bar",
+    "email": "FooBar@Whizzbang.com",
+    "password": "secret"
+}
+
+
+def create_unique_username():
+    return str(uuid.uuid4())
+
+
+def generate_new_user_payload():
+    new_user_payload = SAMPLE_USER.copy()
+    new_user_payload["username"] = create_unique_username()
+    return new_user_payload
+
 
 def create_test_garden():
-    profile = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar", "email_address": "foo@bar.com"})
+    user = User.objects.create(**generate_new_user_payload())
     garden = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK",
-              "profile": profile, "latitude": 50.263195, "longitude": -5.051041}
+              "user": user, "latitude": 50.263195, "longitude": -5.051041}
 
     test_garden = Garden.objects.create(**garden)
     return model_to_dict(test_garden)

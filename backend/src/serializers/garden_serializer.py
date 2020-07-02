@@ -1,14 +1,14 @@
 import re
 
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from backend.src.models.garden import Garden
-from backend.src.models.profile import Profile
 from backend.src.serializers.plant_serializer import PlantSerializer
 
 
 class GardenSerializer(serializers.ModelSerializer):
-    profile = serializers.SlugRelatedField(slug_field="profile_id", queryset=Profile.objects.all())
+    user = serializers.SlugRelatedField(slug_field="id", queryset=User.objects.all())
     plants = PlantSerializer(many=True, read_only=True)
     sunlight = serializers.ReadOnlyField()
     shade_tolerance = serializers.ReadOnlyField()
@@ -17,9 +17,9 @@ class GardenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Garden
-        fields = ["garden_id", "garden_name", "plants", "profile", "direction",
+        fields = ["garden_id", "garden_name", "plants", "user", "direction",
                   "sunlight", "shade_tolerance", "location", "latitude", "longitude"]
-        read_only_fields = ["garden_id", "profile", "sunlight", "shade_tolerance"]
+        read_only_fields = ["garden_id", "user", "sunlight", "shade_tolerance"]
 
     @staticmethod
     def validate_garden_name(value):

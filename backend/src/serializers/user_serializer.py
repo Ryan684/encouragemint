@@ -1,18 +1,30 @@
 import re
 
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from backend.src.models.profile import Profile
 from backend.src.serializers.garden_serializer import GardenSerializer
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     gardens = GardenSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Profile
-        fields = ["profile_id", "first_name", "last_name", "gardens", "email_address"]
-        read_only_fields = ["profile_id"]
+        model = User
+        fields = ["username", "password", "first_name", "last_name",  "email", "gardens"]
+        read_only_fields = ["id"]
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            email=validated_data["email"],
+            username=validated_data["username"],
+            password=validated_data["password"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+        )
+        user.save()
+        return user
 
     @staticmethod
     def validate_first_name(value):
@@ -29,7 +41,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         return value
 
     @staticmethod
-    def validate_email_address(value):
+    def validate_email(value):
         if re.fullmatch(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", value) is None:
             raise serializers.ValidationError(
                 "Your email address is invalid.")

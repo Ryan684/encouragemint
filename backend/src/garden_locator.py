@@ -43,9 +43,9 @@ def _lookup_garden_coordinates(location):
 def _rollback_garden_creation(garden):
     garden.delete()
     send_garden_location_not_found_email(
-        garden.profile.email_address,
+        garden.user.email,
         garden.garden_name,
-        garden.profile.first_name,
+        garden.user.first_name,
         garden.location
     )
 
@@ -58,4 +58,4 @@ def _register_garden(garden, latitude, location, longitude):
 
     logger.info(f"Added coordinates to garden {garden.garden_id} successfully.")
     email.send_garden_registered_email(
-        garden.profile.email_address, garden.garden_name, garden.profile.first_name)
+        garden.user.email, garden.garden_name, garden.user.first_name)

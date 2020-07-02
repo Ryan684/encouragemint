@@ -2,6 +2,7 @@ import json
 from unittest.mock import patch
 from uuid import UUID, uuid4
 
+from django.contrib.auth.models import User
 from django.core import exceptions
 from django.test import TestCase
 from rest_framework import status
@@ -10,17 +11,16 @@ from rest_framework.test import APIRequestFactory
 from backend.src import models
 from backend.src.models.garden import Garden
 from backend.src.models.plant import Plant
-from backend.src.models.profile import Profile
-from backend.tests.helpers import SAMPLE_PLANT
+from backend.tests.helpers import SAMPLE_PLANT, generate_new_user_payload
 from backend.src.views.plant_viewset import PlantViewSet
 from backend.interfaces.trefle.exceptions import TrefleConnectionError
 
 PLANT_URL = "/plant/"
-TEST_PROFILE = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
+TEST_USER = User.objects.create(**generate_new_user_payload())
 TEST_GARDEN = Garden.objects.create(
     **{
         "garden_name": "Foo",
-        "profile": TEST_PROFILE,
+        "user": TEST_USER,
         "direction": "north",
         "location": "Truro, UK",
         "latitude": 50.263195,

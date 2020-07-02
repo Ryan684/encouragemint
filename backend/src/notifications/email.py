@@ -8,7 +8,7 @@ FROM_ADDRESS = "encouragemint.do.not.reply@gmail.com"
 logger = logging.getLogger("django")
 
 
-def send_profile_created_email(recipient, first_name):
+def send_user_created_email(recipient, first_name):
     template = "profile_created"
     subject = "Welcome to Encouragemint"
     content = {"first_name": first_name}

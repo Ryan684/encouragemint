@@ -23,7 +23,7 @@ class GardenViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):  # pylint: disable=no-self-use
         garden_data = serializer.save()
         logger.info(f"Garden {garden_data.garden_id} has been created and added to "
-                    f"profile {garden_data.profile.profile_id}.")
+                    f"user {garden_data.user.id}.")
         add_garden_location.delay(garden_data.garden_id)
 
     def perform_update(self, serializer):

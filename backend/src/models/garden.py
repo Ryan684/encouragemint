@@ -1,13 +1,12 @@
 import uuid
 
+from django.contrib.auth.models import User
 from django.db import models
-
-from backend.src.models.profile import Profile
 
 
 class Garden(models.Model):
     garden_id = models.UUIDField(default=uuid.uuid4)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="gardens")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="gardens")
     garden_name = models.CharField(max_length=25)
     direction = models.CharField(max_length=5)
     location = models.CharField(max_length=100)

@@ -3,9 +3,9 @@ from django.urls import resolve
 
 
 class TestUrlRouting(TestCase):
-    def test_profile_url(self):
-        viewset = resolve("/profile/")
-        self.assertEqual(viewset.func.__name__, "ProfileViewSet")
+    def test_user_url(self):
+        viewset = resolve("/user/")
+        self.assertEqual(viewset.func.__name__, "UserViewSet")
 
     def test_garden_url(self):
         viewset = resolve("/garden/")

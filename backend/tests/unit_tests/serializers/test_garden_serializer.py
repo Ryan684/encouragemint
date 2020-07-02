@@ -1,9 +1,10 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework import serializers
 
 from backend.src.models.garden import Garden
-from backend.src.models.profile import Profile
 from backend.src.serializers.garden_serializer import GardenSerializer
+from backend.tests.helpers import generate_new_user_payload
 
 
 class TestGardenSerializerValidators(TestCase):
@@ -16,10 +17,10 @@ class TestGardenSerializerValidators(TestCase):
 class TestSerializerParameters(TestGardenSerializerValidators):
     def test_serializer_parameters(self):
         self.assertEqual(
-            ["garden_id", "garden_name", "plants", "profile", "direction",
+            ["garden_id", "garden_name", "plants", "user", "direction",
              "sunlight", "shade_tolerance", "location", "latitude", "longitude"],
             self.test_obj.Meta.fields)
-        self.assertEqual(["garden_id", "profile", "sunlight", "shade_tolerance"],
+        self.assertEqual(["garden_id", "user", "sunlight", "shade_tolerance"],
                          self.test_obj.Meta.read_only_fields)
         self.assertEqual(Garden, self.test_obj.Meta.model)
 
@@ -77,11 +78,11 @@ class TestValidateSunlight(TestGardenSerializerValidators):
         self._validate_sunlight_by_direction("west", "medium")
 
     def _validate_sunlight_by_direction(self, direction, expected_sunlight):
-        profile = Profile.objects.create(**{"first_name": "Jane", "last_name": "Doe"})
+        user = User.objects.create(**generate_new_user_payload())
         garden = Garden.objects.create(
             **{
                 "garden_name": "Backyard",
-                "profile": profile,
+                "user": user,
                 "direction": direction,
                 "location": "Truro, UK",
                 "latitude": 50.263195,

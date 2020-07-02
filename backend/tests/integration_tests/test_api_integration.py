@@ -1,51 +1,51 @@
 from unittest.mock import patch, Mock
 
+from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from rest_framework import status
 
 from backend.src.models.garden import Garden
 from backend.src.models.plant import Plant
-from backend.src.models.profile import Profile
 from backend.tests.helpers import create_test_garden, \
     SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, \
     TREFLE_ID_LOOKUP_RESPONSE, METEOSTAT_STATION_SEARCH_RESPONSE, \
-    METEOSTAT_STATION_WEATHER_RESPONSE
+    METEOSTAT_STATION_WEATHER_RESPONSE, generate_new_user_payload
 
 
-class TestProfile(TestCase):
+class TestUser(TestCase):
     def setUp(self):
-        self.url = "/profile/"
-        self.data = {"first_name": "Foo", "last_name": "Bar", "email_address": "FooBar@Whizzbang.com"}
-        self.test_profile = Profile.objects.create(**self.data)
+        self.url = "/user/"
+        self.new_user_payload = generate_new_user_payload()
+        self.test_user = User.objects.create(**generate_new_user_payload())
 
-    def test_create_profile(self):
-        response = self.client.post(self.url, self.data, content_type="application/json")
+    def test_create_user(self):
+        response = self.client.post(self.url, self.new_user_payload, content_type="application/json")
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-    def test_retrieve_profile(self):
-        response = self.client.get(f"{self.url}{self.test_profile.profile_id}/",
+    def test_retrieve_user(self):
+        response = self.client.get(f"{self.url}{self.test_user.username}/",
                                    content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_list_profiles(self):
+    def test_list_users(self):
         response = self.client.get(self.url, content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_patch_profile(self):
+    def test_patch_user(self):
         response = self.client.patch(
-            f"{self.url}{self.test_profile.profile_id}/", self.data,
+            f"{self.url}{self.test_user.username}/", self.new_user_payload,
             content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_update_profile(self):
+    def test_update_user(self):
         response = self.client.put(
-            f"{self.url}{self.test_profile.profile_id}/", self.data,
+            f"{self.url}{self.test_user.username}/", self.new_user_payload,
             content_type="application/json")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_delete_profile(self):
+    def test_delete_user(self):
         response = self.client.delete(
-            f"{self.url}{self.test_profile.profile_id}/", content_type="application/json")
+            f"{self.url}{self.test_user.username}/", content_type="application/json")
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
 
@@ -53,9 +53,9 @@ class TestProfile(TestCase):
 class TestGarden(TestCase):
     def setUp(self):
         self.url = "/garden/"
-        profile = Profile.objects.create(**{"first_name": "Foo", "last_name": "Bar"})
+        user = User.objects.create(**generate_new_user_payload())
         self.data = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK",
-                     "profile": str(profile.profile_id)}
+                     "user": str(user.id)}
         self.test_garden = create_test_garden()
 
         geocoder_patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
