@@ -60,6 +60,7 @@ class SignUp extends React.Component {
          firstName: '', firstNameValid: false,
          lastName: '', lastNameValid: false,
          emailAddress: '', emailAddressValid: false,
+         username: '', usernameValid: false,
          formValid: false,
          errorMsg: {}
       }
@@ -67,9 +68,9 @@ class SignUp extends React.Component {
   }
 
   validateForm = () => {
-    const {emailAddressValid, passwordValid, firstNameValid, lastNameValid} = this.state;
+    const {emailAddressValid, passwordValid, firstNameValid, lastNameValid, usernameValid} = this.state;
     this.setState({
-      formValid: emailAddressValid && passwordValid && firstNameValid && lastNameValid
+      formValid: emailAddressValid && passwordValid && firstNameValid && lastNameValid && usernameValid
     })
   }
 
@@ -125,6 +126,23 @@ class SignUp extends React.Component {
     this.setState({emailAddressValid, errorMsg}, this.validateForm)
   }
 
+  updateUsername = (username) => {
+    this.setState({username}, this.validateUsername)
+  }
+
+  validateUsername = () => {
+    const {username} = this.state;
+    let usernameValid = true;
+    let errorMsg = {...this.state.errorMsg}
+
+    if (!/^[a-zA-Z0-9\\-]{5,}$/.test(username)) {
+      usernameValid = false;
+      errorMsg.username = 'Must be at least 5 characters long and only contain letters and numbers.'
+    }
+
+    this.setState({usernameValid, errorMsg}, this.validateForm)
+  }
+
   updatePassword = (password) => {
     this.setState({password}, this.validatePassword);
   }
@@ -134,19 +152,13 @@ class SignUp extends React.Component {
     let passwordValid = true;
     let errorMsg = {...this.state.errorMsg}
 
-    // must be 6 chars
+    // must be 8 chars
     // must contain a number
     // must contain a special character
 
-    if (password.length < 6) {
+    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(password)) {
       passwordValid = false;
-      errorMsg.password = 'Password must be at least 6 characters long';
-    } else if (!/\d/.test(password)){
-      passwordValid = false;
-      errorMsg.password = 'Password must contain a digit';
-    } else if (!/[!@#$%^&*]/.test(password)){
-      passwordValid = false;
-      errorMsg.password = 'Password must contain special character: !@#$%^&*';
+      errorMsg.password = 'Password must be at least 8 characters long, contain a digit and at least one special character.';
     }
 
     this.setState({passwordValid, errorMsg}, this.validateForm);
@@ -162,7 +174,7 @@ class SignUp extends React.Component {
                 'first_name': this.state.firstName,
                 'last_name': this.state.lastName,
                 'email': this.state.emailAddress,
-                'username': this.state.emailAddress,
+                'username': this.state.username,
                 'password': this.state.password
             }),
             headers: {
@@ -218,6 +230,20 @@ class SignUp extends React.Component {
                     onChange={(e) => this.updateLastName(e.target.value)}
                   />
                   <ValidationMessage valid={this.state.lastNameValid} message={this.state.errorMsg.lastName} />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    value={this.state.username}
+                    onChange={(e) => this.updateUsername(e.target.value)}
+                  />
+                  <ValidationMessage valid={this.state.usernameValid} message={this.state.errorMsg.username} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField

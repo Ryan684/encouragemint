@@ -29,7 +29,7 @@ SAMPLE_USER = {
     "first_name": "Foo",
     "last_name": "Bar",
     "email": "FooBar@Whizzbang.com",
-    "password": "secret"
+    "password": "secret!1"
 }
 
 

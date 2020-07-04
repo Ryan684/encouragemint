@@ -100,3 +100,57 @@ class TestValidateEmail(TestUserSerializerValidators):
             self.test_obj.validate_email,
             invalid_email_address
         )
+
+
+class TestValidateUsername(TestUserSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidateUsername, cls).setUpClass()
+
+    def test_valid_username(self):
+        username = "Ryan123"
+        self.assertEqual(username, self.test_obj.validate_username(username))
+
+    def test_invalid_username(self):
+        self._assert_username_raises_error("Foo_123.bar")
+
+    def test_username_too_short(self):
+        self._assert_username_raises_error("Ry12")
+
+    def _assert_username_raises_error(self, invalid_username):
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            "Your username can only contain letters, numbers and must be 5 or more characters long.",
+            self.test_obj.validate_username,
+            invalid_username
+        )
+
+
+class TestValidatePassword(TestUserSerializerValidators):
+    @classmethod
+    def setUpClass(cls):
+        super(TestValidatePassword, cls).setUpClass()
+
+    def test_valid_password(self):
+        password = "Ryan123!"
+        self.assertEqual(password, self.test_obj.validate_password(password))
+
+    def test_invalid_password_too_short(self):
+        self._assert_password_raises_error("Foo!1")
+
+    def test_invalid_password_no_numbers(self):
+        self._assert_password_raises_error("Ry!ororor")
+
+    def test_invalid_password_no_special_numbers(self):
+        self._assert_password_raises_error("Ry1ororor")
+
+    def test_invalid_password_no_letters(self):
+        self._assert_password_raises_error("1234567!!")
+
+    def _assert_password_raises_error(self, invalid_username):
+        self.assertRaisesMessage(
+            serializers.ValidationError,
+            "Password must be at least 8 characters long, contain a digit and at least one special character.",
+            self.test_obj.validate_password,
+            invalid_username
+        )

@@ -181,8 +181,8 @@ class TestPost(TestCase):
                 "first_name": "Foo",
                 "last_name": "Bar",
                 "email": "FooBar.com",
-                "username": "Foo",
-                "password": "Secret"
+                "username": "Foobar123",
+                "password": "secret!1"
             }
         )
         response.render()
@@ -216,7 +216,7 @@ class TestPut(TestCase):
                 "first_name": "Fooupdated",
                 "last_name": "Bar",
                 "username": "FooUser",
-                "password": "secret",
+                "password": "secret!1",
                 "email": "FooBar@Whizzbang.com"}
         )
         response.render()
@@ -238,7 +238,7 @@ class TestPut(TestCase):
                 "last_name": "Bar",
                 "email": "FooBar@Whizzbang.com",
                 "username": create_unique_username(),
-                "password": "secret"
+                "password": "secret!1"
             })
         response.render()
 
