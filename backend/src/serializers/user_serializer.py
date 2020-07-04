@@ -51,12 +51,15 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_username(value):
         if re.fullmatch(r"^[a-zA-Z0-9\-]{5,}$", value) is None:
             raise serializers.ValidationError(
-                "Your username can only contain letters, numbers and must be 5 or more characters long.")
+                "Your username can only contain letters, "
+                "numbers and must be 5 or more characters long.")
         return value
 
     @staticmethod
     def validate_password(value):
-        if re.fullmatch(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", value) is None:
+        if re.fullmatch(
+                r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", value) is None:
             raise serializers.ValidationError(
-                "Password must be at least 8 characters long, contain a digit and at least one special character.")
+                "Password must be at least 8 characters long, "
+                "contain a digit and at least one special character.")
         return value

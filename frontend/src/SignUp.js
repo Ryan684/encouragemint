@@ -168,7 +168,7 @@ class SignUp extends React.Component {
     if (!this.state.formValid) {
         event.preventDefault();
     } else {
-        fetch('http://127.0.0.1:8000/user/', {
+        fetch('/user/', {
             method: 'POST',
             body: JSON.stringify({
                 'first_name': this.state.firstName,
