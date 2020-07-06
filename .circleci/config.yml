@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  eslint: arrai/eslint@2.0.0
 jobs:
   build:
     docker:
@@ -15,7 +17,6 @@ jobs:
             pip install -r build/requirements.txt
             pip install -r backend/requirements.txt
             sudo pip install pylint==2.4.4
-            sudo install -g eslint
 
       - run:
           name: run pylint
