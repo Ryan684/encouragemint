@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7.3
+      - image: circleci/node:12.13.0
 
     steps:
       - checkout
@@ -15,9 +16,6 @@ jobs:
             pip install -r build/requirements.txt
             pip install -r backend/requirements.txt
             sudo pip install pylint==2.4.4
-            sudo apt-get -y install curl \
-                   && curl -sL https://deb.nodesource.com/setup_12.x | bash \
-                   && apt-get install nodejs
             sudo npm install -g eslint
 
       - run:
