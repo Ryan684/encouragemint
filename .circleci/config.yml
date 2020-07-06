@@ -13,7 +13,7 @@ jobs:
             . venv/bin/activate
             pip install -r build/requirements.txt
             pip install -r backend/requirements.txt
-            sudo pip install pylint==2.4.4
+            pip install pylint==2.4.4
             npm install eslint --save-dev
 
       - run:
