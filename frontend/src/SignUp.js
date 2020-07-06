@@ -183,6 +183,13 @@ class SignUp extends React.Component {
         });
         let data = await response.json()
         console.log(data);
+
+        if (response.status === 400 && data.hasOwnProperty('username')) {
+            let errorMsg = {...this.state.errorMsg}
+            errorMsg.username = data.username[0]
+            this.setState({'usernameValid': false, errorMsg}, this.validateForm)
+        }
+
         return data;
       } catch(err) {
         console.error(err);
