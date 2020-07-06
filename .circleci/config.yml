@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  eslint: arrai/eslint@2.0.0
 jobs:
   build:
     docker:
@@ -17,13 +15,14 @@ jobs:
             pip install -r build/requirements.txt
             pip install -r backend/requirements.txt
             sudo pip install pylint==2.4.4
+            sudo npm install -g eslint
 
       - run:
           name: run pylint
           command: pylint backend/ --disable=E0401,C0103,C0114,C0115,C0116,R0903 --ignore=migrations,settings,tests
 
       - run:
-          name: run esLint
+          name: run eslint
           command: eslint **/*.js
 
       - run:
