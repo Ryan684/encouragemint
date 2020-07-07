@@ -32,6 +32,11 @@ jobs:
     docker:
       - image: circleci/node:latest
 
+    steps:
+      - run:
+          name: update-npm
+          command: sudo npm install -g npm@latest
+
 workflows:
   build-and-test:
     jobs:
