@@ -1,8 +1,11 @@
 version: 2.1
+orbs:
+  eslint: arrai/eslint@2.0.0
 jobs:
   build:
     docker:
-      - image: nikolaik/python-nodejs:latest
+      - image: circleci/python:3.7.3
+
     steps:
       - checkout
 
@@ -13,16 +16,10 @@ jobs:
             . venv/bin/activate
             pip install -r build/requirements.txt
             pip install -r backend/requirements.txt
-            pip install pylint==2.4.4
-            npm install eslint --save-dev
-
+            sudo pip install pylint==2.4.4
       - run:
           name: run pylint
           command: pylint backend/ --disable=E0401,C0103,C0114,C0115,C0116,R0903 --ignore=migrations,settings,tests
-
-      - run:
-          name: run eslint
-          command: eslint **/*.js
 
       - run:
           name: run tests
