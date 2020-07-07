@@ -49,7 +49,7 @@ workflows:
   build-and-test:
     jobs:
       - build-python
-      - react/install
+      - react/install:
           before_install:
             - checkout
             - cd frontend/
