@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: eslint
-          command: ./node_modules/.bin/eslint ./
+          command: eslint ./
 
 workflows:
   build-and-test:
