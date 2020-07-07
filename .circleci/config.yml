@@ -50,6 +50,9 @@ workflows:
     jobs:
       - build-python
       - react/install
+          before_install:
+            - checkout
+            - cd frontend/
       - react/eslint:
           requires:
             - react/install
