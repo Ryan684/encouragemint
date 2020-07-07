@@ -28,19 +28,12 @@ jobs:
             . venv/bin/activate
             python manage.py test --settings=backend.settings.local
 
-#  build-react:
-#    docker:
-#      - image: circleci/node:latest
-#
-#    steps:
-#      - eslint/eslint:
-#          wd: frontend/
-#          files: src/**
+  build-react:
+    docker:
+      - image: circleci/node:latest
 
 workflows:
   build-and-test:
     jobs:
       - build-python
-      - eslint/eslint:
-          wd: frontend/
-          files: src/**
+      - build-react
