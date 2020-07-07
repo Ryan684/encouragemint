@@ -28,6 +28,17 @@ jobs:
             . venv/bin/activate
             python manage.py test --settings=backend.settings.local
 
-  eslint/eslint:
-    wd: frontend/
-    files: src/**
+  lint-JavaScript:
+    docker:
+      - image: circleci/node:latest
+
+    steps:
+      - eslint/eslint:
+        wd: frontend/
+        files: src/**
+
+workflows:
+  encouragemint-build-checks:
+    jobs:
+      - build
+      - lint-JavaScript
