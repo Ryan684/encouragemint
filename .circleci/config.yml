@@ -17,6 +17,7 @@ jobs:
             pip install -r build/requirements.txt
             pip install -r backend/requirements.txt
             sudo pip install pylint==2.4.4
+
       - run:
           name: run pylint
           command: pylint backend/ --disable=E0401,C0103,C0114,C0115,C0116,R0903 --ignore=migrations,settings,tests
@@ -26,3 +27,7 @@ jobs:
           command: |
             . venv/bin/activate
             python manage.py test --settings=backend.settings.local
+
+  - arrai/eslint:
+      wd: frontend/
+      files: src/**
