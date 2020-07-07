@@ -28,7 +28,3 @@ workflows:
             command: |
               . venv/bin/activate
               python manage.py test --settings=backend.settings.local
-
-        - eslint/eslint:
-            wd: frontend/
-            files: src/**
