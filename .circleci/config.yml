@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   eslint: arrai/eslint@2.0.0
 jobs:
-  build:
+  build-python:
     docker:
       - image: circleci/python:3.7.3
 
@@ -31,4 +31,4 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - build
+      - build-python
