@@ -28,10 +28,6 @@ jobs:
             . venv/bin/activate
             python manage.py test --settings=backend.settings.local
 
-workflows:
-  "Eslint JavaScript files":
-    jobs:
       - arrai/eslint
-    parameters:
-      - wd: frontend/
-      - files: src/**
+          wd: frontend/
+          files: src/**
