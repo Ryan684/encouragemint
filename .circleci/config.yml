@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  react: thefrontside/react@0.2.0
 jobs:
   build-python:
     docker:
@@ -26,25 +28,31 @@ jobs:
             . venv/bin/activate
             python manage.py test --settings=backend.settings.local
 
-  build-react:
-    docker:
-      - image: circleci/node:latest
-
-    steps:
-      - checkout
-
-      - run:
-          name: update-npm
-          command: sudo npm install -g npm@latest
-
-      - run: npm install
-
-      - run:
-          name: eslint
-          command: eslint ./
+#  build-react:
+#    docker:
+#      - image: circleci/node:latest
+#
+#    steps:
+#      - checkout
+#
+#      - run:
+#          name: update-npm
+#          command: sudo npm install -g npm@latest
+#
+#      - run: npm install
+#
+#      - run:
+#          name: eslint
+#          command: eslint ./
 
 workflows:
   build-and-test:
     jobs:
       - build-python
-      - build-react
+      - react/install
+      - react/eslint:
+          requires:
+            - react/install
+      - react/stylelint:
+          requires:
+            - react/install
