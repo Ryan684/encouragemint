@@ -53,8 +53,8 @@ workflows:
           before_install:
             - checkout
             - run:
-                name: Change directory to frontend folder
-                command: cd frontend/
+                name: Copy package.json in folder root
+                command: cp frontend/package.json .
       - react/eslint:
           requires:
             - react/install
