@@ -28,33 +28,18 @@ jobs:
             . venv/bin/activate
             python manage.py test --settings=backend.settings.local
 
-#  build-react:
-#    docker:
-#      - image: circleci/node:latest
-#
-#    steps:
-#      - checkout
-#
-#      - run:
-#          name: update-npm
-#          command: sudo npm install -g npm@latest
-#
-#      - run: npm install
-#
-#      - run:
-#          name: eslint
-#          command: eslint ./
-
 workflows:
   build-and-test:
     jobs:
       - build-python
+
       - react/install:
           before_install:
             - checkout
             - run:
-                name: Copy package.json in folder root
+                name: Copy package.json into folder root
                 command: cp frontend/package.json .
+
       - react/eslint:
           requires:
             - react/install
