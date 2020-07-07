@@ -37,6 +37,10 @@ jobs:
           name: update-npm
           command: sudo npm install -g npm@latest
 
+      - run:
+          name: eslint
+          command: ./node_modules/.bin/eslint ./
+
 workflows:
   build-and-test:
     jobs:
