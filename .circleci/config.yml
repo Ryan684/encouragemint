@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  eslint: arrai/eslint@2.0.0
 jobs:
   build-python:
     docker:
