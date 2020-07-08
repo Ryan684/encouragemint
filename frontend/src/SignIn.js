@@ -45,20 +45,55 @@ class SignIn extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-         emailAddress: '',
-         password: ''
+         username: '', usernameValid: false,
+         password: '', passwordValid: false,
+         formValid: false,
+         errorMsg: {}
       }
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = (event) => {
-    this.setState({[event.target.name]: event.target.value});
+  updateUsername = (username) => {
+    this.setState({username}, this.validateUsername)
+  }
+
+  validateUsername = () => {
+    const {username} = this.state;
+    let usernameValid = true;
+    let errorMsg = {...this.state.errorMsg}
+
+    if (!/^[a-zA-Z0-9\\-]{5,}$/.test(username)) {
+      usernameValid = false;
+      errorMsg.username = 'Must be at least 5 characters long and only contain letters and numbers.'
+    }
+
+    this.setState({usernameValid, errorMsg}, this.validateForm)
+  }
+
+  updatePassword = (password) => {
+    this.setState({password}, this.validatePassword);
+  }
+
+  validatePassword = () => {
+    const {password} = this.state;
+    let passwordValid = true;
+    let errorMsg = {...this.state.errorMsg}
+
+    // must be 8 chars
+    // must contain a number
+    // must contain a special character
+
+    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(password)) {
+      passwordValid = false;
+      errorMsg.password = 'Password must be at least 8 characters long, contain a digit and at least one special character.';
+    }
+
+    this.setState({passwordValid, errorMsg}, this.validateForm);
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    alert('email: ' +this.state.emailAddress)
+    alert('username: ' +this.state.username)
     alert('password: ' +this.state.password)
   }
 
@@ -74,30 +109,41 @@ class SignIn extends React.Component {
               Sign in
             </Typography>
             <form onSubmit={this.handleSubmit} className={this.props.classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="emailAddress"
-                label="Email Address"
-                name="emailAddress"
-                autoComplete="email"
-                value={this.state.emailAddress}
-                onChange={this.handleChange}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
+               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    variant='outlined'
+                    required
+                    fullWidth
+                    id='username'
+                    label='Username'
+                    name='username'
+                    autoComplete='username'
+                    value={this.state.username}
+                    onChange={(e) => this.updateUsername(e.target.value)}
+                    error={!this.state.usernameValid && this.state.username.length >= 1 ? true : false}
+                    helperText={this.state.usernameValid ? null : this.state.errorMsg.username}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant='outlined'
+                    required
+                    fullWidth
+                    name='password'
+                    label='Password'
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
+                    value={this.state.password}
+                    onChange={(e) => this.updatePassword(e.target.value)}
+                    error={!this.state.passwordValid && this.state.password.length >= 1 ? true : false}
+                    helperText={this.state.passwordValid ? null : this.state.errorMsg.password}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                </Grid>
+              </Grid>
               <Button
                 type="submit"
                 fullWidth

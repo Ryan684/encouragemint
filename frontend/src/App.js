@@ -1,10 +1,10 @@
 import React from 'react';
-import SignUpFunc from './SignUp'
+import SignInFunc from './SignIn'
 
 export default function App() {
   return (
     <div>
-        <SignUpFunc />
+        <SignInFunc />
     </div>
   );
 }
