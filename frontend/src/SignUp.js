@@ -43,15 +43,6 @@ function SignUpFunc() {
 
 export default SignUpFunc;
 
-function ValidationMessage(props) {
-  if (!props.valid) {
-    return(
-      <div className='error-msg'>{props.message}</div>
-    )
-  }
-  return null;
-}
-
 class SignUp extends React.Component {
   constructor(props){
     super(props);
@@ -222,8 +213,9 @@ class SignUp extends React.Component {
                     autoFocus
                     value={this.state.firstName}
                     onChange={(e) => this.updateFirstName(e.target.value)}
+                    error={!this.state.firstNameValid && this.state.firstName.length >= 1 ? true : false}
+                    helperText={this.state.firstNameValid ? null : this.state.errorMsg.firstName}
                   />
-                  <ValidationMessage valid={this.state.firstNameValid} message={this.state.errorMsg.firstName} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -236,8 +228,9 @@ class SignUp extends React.Component {
                     autoComplete='lname'
                     value={this.state.lastName}
                     onChange={(e) => this.updateLastName(e.target.value)}
+                    error={!this.state.lastNameValid && this.state.lastName.length >= 1 ? true : false}
+                    helperText={this.state.lastNameValid ? null : this.state.errorMsg.lastName}
                   />
-                  <ValidationMessage valid={this.state.lastNameValid} message={this.state.errorMsg.lastName} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -250,8 +243,9 @@ class SignUp extends React.Component {
                     autoComplete='username'
                     value={this.state.username}
                     onChange={(e) => this.updateUsername(e.target.value)}
+                    error={!this.state.usernameValid && this.state.username.length >= 1 ? true : false}
+                    helperText={this.state.usernameValid ? null : this.state.errorMsg.username}
                   />
-                  <ValidationMessage valid={this.state.usernameValid} message={this.state.errorMsg.username} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -264,8 +258,9 @@ class SignUp extends React.Component {
                     autoComplete='email'
                     value={this.state.emailAddress}
                     onChange={(e) => this.updateEmailAddress(e.target.value)}
+                    error={!this.state.emailAddressValid && this.state.emailAddress.length >= 1 ? true : false}
+                    helperText={this.state.emailAddressValid ? null : this.state.errorMsg.emailAddress}
                   />
-                  <ValidationMessage valid={this.state.emailAddressValid} message={this.state.errorMsg.emailAddress} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -279,8 +274,9 @@ class SignUp extends React.Component {
                     autoComplete='current-password'
                     value={this.state.password}
                     onChange={(e) => this.updatePassword(e.target.value)}
+                    error={!this.state.passwordValid && this.state.password.length >= 1 ? true : false}
+                    helperText={this.state.passwordValid ? null : this.state.errorMsg.password}
                   />
-                  <ValidationMessage valid={this.state.passwordValid} message={this.state.errorMsg.password} />
                 </Grid>
                 <Grid item xs={12}>
                 </Grid>
