@@ -1,4 +1,3 @@
-import json
 import logging
 
 from django.contrib.auth import authenticate
@@ -31,7 +30,8 @@ def login(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    user = authenticate(request, username=request.data["username"], password=request.data["password"])
+    user = authenticate(
+        request, username=request.data["username"], password=request.data["password"])
 
     if user is not None:
         return Response(
