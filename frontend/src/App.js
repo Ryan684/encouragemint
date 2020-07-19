@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { SignIn } from './SignIn'
-import { SignUp } from './SignUp'
+import SignUp from './SignUp'
 import {
     BrowserRouter as Router,
     Switch,

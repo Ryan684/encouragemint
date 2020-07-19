@@ -23,6 +23,13 @@ export class SignIn extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  validateForm = () => {
+    const {passwordValid, usernameValid} = this.state;
+    this.setState({
+      formValid: passwordValid && usernameValid
+    })
+  }
+
   updateUsername = (username) => {
     this.setState({username}, this.validateUsername)
   }
@@ -61,10 +68,35 @@ export class SignIn extends React.Component {
     this.setState({passwordValid, errorMsg}, this.validateForm);
   }
 
-  handleSubmit = (event) => {
+  async handleSubmit(event) {
     event.preventDefault();
-    alert('username: ' +this.state.username)
-    alert('password: ' +this.state.password)
+    if (this.state.formValid) {
+      try {
+        let response = await fetch('http://127.0.0.1:8000/login/', {
+            method: 'POST',
+            body: JSON.stringify({
+                'username': this.state.username,
+                'password': this.state.password
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        });
+        let data = await response.json()
+        console.log(data);
+
+        if (response.status === 400 && data.hasOwnProperty('message')) {
+            let errorMsg = {...this.state.errorMsg}
+            errorMsg.username = ''
+            errorMsg.password = data.message
+            this.setState({'passwordValid': false, 'usernameValid': false, errorMsg}, this.validateForm)
+        }
+
+        return data;
+      } catch(err) {
+        console.error(err);
+      }
+    }
   }
 
   render() {

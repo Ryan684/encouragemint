@@ -61,7 +61,10 @@ class TestPlantDetailView(APITestCase):
         response.render()
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual({"message": "login failed"}, response.data)
+        self.assertEqual(
+            {"message": "Login failed. You have entered an invalid username or password."},
+            response.data
+        )
 
     @patch("backend.src.views.login_view.authenticate")
     def test_successful_login(self, mocked_authenticate):
@@ -81,4 +84,4 @@ class TestPlantDetailView(APITestCase):
         response.render()
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual({"message": "login successful"}, response.data)
+        self.assertEqual({"message": "Login successful"}, response.data)

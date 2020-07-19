@@ -35,11 +35,11 @@ def login(request):
 
     if user is not None:
         return Response(
-            {"message": "login successful"},
+            {"message": "Login successful"},
             status=status.HTTP_200_OK
         )
 
     return Response(
-        {"message": "login failed"},
+        {"message": "Login failed. You have entered an invalid username or password."},
         status=status.HTTP_400_BAD_REQUEST
     )

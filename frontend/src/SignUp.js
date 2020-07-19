@@ -9,9 +9,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Copyright from './Copyright'
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
-export class SignUp extends React.Component {
+class SignUp extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -149,7 +149,9 @@ export class SignUp extends React.Component {
             this.setState({'usernameValid': false, errorMsg}, this.validateForm)
         }
 
-        return data;
+        if (response.status === 201) {
+            this.props.history.push('/');
+        }
       } catch(err) {
         console.error(err);
       }
@@ -272,3 +274,5 @@ export class SignUp extends React.Component {
       );
   };
 }
+
+export default withRouter(SignUp);
