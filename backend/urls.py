@@ -17,6 +17,7 @@ from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 
 from backend.src.views.garden_viewset import GardenViewSet
+from backend.src.views.login_view import login
 from backend.src.views.plant_detail_view import plant_detail
 from backend.src.views.plant_viewset import PlantViewSet
 from backend.src.views.user_viewset import UserViewSet
@@ -28,6 +29,7 @@ router.register(r"plant", PlantViewSet)
 
 urlpatterns = [
     url(r"^plant_detail/(?P<trefle_id>.+)/$", plant_detail),
+    url(r"^login/$", login)
 ]
 
 urlpatterns += router.urls

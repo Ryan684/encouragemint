@@ -19,3 +19,7 @@ class TestUrlRouting(TestCase):
         arbitrary_trefle_id = "123456"
         viewset = resolve(f"/plant_detail/{arbitrary_trefle_id}/")
         self.assertEqual(viewset.func.__name__, "plant_detail")
+
+    def test_login_url(self):
+        viewset = resolve(f"/login/")
+        self.assertEqual(viewset.func.__name__, "login")
