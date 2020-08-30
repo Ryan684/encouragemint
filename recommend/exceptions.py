@@ -1,0 +1,2 @@
+class GeocoderNoResultsError(Exception):
+    pass
