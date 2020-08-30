@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from backend.tests.helpers import SAMPLE_GARDEN_GEOCODE_LOCATION
 from recommend.exceptions import GeocoderNoResultsError
-from recommend.locator import get_coordinates
+from recommend.garden_locator import get_coordinates
 
 
 class TestGetCoordinates(TestCase):
@@ -12,7 +12,7 @@ class TestGetCoordinates(TestCase):
         patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode")
         self.mock_geocoder = patcher.start()
         self.addCleanup(patcher.stop)
-        self.dummy_location = "Romsey, Hampshire"
+        self.dummy_location = "Truro, Cornwall"
 
     def test_no_results(self):
         self.mock_geocoder.return_value = None
