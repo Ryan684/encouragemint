@@ -32,9 +32,9 @@ def recommend(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    if "duration" in request.data:
+    if "duration" in request.GET:
         allowed_durations = ["PERENNIAL", "ANNUAL", "BIENNIAL"]
-        duration = request.data["duration"].upper()
+        duration = request.GET["duration"].upper()
         try:
             assert duration in allowed_durations
             duration = duration.lower().capitalize()
@@ -42,15 +42,16 @@ def recommend(request):
         except AssertionError:
             logger.error(f"Recommendation failed. User supplied invalid duration: {duration}.")
             return Response(
-                {"message": f"The duration must be one of the following: {allowed_durations}"},
+                {"message": "The duration must be one of the following: "
+                f"{allowed_durations}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    if "bloom_period" in request.data:
+    if "bloom_period" in request.GET:
         allowed_bloom_periods = [
             f"EARLY {season}", f"MID {season}", f"{season}", f"LATE {season}"
         ]
-        bloom_period = request.data["bloom_period"].upper()
+        bloom_period = request.GET["bloom_period"].upper()
         try:
             assert bloom_period in allowed_bloom_periods
            # query["bloom_period"] = bloom_period.lower().title()

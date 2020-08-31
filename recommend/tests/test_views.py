@@ -44,38 +44,3 @@ class TestRecommend(TestCase):
             },
             response.data
         )
-
-    def test_invalid_duration_parameter(self):
-        request = self.factory.post(
-            self.recommend_url,
-            {"season": "summer", "duration": "yearly"},
-            format="json"
-        )
-        response = self.view(request)
-        response.render()
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(
-            {
-                "message": "The duration must be one of the following: ['PERENNIAL', 'ANNUAL', 'BIENNIAL']"
-            },
-            response.data
-        )
-
-    def test_invalid_bloom_period_parameter(self):
-        allowed_bloom_periods = ["EARLY SPRING", "MID SPRING", "SPRING", "LATE SPRING"]
-        request = self.factory.post(
-            self.recommend_url,
-            {"season": "spring", "bloom_period": "march"},
-            format="json"
-        )
-        response = self.view(request)
-        response.render()
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(
-            {
-                "message": f"The bloom_period must be one of the following: {allowed_bloom_periods}"
-            },
-            response.data
-        )
