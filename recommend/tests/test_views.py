@@ -14,13 +14,9 @@ class TestRecommend(TestCase):
         self.recommend_url = "/recommend/"
 
     def test_missing_mandatory_parameters(self):
-        request = self.factory.post(
-            self.recommend_url,
-            {"season": "summer", "direction": "South"},
-            format="json"
-        )
-        response = self.view(request)
-        response.render()
+        payload = {"season": "summer", "direction": "South"}
+
+        response = self._post_to_endpoint(payload)
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
@@ -28,17 +24,19 @@ class TestRecommend(TestCase):
             str(response.data)
         )
 
-    @patch("recommend.views.execute_recommendation")
-    def test_valid_task_call(self, mock_task_call):
-        mock_task_call.return_value = {}
+    @patch("recommend.views.recommend_plants")
+    def test_valid_task_call(self, mock_recommendations):
+        mock_recommendations.return_value = {}
+        payload = {"season": "summer", "direction": "South", "location": "Romsey, UK"}
 
-        request = self.factory.post(
-            self.recommend_url,
-            {"season": "summer", "direction": "South", "location": "Romsey, UK"},
-            format="json"
-        )
+        response = self._post_to_endpoint(payload)
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual({}, response.data)
+
+    def _post_to_endpoint(self, payload):
+        request = self.factory.post(self.recommend_url, payload, format="json")
         response = self.view(request)
         response.render()
 
-        self.assertEqual(status.HTTP_202_ACCEPTED, response.status_code)
-        self.assertEqual({"Processing.."}, response.data)
+        return response
