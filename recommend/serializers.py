@@ -3,12 +3,18 @@ import re
 from rest_framework import serializers
 
 
-class RecommendSerializer(serializers.ModelSerializer):
+class RecommendSerializer(serializers.Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
     location = serializers.CharField()
     direction = serializers.CharField()
-    duration = serializers.CharField()
+    duration = serializers.CharField(required=False)
     season = serializers.CharField()
-    bloom_period = serializers.CharField()
+    bloom_period = serializers.CharField(required=False)
 
     @staticmethod
     def validate_location(value):
@@ -30,12 +36,11 @@ class RecommendSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_duration(value):
-        if value:
-            duration = value.upper()
-            if duration not in ["PERENNIAL", "ANNUAL", "BIENNIAL"]:
-                raise serializers.ValidationError(
-                    "A garden's duration can only be perennial, annual or biennial.")
-            return duration
+        duration = value.upper()
+        if duration not in ["PERENNIAL", "ANNUAL", "BIENNIAL"]:
+            raise serializers.ValidationError(
+                "A garden's duration can only be perennial, annual or biennial.")
+        return duration
 
     @staticmethod
     def validate_season(value):
@@ -47,9 +52,8 @@ class RecommendSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_bloom_period(value):
-        if value:
-            bloom_period = value.upper()
-            if bloom_period not in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]:
-                raise serializers.ValidationError(
-                    "A garden's bloom period can only be spring, summer, autumn or winter.")
-            return bloom_period
+        bloom_period = value.upper()
+        if bloom_period not in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]:
+            raise serializers.ValidationError(
+                "A garden's bloom period can only be spring, summer, autumn or winter.")
+        return bloom_period

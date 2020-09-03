@@ -63,10 +63,6 @@ class TestValidateDuration(TestGardenSerializerValidators):
     def setUpClass(cls):
         super(TestValidateDuration, cls).setUpClass()
 
-    def test_null_duration(self):
-        duration = None
-        self.assertEqual(duration, self.test_obj.validate_duration(duration))
-
     def test_valid_uppercase_duration(self):
         duration = "PERENNIAL"
         self.assertEqual(duration, self.test_obj.validate_duration(duration))
@@ -114,10 +110,6 @@ class TestValidateBloomPeriod(TestGardenSerializerValidators):
     @classmethod
     def setUpClass(cls):
         super(TestValidateBloomPeriod, cls).setUpClass()
-
-    def test_null_bloom_period(self):
-        bloom_period = None
-        self.assertEqual(bloom_period, self.test_obj.validate_bloom_period(bloom_period))
 
     def test_valid_uppercase_bloom_period(self):
         bloom_period = "SPRING"
