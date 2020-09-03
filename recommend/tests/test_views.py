@@ -1,3 +1,4 @@
+import json
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -26,13 +27,15 @@ class TestRecommendView(TestCase):
 
     @patch("recommend.views.recommend_plants")
     def test_valid_task_call(self, mock_recommendations):
-        mock_recommendations.return_value = {}
+        with open("backend/interfaces/trefle/tests/test_responses/plant_search_one_match.json", "r") as file:
+            recommend_one_result = json.load(file)
+        mock_recommendations.return_value = recommend_one_result
         payload = {"season": "summer", "direction": "South", "location": "Romsey, UK"}
 
         response = self._post_to_endpoint(payload)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual({}, response.data)
+        self.assertEqual(recommend_one_result, response.data)
 
     def _post_to_endpoint(self, payload):
         request = self.factory.post(self.recommend_url, payload, format="json")
