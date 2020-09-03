@@ -13,5 +13,5 @@ class RecommendView(views.APIView):
     def post(self, request):
         serializer = RecommendSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            results = recommend_plants(serializer.data)
+            results = recommend_plants(serializer.validated_data)
             return Response(results, status.HTTP_200_OK)

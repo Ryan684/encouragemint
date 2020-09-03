@@ -7,7 +7,7 @@ from rest_framework.test import APIRequestFactory
 from recommend.views import RecommendView
 
 
-class TestRecommend(TestCase):
+class TestRecommendView(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = RecommendView.as_view()
