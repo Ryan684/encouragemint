@@ -4,7 +4,7 @@ from django.conf import settings
 from backend.interfaces.trefle.exceptions import TrefleConnectionError
 
 
-TREFLE_URL = "http://trefle.io/api/plants/"
+TREFLE_URL = "http://trefle.io/api/v1/plants/"
 HEADERS = {"content-type": "application/json"}
 TOKEN = settings.TREFLE_API_KEY
 

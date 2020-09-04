@@ -84,8 +84,8 @@ class TestRecommendPlants(TestCase):
         input_data["duration"] = "Annual"
 
         plants = recommend_plants(input_data)
-        self.assertEqual(self.recommend_one_result, plants)
 
+        self.assertEqual(self.recommend_one_result, plants)
         self.mock_trefle.assert_called_with(expected_trefle_payload)
 
     def test_many_trefle_results(self):

@@ -21,6 +21,7 @@ from backend.src.views.login_view import login
 from backend.src.views.plant_detail_view import plant_detail
 from backend.src.views.plant_viewset import PlantViewSet
 from backend.src.views.user_viewset import UserViewSet
+from recommend.views import RecommendView
 
 router = DefaultRouter()
 router.register(r"user", UserViewSet)
@@ -29,7 +30,8 @@ router.register(r"plant", PlantViewSet)
 
 urlpatterns = [
     url(r"^plant_detail/(?P<trefle_id>.+)/$", plant_detail),
-    url(r"^login/$", login)
+    url(r"^login/$", login),
+    url(r"^recommend/$", RecommendView.as_view())
 ]
 
 urlpatterns += router.urls
