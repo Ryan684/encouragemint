@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { SignIn } from './SignIn'
-import SignUp from './SignUp'
+import { SignIn } from './SignIn';
+import SignUp from './SignUp';
+import RecommendForm from './RecommendForm';
 import {
     BrowserRouter as Router,
     Switch,
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -38,6 +39,9 @@ export default function App() {
           </Route>
           <Route path='/signup'>
             <SignUp classes={classes}/>
+          </Route>
+          <Route path='/recommend'>
+            <RecommendForm classes={classes}/>
           </Route>
         </Switch>
     </Router>
