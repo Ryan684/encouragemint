@@ -1,7 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { SignIn } from './SignIn';
-import SignUp from './SignUp';
 import RecommendForm from './RecommendForm';
 import {
     BrowserRouter as Router,
@@ -34,13 +32,7 @@ export default function App() {
   return (
     <Router>
         <Switch>
-          <Route exact path='/'>
-            <SignIn classes={classes}/>
-          </Route>
-          <Route path='/signup'>
-            <SignUp classes={classes}/>
-          </Route>
-          <Route path='/recommend'>
+          <Route path='/'>
             <RecommendForm classes={classes}/>
           </Route>
         </Switch>
