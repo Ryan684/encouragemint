@@ -7,7 +7,7 @@ from rest_framework.test import APIRequestFactory
 
 from backend.tests.helpers import create_test_garden
 from backend.src.views.garden_viewset import GardenViewSet
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
 
 
 class TestGardenViewSetRecommendAction(TestCase):
@@ -19,7 +19,7 @@ class TestGardenViewSetRecommendAction(TestCase):
         self.garden_id = self.sample_garden.get("garden_id")
         self.recommend_url = f"garden/{self.garden_id}recommend/"
 
-        test_responses_dir = "backend/interfaces/trefle/tests/test_responses"
+        test_responses_dir = "recommend/interfaces/trefle/tests/test_responses"
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.recommend_many_results = json.load(file)
 

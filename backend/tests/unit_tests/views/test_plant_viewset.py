@@ -13,7 +13,7 @@ from backend.src.models.garden import Garden
 from backend.src.models.plant import Plant
 from backend.tests.helpers import SAMPLE_PLANT, generate_new_user_payload
 from backend.src.views.plant_viewset import PlantViewSet
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
 
 PLANT_URL = "/plant/"
 TEST_USER = User.objects.create(**generate_new_user_payload())
@@ -133,7 +133,7 @@ class TestPost(TestCase):
         )
 
     def test_successful_create_plant_many_trefle_results(self):
-        test_responses_dir = "backend/interfaces/trefle/tests/test_responses"
+        test_responses_dir = "recommend/interfaces/trefle/tests/test_responses"
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             search_many_matches = json.load(file)
 

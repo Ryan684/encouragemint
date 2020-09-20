@@ -8,8 +8,8 @@ from backend.src.models.plant import Plant
 from backend.src.serializers.new_plant_request_serializer import \
     NewPlantRequestSerializer
 from backend.src.serializers.plant_serializer import PlantSerializer
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
-from backend.interfaces.trefle.trefle import lookup_plants
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.trefle.trefle import lookup_plants
 
 logger = logging.getLogger("django")
 

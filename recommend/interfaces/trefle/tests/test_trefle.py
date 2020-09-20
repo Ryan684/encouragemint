@@ -4,14 +4,14 @@ from unittest.mock import patch, Mock
 import requests
 from django.test import TestCase, override_settings
 
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
-from backend.interfaces.trefle.trefle import lookup_plants
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.trefle.trefle import lookup_plants
 
 
 @override_settings(TREFLE_API_KEY="Foo")
 class TestTrefle(TestCase):
     def setUp(self):
-        test_responses_dir = "backend/interfaces/trefle/tests/test_responses"
+        test_responses_dir = "recommend/interfaces/trefle/tests/test_responses"
         with open(f"{test_responses_dir}/plant_search_one_match.json", "r") as file:
             self.search_single_match = json.load(file)
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:

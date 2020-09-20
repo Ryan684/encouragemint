@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
-from backend.interfaces.trefle.trefle import lookup_plant_by_id
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.trefle.trefle import lookup_plant_by_id
 
 logger = logging.getLogger("django")
 

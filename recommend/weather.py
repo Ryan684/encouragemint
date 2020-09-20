@@ -1,8 +1,8 @@
 import datetime
 import logging
 
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend.interfaces.meteostat.meteostat import search_for_nearest_weather_stations, get_station_weather_record
+from recommend.interfaces.meteostat.exceptions import MeteostatConnectionError
+from recommend.interfaces.meteostat.meteostat import search_for_nearest_weather_stations, get_station_weather_record
 
 logger = logging.getLogger("django")
 

@@ -1,4 +1,4 @@
-from backend.settings.base import *
+from recommend.settings.base import *
 
 DEBUG = True
 SECRET_KEY = "dev"

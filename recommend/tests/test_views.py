@@ -5,8 +5,8 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.meteostat.exceptions import MeteostatConnectionError
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
 from recommend.exceptions import GeocoderNoResultsError
 from recommend.views import RecommendView
 
@@ -67,7 +67,7 @@ class TestRecommendView(TestCase):
 
     @patch("recommend.views.recommend_plants")
     def test_valid_task_call(self, mock_recommendations):
-        with open("backend/interfaces/trefle/tests/test_responses/plant_search_one_match.json", "r") as file:
+        with open("recommend/interfaces/trefle/tests/test_responses/plant_search_one_match.json", "r") as file:
             recommend_one_result = json.load(file)
         mock_recommendations.return_value = recommend_one_result
 

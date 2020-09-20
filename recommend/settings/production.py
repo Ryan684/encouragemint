@@ -1,6 +1,6 @@
 import pymysql
 
-from backend.settings.base import *
+from recommend.settings.base import *
 
 DEBUG = False
 SECRET_KEY = os.getenv("SECRET_KEY")

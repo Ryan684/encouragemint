@@ -3,8 +3,8 @@ import logging
 from rest_framework import views, status
 from rest_framework.response import Response
 
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.meteostat.exceptions import MeteostatConnectionError
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
 from recommend.exceptions import GeocoderNoResultsError
 from recommend.recommender import recommend_plants
 from recommend.serializers import RecommendSerializer

@@ -2,7 +2,6 @@ from unittest.mock import patch, Mock
 
 from django.test import TestCase
 
-from backend.tests.helpers import SAMPLE_GARDEN_GEOCODE_LOCATION
 from recommend.exceptions import GeocoderNoResultsError
 from recommend.garden_locator import get_coordinates
 
@@ -20,11 +19,17 @@ class TestGetCoordinates(TestCase):
         self.assertRaises(GeocoderNoResultsError, get_coordinates, self.dummy_location)
 
     def test_location_found(self):
-        mock = Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION)
+        sample_garden_geocode_location = {
+            "address": "Truro, Cornwall",
+            "latitude": 50.263195,
+            "longitude": -5.051041
+        }
+        
+        mock = Mock(**sample_garden_geocode_location)
         self.mock_geocoder.return_value = mock
 
         latitude, longitude, address = get_coordinates(self.dummy_location)
 
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION["latitude"], latitude)
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION["longitude"], longitude)
-        self.assertEqual(SAMPLE_GARDEN_GEOCODE_LOCATION["address"], address)
+        self.assertEqual(sample_garden_geocode_location["latitude"], latitude)
+        self.assertEqual(sample_garden_geocode_location["longitude"], longitude)
+        self.assertEqual(sample_garden_geocode_location["address"], address)

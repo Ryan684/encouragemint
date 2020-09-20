@@ -3,7 +3,7 @@ from unittest.mock import patch, ANY
 from celery.exceptions import Retry
 from django.test import TestCase
 
-from backend.src.exceptions import GardenSystemError, GardenUserError
+from recommend.exceptions import GardenSystemError, GardenUserError
 from backend.src.tasks import add_garden_location
 from backend.tests.helpers import SAMPLE_GARDEN
 

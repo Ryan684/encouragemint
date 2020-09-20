@@ -1,4 +1,4 @@
-from backend.interfaces.trefle.trefle import lookup_plants
+from recommend.interfaces.trefle.trefle import lookup_plants
 from recommend.garden_locator import get_coordinates
 from recommend.weather import get_garden_moisture
 

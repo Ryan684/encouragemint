@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
 
 
 TREFLE_URL = "http://trefle.io/api/v1/plants/"

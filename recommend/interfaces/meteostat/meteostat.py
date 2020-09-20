@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
+from recommend.interfaces.meteostat.exceptions import MeteostatConnectionError
 
 
 METEOSTAT_URL = "https://api.meteostat.net/v1/"

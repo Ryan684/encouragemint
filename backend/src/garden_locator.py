@@ -4,7 +4,7 @@ from django.conf import settings
 from geopy import GoogleV3
 from geopy.exc import GeopyError
 
-from backend.src.exceptions import GeocoderNoResultsError, GardenSystemError, \
+from recommend.exceptions import GeocoderNoResultsError, GardenSystemError, \
     GardenUserError
 from backend.src.models.garden import Garden
 from backend.src.notifications import email

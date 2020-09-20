@@ -4,8 +4,8 @@ from unittest.mock import patch, Mock
 import requests
 from django.test import override_settings, TestCase
 
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend.interfaces.meteostat.meteostat import get_station_weather_record, search_for_nearest_weather_stations
+from recommend.interfaces.meteostat.exceptions import MeteostatConnectionError
+from recommend.interfaces.meteostat.meteostat import get_station_weather_record, search_for_nearest_weather_stations
 
 
 @override_settings(METEOSTAT_API_KEY="Foo")
@@ -17,7 +17,7 @@ class TestMeteostat(TestCase):
         self.sample_weather_start_date = "2019-01"
         self.sample_weather_end_date = "2019-12"
 
-        test_responses_dir = "backend/interfaces/meteostat/tests/test_responses"
+        test_responses_dir = "recommend/interfaces/meteostat/tests/test_responses"
         with open(f"{test_responses_dir}/station_search_response_no_data.json", "r") as file:
             self.station_search_matches = json.load(file)
         with open(f"{test_responses_dir}/station_search_response_with_data.json", "r") as file:

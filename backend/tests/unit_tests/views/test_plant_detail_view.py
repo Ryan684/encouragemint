@@ -7,7 +7,7 @@ from rest_framework.test import APIRequestFactory
 
 from backend.tests.helpers import TREFLE_ID_LOOKUP_RESPONSE
 from backend.src.views.plant_detail_view import plant_detail
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
+from recommend.interfaces.trefle.exceptions import TrefleConnectionError
 
 
 class TestPlantDetailView(TestCase):

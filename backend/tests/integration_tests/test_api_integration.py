@@ -18,10 +18,6 @@ class TestUser(TestCase):
         self.new_user_payload = generate_new_user_payload()
         self.test_user = User.objects.create(**generate_new_user_payload())
 
-    def test_create_user(self):
-        response = self.client.post(self.url, self.new_user_payload, content_type="application/json")
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-
     def test_retrieve_user(self):
         response = self.client.get(f"{self.url}{self.test_user.username}/",
                                    content_type="application/json")

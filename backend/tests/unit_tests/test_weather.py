@@ -6,14 +6,14 @@ from django.test import TestCase
 from backend.src import weather
 from backend.src.models.garden import Garden
 from backend.tests.helpers import create_test_garden
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
+from recommend.interfaces.meteostat.exceptions import MeteostatConnectionError
 
 
 class TestWeather(TestCase):
     def setUp(self):
         self.test_garden = Garden.objects.get(garden_id=create_test_garden().get("garden_id"))
 
-        test_responses_dir = "backend/tests/unit_tests/test_responses"
+        test_responses_dir = "recommend/tests/test_responses"
         with open(f"{test_responses_dir}/search_for_nearest_weather_stations.json", "r") as file:
             self.station_search_with_data = json.load(file)
         with open(f"{test_responses_dir}/get_station_weather_record.json", "r") as file:
