@@ -9,7 +9,7 @@ from recommend import weather
 
 class TestGetGardenMoisture(TestCase):
     def setUp(self):
-        test_responses_dir = "recommend/tests/test_responses"
+        test_responses_dir = "recommend/tests/unit_tests/test_responses"
         with open(f"{test_responses_dir}/search_for_nearest_weather_stations.json", "r") as file:
             self.station_search_with_data = json.load(file)
         with open(f"{test_responses_dir}/get_station_weather_record.json", "r") as file:
