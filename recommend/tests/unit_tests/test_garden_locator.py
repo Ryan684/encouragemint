@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from recommend.exceptions import GeocoderNoResultsError
 from recommend.garden_locator import get_coordinates
+from recommend.tests.helpers import SAMPLE_GARDEN_GEOCODE_LOCATION
 
 
 class TestGetCoordinates(TestCase):
@@ -19,11 +20,7 @@ class TestGetCoordinates(TestCase):
         self.assertRaises(GeocoderNoResultsError, get_coordinates, self.dummy_location)
 
     def test_location_found(self):
-        sample_garden_geocode_location = {
-            "address": "Truro, Cornwall",
-            "latitude": 50.263195,
-            "longitude": -5.051041
-        }
+        sample_garden_geocode_location = SAMPLE_GARDEN_GEOCODE_LOCATION
         
         mock = Mock(**sample_garden_geocode_location)
         self.mock_geocoder.return_value = mock
