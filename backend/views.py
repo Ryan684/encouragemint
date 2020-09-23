@@ -26,5 +26,5 @@ class RecommendView(views.APIView):
                 return Response(
                     {"message": "We couldn't find your location. Please try and be more specific."},
                     status=status.HTTP_400_BAD_REQUEST)
-
+            logger.info(results)
             return Response(results, status=status.HTTP_200_OK)

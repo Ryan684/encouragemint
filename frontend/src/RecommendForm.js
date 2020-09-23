@@ -249,7 +249,7 @@ class RecommendForm extends React.Component {
                 color='primary'
                 className={this.props.classes.submit}
               >
-                Sign Up
+                Search
               </Button>
             </form>
           </div>

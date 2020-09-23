@@ -1,56 +1,19 @@
 version: "3"
 
 services:
-  database:
-    image: mysql:8.0.20
-    container_name: database
-    volumes:
-      - "/var/lib/mysql"
-    ports:
-      - "3306:3306"
-    networks:
-      - encouragemint
-    env_file:
-      - .env
-
-  broker:
-    image: rabbitmq:3.8.3
-    container_name: broker
-    networks:
-      - encouragemint
-    ports:
-      - "15672:15672"
-
-  backend-worker:
-    image: encouragemint
-    container_name: backend-worker
-    volumes:
-      - .:/encouragemint
-    env_file:
-      - .env
-    depends_on:
-      - broker
-      - backend
-    networks:
-      - encouragemint
-    command: ./wait-for-it.sh broker:15672 -t 60 -- /bin/bash -c "./start_worker.sh "
-
   backend:
     build: .
     image: encouragemint
     container_name: backend
     volumes:
       - .:/encouragemint/backend
-    depends_on:
-      - database
     ports:
       - "8000:8000"
     networks:
       - encouragemint
     env_file:
       - .env
-    command: ./wait-for-it.sh database:3306 -t 60 -- /bin/bash -c "./start_web.sh"
-
+    command: /bin/bash -c "./start_web.sh"
 
   frontend:
     build: .
@@ -66,10 +29,6 @@ services:
     env_file:
       - .env
     command: /bin/bash -c "cd frontend && npm start"
-
-volumes:
-  mysql_data_dir:
-    driver: local
 
 networks:
   encouragemint:

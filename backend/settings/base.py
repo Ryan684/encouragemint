@@ -28,7 +28,8 @@ CURRENT_HOST = os.getenv("NODE_IP", "127.0.0.1")
 ALLOWED_HOSTS = [CURRENT_HOST]
 
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
 ]
 
 # Application definition
