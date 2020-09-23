@@ -7,7 +7,7 @@ db.sqlite3
 .env
 README.md
 .circleci/
-encouragemint/encouragemint/tests/
-encouragemint/interfaces/trefle/tests/
-encouragemint/interfaces/meteostat/tests/
+encouragemint/backend/tests/
+encouragemint/backend/interfaces/trefle/tests/
+encouragemint/backend/interfaces/meteostat/tests/
 build/

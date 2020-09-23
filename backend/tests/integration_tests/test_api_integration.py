@@ -1,162 +1,91 @@
 from unittest.mock import patch, Mock
 
-from django.contrib.auth.models import User
-from django.test import TestCase, override_settings
+import requests
+from django.test import override_settings, TestCase
 from rest_framework import status
 
-from backend.src.models.garden import Garden
-from backend.src.models.plant import Plant
-from backend.tests.helpers import create_test_garden, \
-    SAMPLE_GARDEN_GEOCODE_LOCATION, SAMPLE_PLANT, TREFLE_NAME_LOOKUP_RESPONSE, \
-    TREFLE_ID_LOOKUP_RESPONSE, METEOSTAT_STATION_SEARCH_RESPONSE, \
-    METEOSTAT_STATION_WEATHER_RESPONSE, generate_new_user_payload
+from backend.exceptions import GeocoderNoResultsError
+from backend.tests import helpers
 
 
-class TestUser(TestCase):
-    def setUp(self):
-        self.url = "/user/"
-        self.new_user_payload = generate_new_user_payload()
-        self.test_user = User.objects.create(**generate_new_user_payload())
-
-    def test_retrieve_user(self):
-        response = self.client.get(f"{self.url}{self.test_user.username}/",
-                                   content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_list_users(self):
-        response = self.client.get(self.url, content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_patch_user(self):
-        response = self.client.patch(
-            f"{self.url}{self.test_user.username}/", self.new_user_payload,
-            content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_update_user(self):
-        response = self.client.put(
-            f"{self.url}{self.test_user.username}/", self.new_user_payload,
-            content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_delete_user(self):
-        response = self.client.delete(
-            f"{self.url}{self.test_user.username}/", content_type="application/json")
-        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
-
-
+@override_settings(METEOSTAT_API_KEY="Foo")
 @override_settings(GOOGLE_API_KEY="Foo")
 class TestGarden(TestCase):
     def setUp(self):
-        self.url = "/garden/"
-        user = User.objects.create(**generate_new_user_payload())
-        self.data = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK",
-                     "user": str(user.id)}
-        self.test_garden = create_test_garden()
+        self.url = "/recommend/"
+        self.data = {"season": "summer", "direction": "South", "location": "Romsey, UK"}
 
         geocoder_patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
-                                 return_value=Mock(**SAMPLE_GARDEN_GEOCODE_LOCATION))
-        geocoder_patcher.start()
+                                 return_value=Mock(**helpers.SAMPLE_GARDEN_GEOCODE_LOCATION))
+        self.mock_geocoder = geocoder_patcher.start()
         self.addCleanup(geocoder_patcher.stop)
 
-    @override_settings(CELERY_TASK_ALWAYS_EAGER=True)
-    def test_create_garden(self):
-        response = self.client.post(self.url, self.data, content_type="application/json")
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        meteostat_patcher = patch("requests.post")
+        self.mock_meteostat = meteostat_patcher.start()
+        self.addCleanup(meteostat_patcher.stop)
 
-    def test_retrieve_garden(self):
-        response = self.client.get(
-            f"{self.url}{self.test_garden['garden_id']}/", content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_list_gardens(self):
-        response = self.client.get(self.url, content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_delete_garden(self):
-        response = self.client.delete(
-            f"{self.url}{self.test_garden['garden_id']}/",
-            content_type="application/json")
-        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
-
-    @override_settings(CELERY_TASK_ALWAYS_EAGER=True)
-    def test_patch_garden(self):
-        response = self.client.patch(
-            f"{self.url}{self.test_garden['garden_id']}/", self.data,
-            content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    @override_settings(METEOSTAT_API_KEY="Foo")
-    @patch("requests.post")
-    @patch("requests.get")
-    def test_recommend_plants_for_garden(self, mock_trefle, mock_meteostat):
-        self.test_garden = create_test_garden()
-        self.url = f"{self.url}{self.test_garden['garden_id']}/recommend/"
-
-        mock_trefle_responses = [Mock(), Mock()]
-        mock_trefle_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
-        mock_trefle_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
-
-        mock_trefle.side_effect = mock_trefle_responses
-
-        mock_meteostat_responses = [Mock(), Mock()]
-        mock_meteostat_responses[0].json.return_value = METEOSTAT_STATION_SEARCH_RESPONSE
-        mock_meteostat_responses[1].json.return_value = METEOSTAT_STATION_WEATHER_RESPONSE
-
-        mock_meteostat.side_effect = mock_meteostat_responses
-
-        response = self.client.get(f"{self.url}?season=Spring", content_type="application/json")
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-
-class TestPlant(TestCase):
-    def setUp(self):
-        self.url = "/plant/"
-        self.plant_data = SAMPLE_PLANT.copy()
-        self.test_garden = Garden.objects.get(garden_id=create_test_garden().get("garden_id"))
-        self.test_plant = Plant.objects.create(**self.plant_data, garden=self.test_garden)
-
-        mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = TREFLE_NAME_LOOKUP_RESPONSE
-        mock_responses[1].json.return_value = TREFLE_ID_LOOKUP_RESPONSE
-
-        trefle_patcher = patch("requests.get", side_effect=mock_responses)
-        trefle_patcher.start()
+        trefle_patcher = patch("requests.get")
+        self.mock_trefle = trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 
-    def test_create_plant(self):
-        data = {
-            "plant_name": "common woolly sunflower",
-            "garden": self.test_garden.garden_id
-        }
-        response = self.client.post(self.url, data, content_type="application/json")
+    def test_input_validation_error(self):
+        response = self.client.post(f"{self.url}", content_type="application/json", data={"season": "summer"})
 
-        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_delete_plant(self):
-        response = self.client.delete(
-            f"{self.url}{self.test_plant.plant_id}/", content_type="application/json")
+    def test_external_service_connection_error(self):
+        self.mock_trefle.side_effect = requests.RequestException
 
-        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+        response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
-    def test_update_plant(self):
-        response = self.client.put(
-            f"{self.url}{self.test_plant.plant_id}/", self.plant_data,
-            content_type="application/json")
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR, response.status_code)
+
+    def test_location_not_found_error(self):
+        self.mock_geocoder.side_effect = GeocoderNoResultsError
+
+        response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_single_recommendation_found(self):
+        mock_trefle_responses = [Mock(), Mock()]
+        mock_trefle_responses[0].json.return_value = helpers.TREFLE_NAME_SINGLE_LOOKUP_RESPONSE
+        mock_trefle_responses[1].json.return_value = helpers.TREFLE_ID_LOOKUP_RESPONSE
+
+        self.mock_trefle.side_effect = mock_trefle_responses
+
+        mock_meteostat_responses = [Mock(), Mock()]
+        mock_meteostat_responses[0].json.return_value = helpers.METEOSTAT_STATION_SEARCH_RESPONSE
+        mock_meteostat_responses[1].json.return_value = helpers.METEOSTAT_STATION_WEATHER_RESPONSE
+
+        self.mock_meteostat.side_effect = mock_meteostat_responses
+
+        response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
+    def test_many_recommendations_found(self):
+        self.mock_trefle.return_value = helpers.TREFLE_NAME_MULTIPLE_LOOKUP_RESPONSES
 
-class TestPlantDetail(TestCase):
-    @patch("requests.get")
-    def test_get_plant_detail(self, mock_trefle):
-        mock_trefle_response = Mock()
-        mock_trefle_response.json.return_value = TREFLE_ID_LOOKUP_RESPONSE
-        mock_trefle.return_value = mock_trefle_response
-        arbitrary_trefle_id = "123456"
+        mock_meteostat_responses = [Mock(), Mock()]
+        mock_meteostat_responses[0].json.return_value = helpers.METEOSTAT_STATION_SEARCH_RESPONSE
+        mock_meteostat_responses[1].json.return_value = helpers.METEOSTAT_STATION_WEATHER_RESPONSE
 
-        response = self.client.get(
-            f"/plant_detail/{arbitrary_trefle_id}/", content_type="application/json"
-        )
+        self.mock_meteostat.side_effect = mock_meteostat_responses
+
+        response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_no_recommendations_found(self):
+        self.mock_trefle.return_value = []
+
+        mock_meteostat_responses = [Mock(), Mock()]
+        mock_meteostat_responses[0].json.return_value = helpers.METEOSTAT_STATION_SEARCH_RESPONSE
+        mock_meteostat_responses[1].json.return_value = helpers.METEOSTAT_STATION_WEATHER_RESPONSE
+
+        self.mock_meteostat.side_effect = mock_meteostat_responses
+
+        response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)

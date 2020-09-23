@@ -1,58 +1,10 @@
-import uuid
-
-from django.contrib.auth.models import User
-from django.forms import model_to_dict
-
-from backend.src.models.garden import Garden
-
-SAMPLE_GARDEN = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK"}
-SAMPLE_GARDEN_SUNLIGHT = "low"
 SAMPLE_GARDEN_GEOCODE_LOCATION = {
-    "address": SAMPLE_GARDEN.get("location"),
+    "address": "Truro, Cornwall",
     "latitude": 50.263195,
     "longitude": -5.051041
 }
-SAMPLE_PLANT = {
-    "scientific_name": "Eriophyllum lanatum",
-    "common_name": "common woolly sunflower",
-    "duration": "Annual, Perennial",
-    "bloom_period": "Spring",
-    "growth_period": "Summer",
-    "growth_rate": "Slow",
-    "shade_tolerance": "High",
-    "moisture_use": "High",
-    "family_common_name": "Aster family",
-    "trefle_id": 134845
-}
 
-SAMPLE_USER = {
-    "first_name": "Foo",
-    "last_name": "Bar",
-    "email": "FooBar@Whizzbang.com",
-    "password": "secret!1"
-}
-
-
-def create_unique_username():
-    return str(uuid.uuid4())
-
-
-def generate_new_user_payload():
-    new_user_payload = SAMPLE_USER.copy()
-    new_user_payload["username"] = create_unique_username()
-    return new_user_payload
-
-
-def create_test_garden():
-    user = User.objects.create(**generate_new_user_payload())
-    garden = {"garden_name": "Foo", "direction": "north", "location": "Truro, UK",
-              "user": user, "latitude": 50.263195, "longitude": -5.051041}
-
-    test_garden = Garden.objects.create(**garden)
-    return model_to_dict(test_garden)
-
-
-TREFLE_NAME_LOOKUP_RESPONSE = [
+TREFLE_NAME_SINGLE_LOOKUP_RESPONSE = [
     {
         "slug": "eriophyllum-lanatum",
         "scientific_name": "Eriophyllum lanatum",
@@ -60,6 +12,25 @@ TREFLE_NAME_LOOKUP_RESPONSE = [
         "id": 134845,
         "complete_data": False,
         "common_name": "common woolly sunflower"
+    }
+]
+
+TREFLE_NAME_MULTIPLE_LOOKUP_RESPONSES = [
+    {
+        "slug": "eriophyllum-lanatum",
+        "scientific_name": "Eriophyllum lanatum",
+        "link": "http://trefle.io/api/plants/134845",
+        "id": 134845,
+        "complete_data": False,
+        "common_name": "common woolly sunflower"
+    },
+    {
+        "slug": "Fooius Barius",
+        "scientific_name": "Fooius Baarius Von Whizzbangius",
+        "link": "http://trefle.io/api/plants/134846",
+        "id": 134846,
+        "complete_data": False,
+        "common_name": "common woolly fooflower"
     }
 ]
 
