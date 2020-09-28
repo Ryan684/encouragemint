@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import MenuItem from '@material-ui/core/MenuItem';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -158,27 +159,12 @@ class RecommendForm extends React.Component {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component='h1' variant='h5'>
-              Tell us about your garden and your plant preferences
+              Tell us about your garden and your preferences
               </Typography>
               <form onSubmit={this.handleSubmit} className={this.props.classes.form} noValidate>
                 <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete='season'
-                    name='season'
-                    variant='outlined'
-                    required
-                    fullWidth
-                    id='season'
-                    label='Season'
-                    autoFocus
-                    value={this.state.season}
-                    onChange={(e) => this.updateSeason(e.target.value)}
-                    error={!this.state.seasonValid && this.state.season.length >= 1 ? true : false}
-                    helperText={this.state.seasonValid ? null : this.state.errorMsg.season}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
+                  <p>Where is your garden? (The more accurate, the better!)</p>
                   <TextField
                     variant='outlined'
                     required
@@ -194,6 +180,30 @@ class RecommendForm extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={12}>
+                  <p>When season do you want plant recommendations for?</p>
+                  <TextField
+                    autoComplete='season'
+                    name='season'
+                    variant='outlined'
+                    required
+                    fullWidth
+                    id='season'
+                    label='Season'
+                    autoFocus
+                    value={this.state.season}
+                    onChange={(e) => this.updateSeason(e.target.value)}
+                    error={!this.state.seasonValid && this.state.season.length >= 1 ? true : false}
+                    helperText={this.state.seasonValid ? null : this.state.errorMsg.season}
+                    select
+                  >
+                    <MenuItem value="Spring">Spring</MenuItem>
+                    <MenuItem value="Summer">Summer</MenuItem>
+                    <MenuItem value="Autumn">Autumn</MenuItem>
+                    <MenuItem value="Winter">Winter</MenuItem>
+                  </TextField>
+                </Grid>
+                <Grid item xs={12}>
+                  <p>What direction does your garden face?</p>
                   <TextField
                     variant='outlined'
                     required
@@ -201,14 +211,20 @@ class RecommendForm extends React.Component {
                     id='direction'
                     label='Direction'
                     name='direction'
-                    autoComplete='direction'
                     value={this.state.direction}
                     onChange={(e) => this.updateDirection(e.target.value)}
                     error={!this.state.directionValid && this.state.direction.length >= 1 ? true : false}
                     helperText={this.state.directionValid ? null : this.state.errorMsg.direction}
-                  />
+                    select
+                  >
+                    <MenuItem value="North">North</MenuItem>
+                    <MenuItem value="East">East</MenuItem>
+                    <MenuItem value="South">South</MenuItem>
+                    <MenuItem value="West">West</MenuItem>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12}>
+                  <p>How long does the plant need to last?</p>
                   <TextField
                     variant='outlined'
                     required
@@ -216,28 +232,38 @@ class RecommendForm extends React.Component {
                     id='duration'
                     label='Duration'
                     name='duration'
-                    autoComplete='duration'
                     value={this.state.duration}
                     onChange={(e) => this.updateDuration(e.target.value)}
                     error={!this.state.durationValid && this.state.duration.length >= 1 ? true : false}
                     helperText={this.state.durationValid ? null : this.state.errorMsg.duration}
-                  />
+                    select
+                  >
+                    <MenuItem value="Perennial">Perennial</MenuItem>
+                    <MenuItem value="Annual">Annual</MenuItem>
+                    <MenuItem value="Biennial">Biennial</MenuItem>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12}>
+                  <p>For plants that flower, when do you want them to bloom?</p>
                   <TextField
                     variant='outlined'
                     required
                     fullWidth
+                    id='bloomPeriod'
                     name='bloomPeriod'
                     label='Bloom Period'
                     type='bloomPeriod'
-                    id='bloomPeriod'
-                    autoComplete='current-bloomPeriod'
                     value={this.state.bloomPeriod}
                     onChange={(e) => this.updateBloomPeriod(e.target.value)}
                     error={!this.state.bloomPeriodValid && this.state.bloomPeriod.length >= 1 ? true : false}
                     helperText={this.state.bloomPeriodValid ? null : this.state.errorMsg.bloomPeriod}
-                  />
+                    select
+                  >
+                    <MenuItem value="Spring">Spring</MenuItem>
+                    <MenuItem value="Summer">Summer</MenuItem>
+                    <MenuItem value="Autumn">Autumn</MenuItem>
+                    <MenuItem value="Winter">Winter</MenuItem>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12}>
                 </Grid>
