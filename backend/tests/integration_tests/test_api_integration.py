@@ -6,6 +6,7 @@ from rest_framework import status
 
 from backend.exceptions import GeocoderNoResultsError
 from backend.tests import helpers
+from backend.tests.helpers import VALID_RECOMMEND_PAYLOAD
 
 
 @override_settings(METEOSTAT_API_KEY="Foo")
@@ -13,7 +14,7 @@ from backend.tests import helpers
 class TestGarden(TestCase):
     def setUp(self):
         self.url = "/recommend/"
-        self.data = {"season": "summer", "direction": "South", "location": "Romsey, UK"}
+        self.data = VALID_RECOMMEND_PAYLOAD
 
         geocoder_patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
                                  return_value=Mock(**helpers.SAMPLE_GARDEN_GEOCODE_LOCATION))

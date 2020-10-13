@@ -12,9 +12,9 @@ class RecommendSerializer(serializers.Serializer):
 
     location = serializers.CharField()
     direction = serializers.CharField()
-    duration = serializers.CharField(required=False)
+    duration = serializers.CharField()
     season = serializers.CharField()
-    bloom_period = serializers.CharField(required=False)
+    bloom_period = serializers.CharField()
 
     @staticmethod
     def validate_location(value):

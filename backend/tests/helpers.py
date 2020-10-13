@@ -1,3 +1,11 @@
+VALID_RECOMMEND_PAYLOAD = {
+    "season": "summer",
+    "direction": "South",
+    "location": "Romsey, UK",
+    "duration": "Perennial",
+    "bloom_period": "Summer"
+}
+
 SAMPLE_GARDEN_GEOCODE_LOCATION = {
     "address": "Truro, Cornwall",
     "latitude": 50.263195,

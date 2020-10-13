@@ -1,4 +1,5 @@
 import json
+from copy import copy
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -8,6 +9,7 @@ from rest_framework.test import APIRequestFactory
 from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
 from backend.interfaces.trefle.exceptions import TrefleConnectionError
 from backend.exceptions import GeocoderNoResultsError
+from backend.tests.helpers import VALID_RECOMMEND_PAYLOAD
 from backend.views import RecommendView
 
 
@@ -16,10 +18,11 @@ class TestRecommendView(TestCase):
         self.factory = APIRequestFactory()
         self.view = RecommendView.as_view()
         self.recommend_url = "/recommend/"
-        self.valid_payload = {"season": "summer", "direction": "South", "location": "Romsey, UK"}
+        self.valid_payload = VALID_RECOMMEND_PAYLOAD
 
     def test_missing_mandatory_parameters(self):
-        payload = {"season": "summer", "direction": "South"}
+        payload = copy(self.valid_payload)
+        payload.pop("location")
 
         response = self._post_to_endpoint(payload)
 
