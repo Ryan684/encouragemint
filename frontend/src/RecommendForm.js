@@ -180,7 +180,7 @@ class RecommendForm extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <p>When season do you want plant recommendations for?</p>
+                  <p>What season do you want plant recommendations for?</p>
                   <TextField
                     autoComplete='season'
                     name='season'
@@ -224,7 +224,7 @@ class RecommendForm extends React.Component {
                   </TextField>
                 </Grid>
                 <Grid item xs={12}>
-                  <p>How long does the plant need to last?</p>
+                  <p>How hardy do the plants need to be?</p>
                   <TextField
                     variant='outlined'
                     required
@@ -244,7 +244,7 @@ class RecommendForm extends React.Component {
                   </TextField>
                 </Grid>
                 <Grid item xs={12}>
-                  <p>For plants that flower, when do you want them to bloom?</p>
+                  <p>When do you want the plants to bloom?</p>
                   <TextField
                     variant='outlined'
                     required
