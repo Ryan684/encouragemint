@@ -1,11 +1,9 @@
 <h1>Encouragemint</h1>
-This API allows you to hold an inventory of plants of interest in your garden, and can make recommendations
-on plants that will thrive in your garden based on key pieces of information that can be gleaned from public
-APIs and databases. For example, it can make recommendations on plants for specific seasons based on:</br></br>
+This API makes recommendations on plants that will thrive in your garden based on key pieces of information that can be 
+gleaned from public APIs and databases. For example, it can make recommendations on plants for specific seasons 
+based on:</br></br>
 <li>Average rainfall for your garden</li>
 <li>The shade/sunlight your garden gets by it's direction</li></br>
-
-You can also filter plants by:</br>
 <li>The desired bloom period</li>
 <li>The desired duration (Perennial, Annual, Biennial)</li>
 
@@ -15,19 +13,26 @@ You can also filter plants by:</br>
 <li>Integration of Amazon Lookup API for recommended plants, so users can choose to buy the plant.</li>
 
 <h2>Endpoints</h2>
-<li>/profile [POST, PUT, PATCH, GET]</li>
-<li>/garden [POST, GET]</li>
-<li>/garden/{garden_id}/recommend/ [GET]</li>
-<li>/plants/ [POST, PUT]</li>
-<li>/plant_detail/{trefle_id}/ [GET]</li>
+<li>/profile [POST]</li>
+
+<h2>Payload</h2>
+{</br>
+    "location": <An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.></br>
+    "direction": <The direction of your garden, if you stood looking out from your backdoor. Values can be ["NORTH", "EAST", "SOUTH", "WEST"].></br>
+    "duration": <How long the plant survives. I.E if just one year, it's an annual. Values can be ["PERENNIAL", "ANNUAL", "BIENNIAL"].></br>
+    "season": <The season the plant is at the peak of its growth. Not to be confused with its bloom period, although this can be the same. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].></br>
+    "bloom_period": <The season you want the plant to bloom in. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].></br>
+}</br>
 
 <h2>Logs</h2>
-Currently, the app writes it's logs both to a console and a debug.log file in the root directory of the project.
+Currently, the app writes its logs both to a console and a debug.log file in the root directory of the project.
 
 <h2>Deployment</h2>
 To run this app locally, you can use manage.py runserver or docker-compose to run it locally in a container using
 'docker-compose up' from the root directory of the project. In either case, the API will run locally at
 http://127.0.0.1:8000/.</br></br>
+
+The UI will run at http://127.0.0.1:3000. </br></br>
 
 To run this application external to your local machine on a Kubernetes cluster, follow the steps in the
 /kubernetes directory README.
