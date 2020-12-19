@@ -49,11 +49,7 @@ class TestGarden(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_single_recommendation_found(self):
-        mock_trefle_responses = [Mock(), Mock()]
-        mock_trefle_responses[0].json.return_value = helpers.TREFLE_NAME_SINGLE_LOOKUP_RESPONSE
-        mock_trefle_responses[1].json.return_value = helpers.TREFLE_ID_LOOKUP_RESPONSE
-
-        self.mock_trefle.side_effect = mock_trefle_responses
+        self.mock_trefle.return_value = helpers.TREFLE_NAME_SINGLE_LOOKUP_RESPONSE
 
         mock_meteostat_responses = [Mock(), Mock()]
         mock_meteostat_responses[0].json.return_value = helpers.METEOSTAT_STATION_SEARCH_RESPONSE

@@ -39,26 +39,11 @@ class TestTrefle(TestCase):
         self.assertEqual([], response)
 
     def test_lookup_plants_one_result(self):
-        mock_responses = [Mock(), Mock()]
-        mock_responses[0].json.return_value = self.search_single_match
-        mock_responses[1].json.return_value = self.id_search
-        self.mock_get.side_effect = mock_responses
-        test_plant = {
-            "trefle_id": 134845,
-            "common_name": "common woolly sunflower",
-            "duration": "Annual, Perennial",
-            "bloom_period": "Spring",
-            "growth_period": "Summer",
-            "growth_rate": "Slow",
-            "shade_tolerance": "High",
-            "moisture_use": "High",
-            "family_common_name": "Aster family",
-            "scientific_name": "Eriophyllum lanatum"
-        }
+        self.mock_get.return_value = self.search_single_match
+        expected_plant = self.search_single_match
 
         response = lookup_plants({"scientific_name": "common woolly sunflower"})
-
-        self.assertEqual(test_plant, response)
+        self.assertEqual(expected_plant, response)
 
     def test_lookup_plants_many_results(self):
         self.mock_get.return_value = self.search_many_matches
