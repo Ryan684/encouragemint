@@ -17,11 +17,11 @@ based on:</br></br>
 
 <h2>Payload</h2>
 {</br>
-    "location": An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.</br>
-    "direction": The direction of your garden, if you stood looking out from your backdoor. Values can be ["NORTH", "EAST", "SOUTH", "WEST"].</br>
-    "duration": How long the plant survives. I.E if just one year, it's an annual. Values can be ["PERENNIAL", "ANNUAL", "BIENNIAL"].</br>
-    "season": The season the plant is at the peak of its growth. Not to be confused with its bloom period, although this can be the same. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].</br>
-    "bloom_period": The season you want the plant to bloom in. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].</br>
+    <b>"location"</b>: An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.</br>
+    <b>"direction"</b>: The direction of your garden, if you stood looking out from your backdoor. Values can be ["NORTH", "EAST", "SOUTH", "WEST"].</br>
+    <b>"duration"</b>: How long the plant survives. I.E if just one year, it's an annual. Values can be ["PERENNIAL", "ANNUAL", "BIENNIAL"].</br>
+    <b>"season"</b>: The season the plant is at the peak of its growth. Not to be confused with its bloom period, although this can be the same. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].</br>
+    <b>"bloom_period"</b>: The season you want the plant to bloom in. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].</br>
 }</br>
 
 <h2>Logs</h2>
