@@ -3,7 +3,7 @@ This API makes recommendations on plants that will thrive in your garden based o
 gleaned from public APIs and databases. For example, it can make recommendations on plants for specific seasons 
 based on:</br></br>
 <li>Average rainfall for your garden</li>
-<li>The shade/sunlight your garden gets by it's direction</li></br>
+<li>The shade/sunlight your garden gets by it's direction</li>
 <li>The desired bloom period</li>
 <li>The desired duration (Perennial, Annual, Biennial)</li>
 
@@ -17,11 +17,11 @@ based on:</br></br>
 
 <h2>Payload</h2>
 {</br>
-    "location": <An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.></br>
-    "direction": <The direction of your garden, if you stood looking out from your backdoor. Values can be ["NORTH", "EAST", "SOUTH", "WEST"].></br>
-    "duration": <How long the plant survives. I.E if just one year, it's an annual. Values can be ["PERENNIAL", "ANNUAL", "BIENNIAL"].></br>
-    "season": <The season the plant is at the peak of its growth. Not to be confused with its bloom period, although this can be the same. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].></br>
-    "bloom_period": <The season you want the plant to bloom in. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].></br>
+    "location": An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.</br>
+    "direction": The direction of your garden, if you stood looking out from your backdoor. Values can be ["NORTH", "EAST", "SOUTH", "WEST"].</br>
+    "duration": How long the plant survives. I.E if just one year, it's an annual. Values can be ["PERENNIAL", "ANNUAL", "BIENNIAL"].</br>
+    "season": The season the plant is at the peak of its growth. Not to be confused with its bloom period, although this can be the same. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].</br>
+    "bloom_period": The season you want the plant to bloom in. Values can be ["SPRING", "SUMMER", "AUTUMN", "WINTER"].</br>
 }</br>
 
 <h2>Logs</h2>
