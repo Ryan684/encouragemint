@@ -11,7 +11,7 @@ from backend.interfaces.trefle.trefle import lookup_plants
 @override_settings(TREFLE_API_KEY="Foo")
 class TestTrefle(TestCase):
     def setUp(self):
-        test_responses_dir = "backend/interfaces/trefle/tests/test_responses"
+        test_responses_dir = "backend/tests/unit_tests/interfaces/trefle/test_responses"
         with open(f"{test_responses_dir}/plant_search_one_match.json", "r") as file:
             self.search_single_match = json.load(file)
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
@@ -32,28 +32,28 @@ class TestTrefle(TestCase):
         )
 
     def test_search_plants_no_results(self):
-        self.mock_get.return_value = []
+        self.mock_get.return_value.json.return_value = []
 
         response = lookup_plants({"q": "Barflower"})
 
         self.assertEqual([], response)
 
     def test_lookup_plants_one_result(self):
-        self.mock_get.return_value = self.search_single_match
+        self.mock_get.return_value.json.return_value = self.search_single_match
         expected_plant = self.search_single_match
 
         response = lookup_plants({"scientific_name": "common woolly sunflower"})
         self.assertEqual(expected_plant, response)
 
     def test_lookup_plants_many_results(self):
-        self.mock_get.return_value = self.search_many_matches
+        self.mock_get.return_value.json.return_value = self.search_many_matches
 
         response = lookup_plants({"q": "grass"})
 
         self.assertEqual(self.search_many_matches, response)
 
     def test_lookup_plants_by_multiple_properties(self):
-        self.mock_get.return_value = self.search_many_matches
+        self.mock_get.return_value.json.return_value = self.search_many_matches
 
         response = lookup_plants({"shade_tolerance": "High", "moisture_use": "High"})
 

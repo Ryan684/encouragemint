@@ -2,6 +2,10 @@ import re
 
 from rest_framework import serializers
 
+ALLOWED_SEASONS = ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
+ALLOWED_PLANT_DURATIONS = ["PERENNIAL", "ANNUAL", "BIENNIAL"]
+ALLOWED_GARDEN_DIRECTIONS = ["NORTH", "EAST", "SOUTH", "WEST"]
+
 
 class RecommendSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
@@ -29,7 +33,7 @@ class RecommendSerializer(serializers.Serializer):
     @staticmethod
     def validate_direction(value):
         direction = value.upper()
-        if direction not in ["NORTH", "EAST", "SOUTH", "WEST"]:
+        if direction not in ALLOWED_GARDEN_DIRECTIONS:
             raise serializers.ValidationError(
                 "A garden's direction can only be north, east, south or west.")
         return direction
@@ -37,7 +41,7 @@ class RecommendSerializer(serializers.Serializer):
     @staticmethod
     def validate_duration(value):
         duration = value.upper()
-        if duration not in ["PERENNIAL", "ANNUAL", "BIENNIAL"]:
+        if duration not in ALLOWED_PLANT_DURATIONS:
             raise serializers.ValidationError(
                 "A garden's duration can only be perennial, annual or biennial.")
         return duration
@@ -45,7 +49,7 @@ class RecommendSerializer(serializers.Serializer):
     @staticmethod
     def validate_season(value):
         season = value.upper()
-        if season not in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]:
+        if season not in ALLOWED_SEASONS:
             raise serializers.ValidationError(
                 "A garden's season can only be spring, summer, autumn or winter.")
         return season
@@ -53,7 +57,7 @@ class RecommendSerializer(serializers.Serializer):
     @staticmethod
     def validate_bloom_period(value):
         bloom_period = value.upper()
-        if bloom_period not in ["SPRING", "SUMMER", "AUTUMN", "WINTER"]:
+        if bloom_period not in ALLOWED_SEASONS:
             raise serializers.ValidationError(
                 "A garden's bloom period can only be spring, summer, autumn or winter.")
         return bloom_period

@@ -70,7 +70,7 @@ class TestRecommendView(TestCase):
 
     @patch("backend.views.recommend_plants")
     def test_valid_task_call(self, mock_recommendations):
-        with open("backend/interfaces/trefle/tests/test_responses/plant_search_one_match.json", "r") as file:
+        with open("backend/tests/unit_tests/interfaces/trefle/test_responses/plant_search_one_match.json", "r") as file:
             recommend_one_result = json.load(file)
         mock_recommendations.return_value = recommend_one_result
 

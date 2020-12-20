@@ -1,3 +1,5 @@
+import json
+
 from unittest.mock import patch, Mock
 
 import requests
@@ -6,7 +8,6 @@ from rest_framework import status
 
 from backend.exceptions import GeocoderNoResultsError
 from backend.tests import helpers
-from backend.tests.helpers import VALID_RECOMMEND_PAYLOAD
 
 
 @override_settings(METEOSTAT_API_KEY="Foo")
@@ -14,7 +15,7 @@ from backend.tests.helpers import VALID_RECOMMEND_PAYLOAD
 class TestGarden(TestCase):
     def setUp(self):
         self.url = "/recommend/"
-        self.data = VALID_RECOMMEND_PAYLOAD
+        self.data = helpers.VALID_RECOMMEND_PAYLOAD
 
         geocoder_patcher = patch("geopy.geocoders.googlev3.GoogleV3.geocode",
                                  return_value=Mock(**helpers.SAMPLE_GARDEN_GEOCODE_LOCATION))
@@ -29,13 +30,16 @@ class TestGarden(TestCase):
         self.mock_trefle = trefle_patcher.start()
         self.addCleanup(trefle_patcher.stop)
 
+        self.trefle_responses_dir = "backend/tests/unit_tests/interfaces/trefle/test_responses"
+        self.meteostat_responses_dir = "backend/tests/unit_tests/interfaces/meteostat/test_responses"
+
     def test_input_validation_error(self):
         response = self.client.post(f"{self.url}", content_type="application/json", data={"season": "summer"})
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_external_service_connection_error(self):
-        self.mock_trefle.side_effect = requests.RequestException
+    def test_external_service_request_error(self):
+        self.mock_trefle.side_effect = requests.exceptions.ConnectionError
 
         response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
@@ -49,40 +53,37 @@ class TestGarden(TestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_single_recommendation_found(self):
-        self.mock_trefle.return_value = helpers.TREFLE_NAME_SINGLE_LOOKUP_RESPONSE
-
-        mock_meteostat_responses = [Mock(), Mock()]
-        mock_meteostat_responses[0].json.return_value = helpers.METEOSTAT_STATION_SEARCH_RESPONSE
-        mock_meteostat_responses[1].json.return_value = helpers.METEOSTAT_STATION_WEATHER_RESPONSE
-
-        self.mock_meteostat.side_effect = mock_meteostat_responses
+        with open(f"{self.trefle_responses_dir}/plant_search_one_match.json", "r") as file:
+            self.mock_trefle.return_value.json.return_value = json.load(file)
+        self._prime_meteostat_mocks()
 
         response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_many_recommendations_found(self):
-        self.mock_trefle.return_value = helpers.TREFLE_NAME_MULTIPLE_LOOKUP_RESPONSES
-
-        mock_meteostat_responses = [Mock(), Mock()]
-        mock_meteostat_responses[0].json.return_value = helpers.METEOSTAT_STATION_SEARCH_RESPONSE
-        mock_meteostat_responses[1].json.return_value = helpers.METEOSTAT_STATION_WEATHER_RESPONSE
-
-        self.mock_meteostat.side_effect = mock_meteostat_responses
+        with open(f"{self.trefle_responses_dir}/plant_search_many_matches.json", "r") as file:
+            self.mock_trefle.return_value.json.return_value = json.load(file)
+        self._prime_meteostat_mocks()
 
         response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_no_recommendations_found(self):
-        self.mock_trefle.return_value = []
-
-        mock_meteostat_responses = [Mock(), Mock()]
-        mock_meteostat_responses[0].json.return_value = helpers.METEOSTAT_STATION_SEARCH_RESPONSE
-        mock_meteostat_responses[1].json.return_value = helpers.METEOSTAT_STATION_WEATHER_RESPONSE
-
-        self.mock_meteostat.side_effect = mock_meteostat_responses
+        self.mock_trefle.return_value.json.return_value = []
+        self._prime_meteostat_mocks()
 
         response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def _prime_meteostat_mocks(self):
+        mock_meteostat_responses = [Mock(), Mock()]
+
+        with open(f"{self.meteostat_responses_dir}/station_search_response_with_data.json", "r") as file:
+            mock_meteostat_responses[0].json.return_value = json.load(file)
+        with open(f"{self.meteostat_responses_dir}/station_weather_lookup_with_data.json", "r") as file:
+            mock_meteostat_responses[1].json.return_value = json.load(file)
+
+        self.mock_meteostat.side_effect = mock_meteostat_responses

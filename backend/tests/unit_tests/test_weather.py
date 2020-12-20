@@ -9,11 +9,11 @@ from backend import weather
 
 class TestGetGardenMoisture(TestCase):
     def setUp(self):
-        test_responses_dir = "backend/tests/unit_tests/test_responses"
-        with open(f"{test_responses_dir}/search_for_nearest_weather_stations.json", "r") as file:
-            self.station_search_with_data = json.load(file)
-        with open(f"{test_responses_dir}/get_station_weather_record.json", "r") as file:
-            self.weather_record_with_data = json.load(file)
+        meteostat_responses_dir = "backend/tests/unit_tests/interfaces/meteostat/test_responses"
+        with open(f"{meteostat_responses_dir}/station_search_response_with_data.json", "r") as file:
+            self.station_search_with_data = json.load(file)["data"]
+        with open(f"{meteostat_responses_dir}/station_weather_lookup_with_data.json", "r") as file:
+            self.weather_record_with_data = json.load(file)["data"]
 
         patcher = patch("backend.weather.search_for_nearest_weather_stations")
         self.search_for_nearest_weather_stations = patcher.start()

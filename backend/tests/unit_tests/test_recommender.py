@@ -9,7 +9,7 @@ from backend.recommender import recommend_plants
 
 class TestRecommendPlants(TestCase):
     def setUp(self):
-        test_responses_dir = "backend/interfaces/trefle/tests/test_responses"
+        test_responses_dir = "backend/tests/unit_tests/interfaces/trefle/test_responses"
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.recommend_many_results = json.load(file)
         with open(f"{test_responses_dir}/plant_search_one_match.json", "r") as file:

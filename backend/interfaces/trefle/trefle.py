@@ -15,7 +15,7 @@ def lookup_plants(parameters):
             url=TREFLE_URL,
             headers=HEADERS,
             params=_compile_parameters(parameters)
-        )
+        ).json()
     except requests.RequestException as exception:
         raise TrefleConnectionError(exception)
 
