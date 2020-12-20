@@ -24,7 +24,7 @@ class TestTrefle(TestCase):
         self.addCleanup(patcher.stop)
 
     def test_trefle_unreachable(self):
-        self.mock_get.side_effect = requests.RequestException
+        self.mock_get.side_effect = requests.exceptions.ConnectionError
 
         self.assertRaises(
             TrefleConnectionError,
