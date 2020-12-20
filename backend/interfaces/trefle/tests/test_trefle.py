@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
 import requests
 from django.test import TestCase, override_settings

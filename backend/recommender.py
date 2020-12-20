@@ -4,7 +4,7 @@ from backend.weather import get_garden_moisture
 
 
 def recommend_plants(request_data):
-    latitude, longitude, address = get_coordinates(request_data["location"])
+    latitude, longitude, _ = get_coordinates(request_data["location"])
 
     query = {"shade_tolerance": _get_required_shade_tolerance(request_data["direction"])}
     moisture_use = get_garden_moisture(latitude, longitude, request_data["season"])
