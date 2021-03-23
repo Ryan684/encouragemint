@@ -5,5 +5,4 @@ db.sqlite3
 docker-hub-credentials.yml
 keys.yml
 .env
-.db_env
 debug.log
