@@ -22,21 +22,19 @@ class TestTrefle(TestCase):
         patcher = patch("requests.get")
         self.mock_get = patcher.start()
         self.addCleanup(patcher.stop)
+        self.valid_trefle_payload = {"shade_tolerance": "Tolerant"}
 
     def test_trefle_unreachable(self):
         # When more error-specific behavior is introduced, this needs to be more specific.
         # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
         self.mock_get.side_effect = requests.exceptions.RequestException
 
-        self.assertRaises(
-            TrefleConnectionError,
-            lookup_plants, {"q": "Fooflower"}
-        )
+        self.assertRaises(TrefleConnectionError, lookup_plants, self.valid_trefle_payload)
 
     def test_search_plants_no_results(self):
         self.mock_get.return_value.json.return_value = []
 
-        response = lookup_plants({"q": "Barflower"})
+        response = lookup_plants(self.valid_trefle_payload)
 
         self.assertEqual([], response)
 
@@ -44,19 +42,21 @@ class TestTrefle(TestCase):
         self.mock_get.return_value.json.return_value = self.search_single_match
         expected_plant = self.search_single_match
 
-        response = lookup_plants({"scientific_name": "common woolly sunflower"})
+        response = lookup_plants(self.valid_trefle_payload)
         self.assertEqual(expected_plant, response)
 
     def test_lookup_plants_many_results(self):
         self.mock_get.return_value.json.return_value = self.search_many_matches
 
-        response = lookup_plants({"q": "grass"})
+        response = lookup_plants(self.valid_trefle_payload )
 
         self.assertEqual(self.search_many_matches, response)
 
     def test_lookup_plants_by_multiple_properties(self):
         self.mock_get.return_value.json.return_value = self.search_many_matches
+        payload = self.valid_trefle_payload.copy()
+        payload["moisture_use"] = "High"
 
-        response = lookup_plants({"shade_tolerance": "High", "moisture_use": "High"})
+        response = lookup_plants(payload)
 
         self.assertEqual(self.search_many_matches, response)
