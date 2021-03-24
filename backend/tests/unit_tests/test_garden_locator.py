@@ -25,8 +25,7 @@ class TestGetCoordinates(TestCase):
         mock = Mock(**sample_garden_geocode_location)
         self.mock_geocoder.return_value = mock
 
-        latitude, longitude, address = get_coordinates(self.dummy_location)
+        latitude, longitude = get_coordinates(self.dummy_location)
 
         self.assertEqual(sample_garden_geocode_location["latitude"], latitude)
         self.assertEqual(sample_garden_geocode_location["longitude"], longitude)
-        self.assertEqual(sample_garden_geocode_location["address"], address)

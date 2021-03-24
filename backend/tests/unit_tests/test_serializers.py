@@ -82,30 +82,6 @@ class TestValidateDuration(TestGardenSerializerValidators):
         )
 
 
-class TestValidateSeason(TestGardenSerializerValidators):
-    @classmethod
-    def setUpClass(cls):
-        super(TestValidateSeason, cls).setUpClass()
-
-    def test_valid_uppercase_season(self):
-        season = "SUMMER"
-        self.assertEqual(season, self.test_obj.validate_season(season))
-
-    def test_valid_lowercase_season(self):
-        season = "summer"
-        self.assertEqual("SUMMER", self.test_obj.validate_season(season))
-
-    def test_invalid_season(self):
-        season = "june"
-
-        self.assertRaisesMessage(
-            serializers.ValidationError,
-            "A garden's season can only be spring, summer, autumn or winter.",
-            self.test_obj.validate_season,
-            season
-        )
-
-
 class TestValidateBloomPeriod(TestGardenSerializerValidators):
     @classmethod
     def setUpClass(cls):

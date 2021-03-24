@@ -9,5 +9,5 @@ def get_coordinates(location):
     geo_location = geolocator.geocode(location)
 
     if geo_location:
-        return geo_location.latitude, geo_location.longitude, geo_location.address
+        return geo_location.latitude, geo_location.longitude
     raise GeocoderNoResultsError()

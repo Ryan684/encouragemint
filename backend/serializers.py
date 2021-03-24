@@ -17,7 +17,6 @@ class RecommendSerializer(serializers.Serializer):
     location = serializers.CharField()
     direction = serializers.CharField()
     duration = serializers.CharField()
-    season = serializers.CharField()
     bloom_period = serializers.CharField()
 
     @staticmethod
@@ -45,14 +44,6 @@ class RecommendSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "A garden's duration can only be perennial, annual or biennial.")
         return duration
-
-    @staticmethod
-    def validate_season(value):
-        season = value.upper()
-        if season not in ALLOWED_SEASONS:
-            raise serializers.ValidationError(
-                "A garden's season can only be spring, summer, autumn or winter.")
-        return season
 
     @staticmethod
     def validate_bloom_period(value):

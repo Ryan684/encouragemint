@@ -1,5 +1,4 @@
 VALID_RECOMMEND_PAYLOAD = {
-    "season": "summer",
     "direction": "South",
     "location": "Romsey, UK",
     "duration": "Perennial",
