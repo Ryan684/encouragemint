@@ -28,6 +28,6 @@ def _compile_parameters(search_parameters):
     }
 
     for parameter in search_parameters:
-        url_parameters[parameter] = search_parameters[parameter]
+        url_parameters[f"filter[{parameter}]"] = search_parameters[parameter]
 
     return url_parameters

@@ -69,7 +69,7 @@ class TestTrefle(TestCase):
     def _assert_trefle_api_payload(self, search_parameters):
         parameters = {"token": None, "page_size": 100}
         for parameter in search_parameters:
-            parameters[parameter] = search_parameters[parameter]
+            parameters[f"filter[{parameter}]"] = search_parameters[parameter]
 
         self.mock_get.assert_called_once_with(
             headers=trefle.HEADERS,
