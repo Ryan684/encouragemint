@@ -5,7 +5,7 @@ import requests
 from django.test import TestCase, override_settings
 
 from backend.interfaces.trefle.exceptions import TrefleConnectionError
-from backend.interfaces.trefle.trefle import lookup_plants
+from backend.interfaces.trefle import trefle
 
 
 @override_settings(TREFLE_API_KEY="Foo")
@@ -29,27 +29,31 @@ class TestTrefle(TestCase):
         # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
         self.mock_get.side_effect = requests.exceptions.RequestException
 
-        self.assertRaises(TrefleConnectionError, lookup_plants, self.trefle_payload)
+        self.assertRaises(TrefleConnectionError, trefle.lookup_plants, self.trefle_payload)
 
     def test_search_plants_no_results(self):
         self.mock_get.return_value.json.return_value = []
 
-        response = lookup_plants(self.trefle_payload)
+        response = trefle.lookup_plants(self.trefle_payload)
 
+        self._assert_trefle_api_payload(self.trefle_payload)
         self.assertEqual([], response)
 
     def test_lookup_plants_one_result(self):
         self.mock_get.return_value.json.return_value = self.search_single_match
         expected_plant = self.search_single_match
 
-        response = lookup_plants(self.trefle_payload)
+        response = trefle.lookup_plants(self.trefle_payload)
+
+        self._assert_trefle_api_payload(self.trefle_payload)
         self.assertEqual(expected_plant, response)
 
     def test_lookup_plants_many_results(self):
         self.mock_get.return_value.json.return_value = self.search_many_matches
 
-        response = lookup_plants(self.trefle_payload)
+        response = trefle.lookup_plants(self.trefle_payload)
 
+        self._assert_trefle_api_payload(self.trefle_payload)
         self.assertEqual(self.search_many_matches, response)
 
     def test_lookup_plants_by_multiple_properties(self):
@@ -57,6 +61,18 @@ class TestTrefle(TestCase):
         payload = self.trefle_payload.copy()
         payload["moisture_use"] = "High"
 
-        response = lookup_plants(payload)
+        response = trefle.lookup_plants(payload)
 
+        self._assert_trefle_api_payload(payload)
         self.assertEqual(self.search_many_matches, response)
+
+    def _assert_trefle_api_payload(self, search_parameters):
+        parameters = {"token": None, "page_size": 100}
+        for parameter in search_parameters:
+            parameters[parameter] = search_parameters[parameter]
+
+        self.mock_get.assert_called_once_with(
+            headers=trefle.HEADERS,
+            params=parameters,
+            url=trefle.PLANTS_ENDPOINT
+        )
