@@ -24,7 +24,9 @@ class TestTrefle(TestCase):
         self.addCleanup(patcher.stop)
 
     def test_trefle_unreachable(self):
-        self.mock_get.side_effect = requests.exceptions.ConnectionError
+        # When more error-specific behavior is introduced, this needs to be more specific.
+        # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
+        self.mock_get.side_effect = requests.exceptions.RequestException
 
         self.assertRaises(
             TrefleConnectionError,
