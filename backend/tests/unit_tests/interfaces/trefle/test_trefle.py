@@ -48,7 +48,7 @@ class TestTrefle(TestCase):
     def test_lookup_plants_many_results(self):
         self.mock_get.return_value.json.return_value = self.search_many_matches
 
-        response = lookup_plants(self.valid_trefle_payload )
+        response = lookup_plants(self.valid_trefle_payload)
 
         self.assertEqual(self.search_many_matches, response)
 
