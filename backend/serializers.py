@@ -48,7 +48,8 @@ class RecommendSerializer(serializers.Serializer):
         direction = value.upper()
         if direction not in ALLOWED_GARDEN_DIRECTIONS:
             raise serializers.ValidationError(
-                f"A garden's direction can only be one of these directions: {ALLOWED_GARDEN_DIRECTIONS}")
+                "A garden's direction can only be one of these directions: "
+                f"{ALLOWED_GARDEN_DIRECTIONS}")
         return direction
 
     @staticmethod

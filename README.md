@@ -15,7 +15,7 @@ based on:
 <li>Integration of Amazon Lookup API for recommended plants, so users can choose to buy the plant.</li>
 
 <h2>Endpoints</h2>
-<li>/profile [POST]</li>
+<li>/recommend [POST]</li>
 
 <h2>Post Payload Fields</h2>
     <b>location</b>: An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.</br>
