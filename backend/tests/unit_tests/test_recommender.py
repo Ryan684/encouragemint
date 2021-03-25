@@ -29,30 +29,19 @@ class TestRecommendPlants(TestCase):
 
     def test_without_moisture_use_parameter(self):
         self.mock_weather.return_value = None
-        expected_trefle_payload = self._get_trefle_payload("Tolerant")
+        expected_trefle_payload = self._get_trefle_payload()
         expected_trefle_payload.pop("moisture_use")
 
-        self._assert_recommendation(expected_trefle_payload, "NORTH")
+        self._assert_recommendation(expected_trefle_payload)
 
-    def test_north_facing_garden(self):
-        expected_trefle_payload = self._get_trefle_payload("Tolerant")
+    def test_with_moisture_use_parameter(self):
+        expected_trefle_payload = self._get_trefle_payload()
 
-        self._assert_recommendation(expected_trefle_payload, "NORTH")
+        self._assert_recommendation(expected_trefle_payload)
 
-    def test_south_facing_garden(self):
-        expected_trefle_payload = self._get_trefle_payload("Intolerant")
-
-        self._assert_recommendation(expected_trefle_payload, "SOUTH")
-
-    def test_other_direction_facing_garden(self):
-        expected_trefle_payload = self._get_trefle_payload("Intermediate")
-
-        self._assert_recommendation(expected_trefle_payload, "EAST")
-
-    def _assert_recommendation(self, expected_trefle_payload, garden_direction):
+    def _assert_recommendation(self, expected_trefle_payload):
         input_data = {
             "bloom_period": seasons.EARLY_SUMMER,
-            "direction": garden_direction,
             "location": "Romsey, UK",
             "duration": "Annual"
         }
@@ -65,12 +54,10 @@ class TestRecommendPlants(TestCase):
         self.mock_trefle.assert_called_once_with(expected_trefle_payload)
         self.assertEqual(self.recommend_many_results, plants)
 
-
     @staticmethod
-    def _get_trefle_payload(shade_tolerance):
+    def _get_trefle_payload():
         return {
             "bloom_months": seasons.BLOOM_MONTHS[seasons.EARLY_SUMMER],
-            "shade_tolerance": shade_tolerance,
             "moisture_use": "Medium",
             "duration": "Annual"
         }

@@ -4,7 +4,7 @@ from unittest.mock import patch
 from django.test import TestCase
 
 from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend import weather
+from backend import weather, seasons
 
 
 class TestGetGardenMoisture(TestCase):
@@ -27,7 +27,7 @@ class TestGetGardenMoisture(TestCase):
         self.search_for_nearest_weather_stations.return_value = self.station_search_with_data
         self.get_station_weather_record.return_value = self.weather_record_with_data
 
-        moisture = weather.get_garden_moisture(123456, 789010, "SPRING")
+        moisture = weather.get_garden_moisture(123456, 789010, seasons.EARLY_SPRING)
 
         self.assertEqual("High", moisture)
 
@@ -39,7 +39,7 @@ class TestGetGardenMoisture(TestCase):
             self.station_search_with_data
         self.get_station_weather_record.side_effect = mocked_weather_records
 
-        moisture = weather.get_garden_moisture(123456, 789010, "SPRING")
+        moisture = weather.get_garden_moisture(123456, 789010, seasons.EARLY_SPRING)
 
         self.assertEqual("High", moisture)
 
@@ -48,7 +48,7 @@ class TestGetGardenMoisture(TestCase):
             self.station_search_with_data
         self.get_station_weather_record.return_value = []
 
-        moisture = weather.get_garden_moisture(123456, 789010, "SPRING")
+        moisture = weather.get_garden_moisture(123456, 789010, seasons.EARLY_SPRING)
 
         self.assertIsNone(moisture)
 
@@ -56,7 +56,7 @@ class TestGetGardenMoisture(TestCase):
         self.search_for_nearest_weather_stations.side_effect = \
             MeteostatConnectionError
 
-        moisture = weather.get_garden_moisture(123456, 789010, "SPRING")
+        moisture = weather.get_garden_moisture(123456, 789010, seasons.EARLY_SPRING)
 
         self.assertIsNone(moisture)
 
@@ -65,14 +65,14 @@ class TestGetGardenMoisture(TestCase):
             self.station_search_with_data
         self.get_station_weather_record.side_effect = MeteostatConnectionError
 
-        moisture = weather.get_garden_moisture(123456, 789010, "SPRING")
+        moisture = weather.get_garden_moisture(123456, 789010, seasons.EARLY_SPRING)
 
         self.assertIsNone(moisture)
 
     def test_unsuccessful_get_garden_moisture_from_no_station_data(self):
         self.search_for_nearest_weather_stations.return_value = []
 
-        moisture = weather.get_garden_moisture(123456, 789010, "SPRING")
+        moisture = weather.get_garden_moisture(123456, 789010, seasons.EARLY_SPRING)
 
         self.assertIsNone(moisture)
 
@@ -81,6 +81,6 @@ class TestGetGardenMoisture(TestCase):
             self.station_search_with_data
         self.get_station_weather_record.return_value = []
 
-        moisture = weather.get_garden_moisture(123456, 789010, "SPRING")
+        moisture = weather.get_garden_moisture(123456, 789010, seasons.EARLY_SPRING)
 
         self.assertIsNone(moisture)

@@ -6,7 +6,6 @@ from backend.weather import get_garden_moisture
 
 def recommend_plants(request_data):
     query = {
-        "shade_tolerance": _get_required_shade_tolerance(request_data["direction"]),
         "duration": request_data["duration"].lower().capitalize(),
         "bloom_months": seasons.BLOOM_MONTHS[request_data["bloom_period"]]
     }
@@ -18,11 +17,3 @@ def recommend_plants(request_data):
         query["moisture_use"] = moisture_use
 
     return lookup_plants(query)
-
-
-def _get_required_shade_tolerance(direction):
-    if direction == "NORTH":
-        return "Tolerant"
-    if direction == "SOUTH":
-        return "Intolerant"
-    return "Intermediate"

@@ -34,31 +34,6 @@ class TestValidateLocation(TestGardenSerializerValidators):
         )
 
 
-class TestValidateDirection(TestGardenSerializerValidators):
-    @classmethod
-    def setUpClass(cls):
-        super(TestValidateDirection, cls).setUpClass()
-
-    def test_valid_uppercase_direction(self):
-        direction = "NORTH"
-        self.assertEqual(direction, self.test_obj.validate_direction(direction))
-
-    def test_valid_lowercase_direction(self):
-        direction = "north"
-        self.assertEqual("NORTH", self.test_obj.validate_direction(direction))
-
-    def test_invalid_direction(self):
-        direction = "down"
-
-        self.assertRaisesMessage(
-            serializers.ValidationError,
-            "A garden's direction can only be one of these directions: "
-            f"{backend_serializers.ALLOWED_GARDEN_DIRECTIONS}",
-            self.test_obj.validate_direction,
-            direction
-        )
-
-
 class TestValidateDuration(TestGardenSerializerValidators):
     @classmethod
     def setUpClass(cls):

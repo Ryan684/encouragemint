@@ -4,7 +4,6 @@ gleaned from public APIs and databases. For example, it can make recommendations
 based on:</br></br>
 <ul>
     <li>Average rainfall for your garden</li>
-    <li>The shade/sunlight your garden gets by it's direction</li>
     <li>The desired bloom period</li>
     <li>The desired duration (Perennial, Annual, Biennial)</li>
 </ul>
@@ -19,7 +18,6 @@ based on:</br></br>
 
 <h2>Post Payload Fields</h2>
     <b>location</b>: An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.</br>
-    <b>direction</b>: The direction of your garden, if you stood looking out from your backdoor. Values can be:
     <ul>
         <li>NORTH</li>
         <li>EAST</li>

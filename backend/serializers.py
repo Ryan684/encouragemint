@@ -29,7 +29,6 @@ class RecommendSerializer(serializers.Serializer):
         pass
 
     location = serializers.CharField()
-    direction = serializers.CharField()
     duration = serializers.CharField()
     bloom_period = serializers.CharField()
 
@@ -42,15 +41,6 @@ class RecommendSerializer(serializers.Serializer):
                 "To be a valid location, you also have to have at least one degree of accuracy. "
                 "For example; 'London' would not be valid, but 'London, UK' would work.")
         return value
-
-    @staticmethod
-    def validate_direction(value):
-        direction = value.upper()
-        if direction not in ALLOWED_GARDEN_DIRECTIONS:
-            raise serializers.ValidationError(
-                "A garden's direction can only be one of these directions: "
-                f"{ALLOWED_GARDEN_DIRECTIONS}")
-        return direction
 
     @staticmethod
     def validate_duration(value):
