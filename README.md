@@ -1,7 +1,7 @@
 <h1>Encouragemint</h1>
 This API makes recommendations on plants that will thrive in your garden based on key pieces of information that can be 
 gleaned from public APIs and databases. For example, it can make recommendations on plants for specific seasons 
-based on:
+based on:</br>
 <ul>
     <li>Average rainfall for your garden</li>
     <li>The shade/sunlight your garden gets by it's direction</li>
@@ -52,7 +52,7 @@ Currently, the app writes its logs both to a console and a debug.log file in the
 <h2>Deployment</h2>
 To run this app locally, you can use manage.py runserver or docker-compose to run it locally in a container using
 'docker-compose up' from the root directory of the project. In either case, the API will run locally at
-http://127.0.0.1:8000/
+http://127.0.0.1:8000/</br>
 
 The UI will run at http://127.0.0.1:3000
 
