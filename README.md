@@ -18,32 +18,32 @@ based on:
 <li>/profile [POST]</li>
 
 <h2>Post Payload Fields</h2>
-    <b>"location"</b>: An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.</br>
-    <b>"direction"</b>: The direction of your garden, if you stood looking out from your backdoor. Values can be:
+    <b>location</b>: An address as specific as possible, but can be as loose as your town. I.E, 'London, UK'.</br>
+    <b>direction</b>: The direction of your garden, if you stood looking out from your backdoor. Values can be:
     <ul>
-        <li>"NORTH"</li>
-        <li>"EAST"</li>
-        <li>"SOUTH"</li>
-        <li>"WEST"</li>
+        <li>NORTH</li>
+        <li>EAST</li>
+        <li>SOUTH</li>
+        <li>WEST</li>
     </ul>
-    <b>"duration"</b>: How long the plant survives. I.E if just one year, it's an annual. Values can be:
-    <ul><li>"PERENNIAL"</li>
-        <li>"ANNUAL"</li>
-        <li>"BIENNIAL"</li></ul>
-    <b>"bloom_period"</b>: The season you want the plant to bloom in. Values can be: </br>
+    <b>duration</b>: How long the plant survives. I.E if just one year, it's an annual. Values can be:
+    <ul><li>PERENNIAL</li>
+        <li>ANNUAL</li>
+        <li>BIENNIAL</li></ul>
+    <b>bloom_period</b>: The season you want the plant to bloom in. Values can be: </br>
     <ul>
-        <li>"EARLY SPRING"</li>
-        <li>"LATE SPRING"</li> 
-        <li>"ALL SPRING"</li>
-        <li>"EARLY SUMMER"</li>
-        <li>"LATE SUMMER"</li>
-        <li>"ALL SUMMER"</li>
-        <li>"EARLY AUTUMN"</li>
-        <li>"LATE AUTUMN"</li>
-        <li>"ALL AUTUMN"</li>
-        <li>"EARLY WINTER"</li>
-        <li>"LATE WINTER"</li>
-        <li>"ALL WINTER"</li>
+        <li>EARLY SPRING</li>
+        <li>LATE SPRING</li> 
+        <li>ALL SPRING</li>
+        <li>EARLY SUMMER</li>
+        <li>LATE SUMMER</li>
+        <li>ALL SUMMER</li>
+        <li>EARLY AUTUMN</li>
+        <li>LATE AUTUMN</li>
+        <li>ALL AUTUMN</li>
+        <li>EARLY WINTER</li>
+        <li>LATE WINTER</li>
+        <li>ALL WINTER</li>
     </ul>
 
 <h2>Logs</h2>
