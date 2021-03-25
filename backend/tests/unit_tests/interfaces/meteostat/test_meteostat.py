@@ -27,14 +27,14 @@ class TestMeteostat(TestCase):
         with open(f"{test_responses_dir}/station_weather_lookup_no_data.json", "r") as file:
             self.station_weather_no_data = json.load(file)
 
-        patcher = patch("requests.post")
-        self.mock_post = patcher.start()
+        patcher = patch("requests.get")
+        self.mock_get = patcher.start()
         self.addCleanup(patcher.stop)
 
     def test_successful_search_for_nearest_weather_stations(self):
         mock = Mock()
         mock.json.return_value = self.station_search_matches
-        self.mock_post.return_value = mock
+        self.mock_get.return_value = mock
 
         stations = search_for_nearest_weather_stations(
             self.sample_latitude, self.sample_longitude)
@@ -44,7 +44,7 @@ class TestMeteostat(TestCase):
     def test_unsuccessful_search_for_nearest_weather_stations(self):
         mock = Mock()
         mock.json.return_value = self.station_search_no_matches
-        self.mock_post.return_value = mock
+        self.mock_get.return_value = mock
 
         stations = search_for_nearest_weather_stations(
             self.sample_latitude, self.sample_longitude)
@@ -52,7 +52,9 @@ class TestMeteostat(TestCase):
         self.assertEqual(self.station_search_no_matches.get("data"), stations)
 
     def test_unsuccessful_search_for_nearest_weather_stations_from_meteostat_exception(self):
-        self.mock_post.side_effect = requests.exceptions.ConnectionError
+        # When more error-specific behavior is introduced, this needs to be more specific.
+        # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
+        self.mock_get.side_effect = requests.exceptions.RequestException
 
         self.assertRaises(
             MeteostatConnectionError,
@@ -64,7 +66,7 @@ class TestMeteostat(TestCase):
     def test_successful_get_station_weather_record(self):
         mock = Mock()
         mock.json.return_value = self.station_weather_data
-        self.mock_post.return_value = mock
+        self.mock_get.return_value = mock
 
         weather_report = get_station_weather_record(
             self.sample_weather_start_date,
@@ -77,7 +79,7 @@ class TestMeteostat(TestCase):
     def test_unsuccessful_get_station_weather_record(self):
         mock = Mock()
         mock.json.return_value = self.station_weather_no_data
-        self.mock_post.return_value = mock
+        self.mock_get.return_value = mock
 
         weather_report = get_station_weather_record(
             self.sample_weather_start_date,
@@ -88,7 +90,9 @@ class TestMeteostat(TestCase):
         self.assertEqual(self.station_weather_no_data.get("data"), weather_report)
 
     def test_unsuccessful_get_station_weather_record_from_meteostat_exception(self):
-        self.mock_post.side_effect = requests.exceptions.ConnectionError
+        # When more error-specific behavior is introduced, this needs to be more specific.
+        # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
+        self.mock_get.side_effect = requests.exceptions.RequestException
 
         self.assertRaises(
             MeteostatConnectionError,
