@@ -36,7 +36,7 @@ class TestTrefle(TestCase):
 
         response = trefle.lookup_plants(self.trefle_payload)
 
-        self._assert_trefle_api_payload(self.trefle_payload)
+        self._assert_trefle_api_call(self.trefle_payload)
         self.assertEqual([], response)
 
     def test_lookup_plants_one_result(self):
@@ -45,7 +45,7 @@ class TestTrefle(TestCase):
 
         response = trefle.lookup_plants(self.trefle_payload)
 
-        self._assert_trefle_api_payload(self.trefle_payload)
+        self._assert_trefle_api_call(self.trefle_payload)
         self.assertEqual(expected_plant, response)
 
     def test_lookup_plants_many_results(self):
@@ -53,7 +53,7 @@ class TestTrefle(TestCase):
 
         response = trefle.lookup_plants(self.trefle_payload)
 
-        self._assert_trefle_api_payload(self.trefle_payload)
+        self._assert_trefle_api_call(self.trefle_payload)
         self.assertEqual(self.search_many_matches, response)
 
     def test_lookup_plants_by_multiple_properties(self):
@@ -63,10 +63,10 @@ class TestTrefle(TestCase):
 
         response = trefle.lookup_plants(payload)
 
-        self._assert_trefle_api_payload(payload)
+        self._assert_trefle_api_call(payload)
         self.assertEqual(self.search_many_matches, response)
 
-    def _assert_trefle_api_payload(self, search_parameters):
+    def _assert_trefle_api_call(self, search_parameters):
         parameters = {"token": None, "page_size": 100}
         for parameter in search_parameters:
             parameters[f"filter[{parameter}]"] = search_parameters[parameter]

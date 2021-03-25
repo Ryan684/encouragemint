@@ -11,48 +11,65 @@ class TestRecommendPlants(TestCase):
         test_responses_dir = "backend/tests/unit_tests/interfaces/trefle/test_responses"
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.recommend_many_results = json.load(file)
-        with open(f"{test_responses_dir}/plant_search_one_match.json", "r") as file:
-            self.recommend_one_result = json.load(file)
+        self.mock_coordinates = (12345, 678910)
 
         weather_patcher = patch(
             "backend.recommender.get_garden_moisture", return_value="Medium")
         self.mock_weather = weather_patcher.start()
         garden_locator_patcher = patch(
-            "backend.recommender.get_coordinates", return_value=(12345, 678910))
-        self.mock_weather = garden_locator_patcher.start()
-        trefle_patcher = patch("backend.recommender.lookup_plants")
+            "backend.recommender.get_coordinates", return_value=self.mock_coordinates)
+        self.mock_garden_locator = garden_locator_patcher.start()
+        trefle_patcher = patch("backend.recommender.lookup_plants", return_value=self.recommend_many_results)
         self.mock_trefle = trefle_patcher.start()
 
         self.addCleanup(weather_patcher.stop)
         self.addCleanup(garden_locator_patcher.stop)
         self.addCleanup(trefle_patcher.stop)
 
-        self.base_input_data = {
+    def test_without_moisture_use_parameter(self):
+        self.mock_weather.return_value = None
+        expected_trefle_payload = self._get_trefle_payload("Tolerant")
+        expected_trefle_payload.pop("moisture_use")
+
+        self._assert_recommendation(expected_trefle_payload, "NORTH")
+
+    def test_north_facing_garden(self):
+        expected_trefle_payload = self._get_trefle_payload("Tolerant")
+
+        self._assert_recommendation(expected_trefle_payload, "NORTH")
+
+    def test_south_facing_garden(self):
+        expected_trefle_payload = self._get_trefle_payload("Intolerant")
+
+        self._assert_recommendation(expected_trefle_payload, "SOUTH")
+
+    def test_other_direction_facing_garden(self):
+        expected_trefle_payload = self._get_trefle_payload("Intermediate")
+
+        self._assert_recommendation(expected_trefle_payload, "EAST")
+
+    def _assert_recommendation(self, expected_trefle_payload, garden_direction):
+        input_data = {
             "bloom_period": "SUMMER",
-            "direction": "NORTH",
+            "direction": garden_direction,
             "location": "Romsey, UK",
             "duration": "Annual"
         }
 
-        self.base_expected_trefle_payload = {
+        plants = recommend_plants(input_data)
+
+        self.mock_garden_locator.assert_called_once_with(input_data["location"])
+        self.mock_weather.assert_called_once_with(
+            self.mock_coordinates[0], self.mock_coordinates[1], input_data["bloom_period"])
+        self.mock_trefle.assert_called_once_with(expected_trefle_payload)
+        self.assertEqual(self.recommend_many_results, plants)
+
+
+    @staticmethod
+    def _get_trefle_payload(shade_tolerance):
+        return {
             "bloom_period": "Summer",
-            "shade_tolerance": "Tolerant",
+            "shade_tolerance": shade_tolerance,
             "moisture_use": "Medium",
             "duration": "Annual"
         }
-
-    def test_many_one_results(self):
-        self.mock_trefle.return_value = self.recommend_one_result
-
-        plants = recommend_plants(self.base_input_data)
-
-        self.mock_trefle.assert_called_with(self.base_expected_trefle_payload)
-        self.assertEqual(self.recommend_one_result, plants)
-
-    def test_many_trefle_results(self):
-        self.mock_trefle.return_value = self.recommend_many_results
-
-        plants = recommend_plants(self.base_input_data)
-
-        self.mock_trefle.assert_called_with(self.base_expected_trefle_payload)
-        self.assertEqual(self.recommend_many_results, plants)
