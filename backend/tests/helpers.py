@@ -2,7 +2,7 @@ VALID_RECOMMEND_PAYLOAD = {
     "direction": "South",
     "location": "Romsey, UK",
     "duration": "Perennial",
-    "bloom_period": "Summer"
+    "bloom_period": "early summer"
 }
 
 SAMPLE_GARDEN_GEOCODE_LOCATION = {

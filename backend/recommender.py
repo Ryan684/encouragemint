@@ -1,3 +1,4 @@
+from backend import seasons
 from backend.interfaces.trefle.trefle import lookup_plants
 from backend.garden_locator import get_coordinates
 from backend.weather import get_garden_moisture
@@ -7,7 +8,7 @@ def recommend_plants(request_data):
     query = {
         "shade_tolerance": _get_required_shade_tolerance(request_data["direction"]),
         "duration": request_data["duration"].lower().capitalize(),
-        "bloom_period": request_data["bloom_period"].lower().title()
+        "bloom_months": seasons.BLOOM_MONTHS[request_data["bloom_period"]]
     }
 
     latitude, longitude = get_coordinates(request_data["location"])

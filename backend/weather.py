@@ -1,6 +1,7 @@
 import datetime
 import logging
 
+from backend import seasons
 from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
 from backend.interfaces.meteostat.meteostat import \
     search_for_nearest_weather_stations, get_station_weather_record
@@ -36,14 +37,14 @@ def _get_historical_rainfall_data(latitude, longitude, season):
     start_year = this_year - 1
     end_year = start_year
 
-    if season == "WINTER":
+    if seasons.WINTER in season:
         end_year = start_year + 1
         start_month = "12"
         end_month = "02"
-    elif season == "SPRING":
+    elif seasons.SPRING in season:
         start_month = "03"
         end_month = "05"
-    elif season == "SUMMER":
+    elif seasons.SUMMER in season:
         start_month = "06"
         end_month = "08"
     else:

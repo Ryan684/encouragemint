@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
+from backend import seasons
 from backend.recommender import recommend_plants
 
 
@@ -50,7 +51,7 @@ class TestRecommendPlants(TestCase):
 
     def _assert_recommendation(self, expected_trefle_payload, garden_direction):
         input_data = {
-            "bloom_period": "SUMMER",
+            "bloom_period": seasons.EARLY_SUMMER,
             "direction": garden_direction,
             "location": "Romsey, UK",
             "duration": "Annual"
@@ -68,7 +69,7 @@ class TestRecommendPlants(TestCase):
     @staticmethod
     def _get_trefle_payload(shade_tolerance):
         return {
-            "bloom_period": "Summer",
+            "bloom_months": seasons.BLOOM_MONTHS[seasons.EARLY_SUMMER],
             "shade_tolerance": shade_tolerance,
             "moisture_use": "Medium",
             "duration": "Annual"

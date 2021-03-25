@@ -2,7 +2,21 @@ import re
 
 from rest_framework import serializers
 
-ALLOWED_SEASONS = ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
+from backend import seasons
+
+ALLOWED_SEASONS = [
+    seasons.EARLY_SPRING,
+    seasons.LATE_SPRING,
+    seasons.ALL_SPRING,
+    seasons.EARLY_SUMMER,
+    seasons.LATE_SUMMER,
+    seasons.ALL_SUMMER,
+    seasons.EARLY_AUTUMN,
+    seasons.LATE_AUTUMN,
+    seasons.EARLY_WINTER,
+    seasons.LATE_WINTER,
+    seasons.ALL_WINTER
+]
 ALLOWED_PLANT_DURATIONS = ["PERENNIAL", "ANNUAL", "BIENNIAL"]
 ALLOWED_GARDEN_DIRECTIONS = ["NORTH", "EAST", "SOUTH", "WEST"]
 
@@ -34,7 +48,7 @@ class RecommendSerializer(serializers.Serializer):
         direction = value.upper()
         if direction not in ALLOWED_GARDEN_DIRECTIONS:
             raise serializers.ValidationError(
-                "A garden's direction can only be north, east, south or west.")
+                f"A garden's direction can only be one of these directions: {ALLOWED_GARDEN_DIRECTIONS}")
         return direction
 
     @staticmethod
@@ -42,7 +56,7 @@ class RecommendSerializer(serializers.Serializer):
         duration = value.upper()
         if duration not in ALLOWED_PLANT_DURATIONS:
             raise serializers.ValidationError(
-                "A garden's duration can only be perennial, annual or biennial.")
+                f"A garden's duration can only be one of these periods: {ALLOWED_PLANT_DURATIONS}")
         return duration
 
     @staticmethod
@@ -50,5 +64,5 @@ class RecommendSerializer(serializers.Serializer):
         bloom_period = value.upper()
         if bloom_period not in ALLOWED_SEASONS:
             raise serializers.ValidationError(
-                "A garden's bloom period can only be spring, summer, autumn or winter.")
+                f"A garden's bloom period can only be one of these periods: {ALLOWED_SEASONS}")
         return bloom_period

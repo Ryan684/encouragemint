@@ -1,14 +1,14 @@
 from django.test import TestCase
 from rest_framework import serializers
 
-from backend.serializers import RecommendSerializer
+from backend import serializers as backend_serializers, seasons
 
 
 class TestGardenSerializerValidators(TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestGardenSerializerValidators, cls).setUpClass()
-        cls.test_obj = RecommendSerializer()
+        cls.test_obj = backend_serializers.RecommendSerializer()
 
 
 class TestValidateLocation(TestGardenSerializerValidators):
@@ -52,7 +52,8 @@ class TestValidateDirection(TestGardenSerializerValidators):
 
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A garden's direction can only be north, east, south or west.",
+            "A garden's direction can only be one of these directions: "
+            f"{backend_serializers.ALLOWED_GARDEN_DIRECTIONS}",
             self.test_obj.validate_direction,
             direction
         )
@@ -76,7 +77,7 @@ class TestValidateDuration(TestGardenSerializerValidators):
 
         self.assertRaisesMessage(
             serializers.ValidationError,
-            "A garden's duration can only be perennial, annual or biennial.",
+            f"A garden's duration can only be one of these periods: {backend_serializers.ALLOWED_PLANT_DURATIONS}",
             self.test_obj.validate_duration,
             duration
         )
@@ -88,19 +89,19 @@ class TestValidateBloomPeriod(TestGardenSerializerValidators):
         super(TestValidateBloomPeriod, cls).setUpClass()
 
     def test_valid_uppercase_bloom_period(self):
-        bloom_period = "SPRING"
+        bloom_period = seasons.EARLY_SPRING
         self.assertEqual(bloom_period, self.test_obj.validate_bloom_period(bloom_period))
 
     def test_valid_lowercase_bloom_period(self):
-        bloom_period = "spring"
-        self.assertEqual("SPRING", self.test_obj.validate_bloom_period(bloom_period))
+        bloom_period = seasons.EARLY_SPRING.lower()
+        self.assertEqual(seasons.EARLY_SPRING, self.test_obj.validate_bloom_period(bloom_period))
 
     def test_invalid_bloom_period(self):
         bloom_period = "march"
 
         self.assertRaisesMessage(
             serializers.ValidationError,
-            "A garden's bloom period can only be spring, summer, autumn or winter.",
+            f"A garden's bloom period can only be one of these periods: {backend_serializers.ALLOWED_SEASONS}",
             self.test_obj.validate_bloom_period,
             bloom_period
         )
