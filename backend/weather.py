@@ -1,22 +1,13 @@
-import datetime
 import logging
 
 from backend import seasons
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend.interfaces.meteostat.meteostat import \
-    search_for_nearest_weather_stations, get_station_weather_record
+from backend.interfaces.meteostat.meteostat import  get_location_weather_data
 
 logger = logging.getLogger("django")
 
 
 def get_garden_moisture(latitude, longitude, season):
-    try:
-        average_rainfall = _get_historical_rainfall_data(latitude, longitude, season)
-    except MeteostatConnectionError as exception:
-        logger.error(
-            "Rainfall data could not be gathered from Meteostat due to "
-            f"an error: {exception}")
-        return None
+    average_rainfall = _get_average_rainfall_for_season(latitude, longitude, season)
 
     if average_rainfall:
         if average_rainfall > 60:
@@ -25,64 +16,38 @@ def get_garden_moisture(latitude, longitude, season):
             moisture_use = "Medium"
         else:
             moisture_use = "Low"
-
         return moisture_use
 
     return None
 
 
-def _get_historical_rainfall_data(latitude, longitude, season):
-    average_rainfall = None
-    this_year = datetime.datetime.now().year
-    start_year = this_year - 1
-    end_year = start_year
-
-    if seasons.WINTER in season:
-        end_year = start_year + 1
-        start_month = "12"
-        end_month = "02"
-    elif seasons.SPRING in season:
-        start_month = "03"
-        end_month = "05"
-    elif seasons.SUMMER in season:
-        start_month = "06"
-        end_month = "08"
-    else:
-        start_month = "09"
-        end_month = "11"
-
-    while not average_rainfall and start_year != this_year - 5:
-        average_rainfall_for_year = _get_average_rainfall_for_season(
-            latitude, longitude, f"{start_year}-{start_month}", f"{end_year}-{end_month}")
-        if average_rainfall_for_year:
-            average_rainfall = average_rainfall_for_year
-        else:
-            start_year = start_year - 1
-            end_year = end_year - 1
-
-    return average_rainfall
-
-
-def _get_average_rainfall_for_season(latitude, longitude, start_time, end_time):
-    nearby_weather_stations = search_for_nearest_weather_stations(latitude, longitude)
-    weather_data = None
-
-    for station in nearby_weather_stations:
-
-        station_weather_report = get_station_weather_record(
-            start_time, end_time, station.get("id"))
-
-        if station_weather_report:
-            weather_data = station_weather_report
-            break
+def _get_average_rainfall_for_season(latitude, longitude, season):
+    weather_data = get_location_weather_data(latitude, longitude)
 
     if weather_data:
         rainfall_records = []
-        for month in weather_data:
-            if month.get("precipitation"):
-                rainfall_records.append(month.get("precipitation"))
+        for weather_record in weather_data:
+            _append_rainfall_for_month(rainfall_records, season, weather_record)
 
         if rainfall_records:
             return sum(rainfall_records) / len(rainfall_records)
 
     return None
+
+
+def _append_rainfall_for_month(rainfall_records, season, weather_record):
+    if weather_record.get("month") in _get_months_numbers(season):
+        if weather_record.get("prcp"):
+            rainfall_records.append(weather_record["prcp"])
+
+
+def _get_months_numbers(season):
+    if seasons.WINTER in season:
+        months = [1, 2, 12]
+    elif seasons.SPRING in season:
+        months = [3, 4, 5]
+    elif seasons.SUMMER in season:
+        months = [6, 7, 8]
+    else:
+        months = [9, 10, 11]
+    return months

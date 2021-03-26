@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "source": "WorldClim",
+    "start": 1960,
+    "end": 1990,
+    "exec_time": 0.032,
+    "generated": "2021-03-25 21:23:09"
+  },
+  "data": [
+    {
+      "month": 1,
+      "tavg": 26,
+      "tmin": 22.1,
+      "tmax": 29.9,
+      "prcp": 244,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 2,
+      "tavg": 26.5,
+      "tmin": 22.4,
+      "tmax": 30.6,
+      "prcp": 175,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 3,
+      "tavg": 27,
+      "tmin": 22.8,
+      "tmax": 31.1,
+      "prcp": 186,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 4,
+      "tavg": 27.2,
+      "tmin": 23.1,
+      "tmax": 31.3,
+      "prcp": 195,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 5,
+      "tavg": 27.4,
+      "tmin": 23.5,
+      "tmax": 31.3,
+      "prcp": 170,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 6,
+      "tavg": 27.3,
+      "tmin": 23.4,
+      "tmax": 31.1,
+      "prcp": 169,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 7,
+      "tavg": 27,
+      "tmin": 23.1,
+      "tmax": 30.9,
+      "prcp": 162,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 8,
+      "tavg": 26.9,
+      "tmin": 23,
+      "tmax": 30.7,
+      "prcp": 179,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 9,
+      "tavg": 26.9,
+      "tmin": 23,
+      "tmax": 30.8,
+      "prcp": 170,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 10,
+      "tavg": 26.9,
+      "tmin": 22.8,
+      "tmax": 31,
+      "prcp": 199,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 11,
+      "tavg": 26.6,
+      "tmin": 22.7,
+      "tmax": 30.5,
+      "prcp": 259,
+      "pres": null,
+      "tsun": null
+    },
+    {
+      "month": 12,
+      "tavg": 26.1,
+      "tmin": 22.4,
+      "tmax": 29.7,
+      "prcp": 290,
+      "pres": null,
+      "tsun": null
+    }
+  ]
+}

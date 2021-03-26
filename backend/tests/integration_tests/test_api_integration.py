@@ -66,12 +66,10 @@ class TestApiIntegration(TestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def _prime_get_rest_mocks(self, trefle_response):
-        mock_meteostat_responses = [Mock(), Mock(), Mock()]
+        mock_meteostat_responses = [Mock(), Mock()]
 
-        with open(f"{self.meteostat_responses_dir}/station_search_response_with_data.json", "r") as file:
+        with open(f"{self.meteostat_responses_dir}/climate_normals_response.json", "r") as file:
             mock_meteostat_responses[0].json.return_value = json.load(file)
-        with open(f"{self.meteostat_responses_dir}/station_weather_lookup_with_data.json", "r") as file:
-            mock_meteostat_responses[1].json.return_value = json.load(file)
-        mock_meteostat_responses[2].json.return_value = trefle_response
+        mock_meteostat_responses[1].json.return_value = trefle_response
 
         self.mock_get.side_effect = mock_meteostat_responses

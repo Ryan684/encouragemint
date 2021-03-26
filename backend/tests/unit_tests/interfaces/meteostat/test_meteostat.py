@@ -5,99 +5,54 @@ import requests
 from django.test import override_settings, TestCase
 
 from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend.interfaces.meteostat.meteostat import get_station_weather_record, search_for_nearest_weather_stations
+from backend.interfaces.meteostat import meteostat
 
 
 @override_settings(METEOSTAT_API_KEY="Foo")
-class TestMeteostat(TestCase):
+class TestGetLocationWeatherData(TestCase):
     def setUp(self):
         self.sample_latitude = 50.98893
         self.sample_longitude = -1.49658
-        self.sample_weather_station = "03865"
-        self.sample_weather_start_date = "2019-01"
-        self.sample_weather_end_date = "2019-12"
-
-        test_responses_dir = "backend/tests/unit_tests/interfaces/meteostat/test_responses"
-        with open(f"{test_responses_dir}/station_search_response_no_data.json", "r") as file:
-            self.station_search_matches = json.load(file)
-        with open(f"{test_responses_dir}/station_search_response_with_data.json", "r") as file:
-            self.station_search_no_matches = json.load(file)
-        with open(f"{test_responses_dir}/station_weather_lookup_with_data.json", "r") as file:
-            self.station_weather_data = json.load(file)
-        with open(f"{test_responses_dir}/station_weather_lookup_no_data.json", "r") as file:
-            self.station_weather_no_data = json.load(file)
+        self.test_responses_dir = "backend/tests/unit_tests/interfaces/meteostat/test_responses"
 
         patcher = patch("requests.get")
         self.mock_get = patcher.start()
         self.addCleanup(patcher.stop)
 
-    def test_successful_search_for_nearest_weather_stations(self):
-        mock = Mock()
-        mock.json.return_value = self.station_search_matches
-        self.mock_get.return_value = mock
-
-        stations = search_for_nearest_weather_stations(
-            self.sample_latitude, self.sample_longitude)
-
-        self.assertEqual(self.station_search_matches.get("data"), stations)
-
-    def test_unsuccessful_search_for_nearest_weather_stations(self):
-        mock = Mock()
-        mock.json.return_value = self.station_search_no_matches
-        self.mock_get.return_value = mock
-
-        stations = search_for_nearest_weather_stations(
-            self.sample_latitude, self.sample_longitude)
-
-        self.assertEqual(self.station_search_no_matches.get("data"), stations)
-
-    def test_unsuccessful_search_for_nearest_weather_stations_from_meteostat_exception(self):
+    def test_request_exception(self):
         # When more error-specific behavior is introduced, this needs to be more specific.
         # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
         self.mock_get.side_effect = requests.exceptions.RequestException
 
         self.assertRaises(
             MeteostatConnectionError,
-            search_for_nearest_weather_stations,
+            meteostat.get_location_weather_data,
             self.sample_latitude,
             self.sample_longitude
         )
 
-    def test_successful_get_station_weather_record(self):
+    def test_weather_data_found(self):
+        self._assert_weather_data(f"{self.test_responses_dir}/climate_normals_response.json")
+
+    def test_no_weather_data_found(self):
+        self._assert_weather_data(f"{self.test_responses_dir}/climate_normals_response_no_data.json")
+
+    def _assert_weather_data(self, weather_data_response):
         mock = Mock()
-        mock.json.return_value = self.station_weather_data
+        with open(weather_data_response, "r") as file:
+            climate_normals = json.load(file)
+        mock.json.return_value = climate_normals
         self.mock_get.return_value = mock
 
-        weather_report = get_station_weather_record(
-            self.sample_weather_start_date,
-            self.sample_weather_end_date,
-            self.sample_weather_station
+        weather_data = meteostat.get_location_weather_data(
+                self.sample_latitude, self.sample_longitude)
+
+        self.mock_get.assert_called_once_with(
+            url=meteostat.CLIMATE_NORMALS_ENDPOINT,
+            headers=meteostat.HEADERS,
+            params={
+                "lat": self.sample_latitude,
+                "lon": self.sample_longitude
+            }
         )
-
-        self.assertEqual(self.station_weather_data.get("data"), weather_report)
-
-    def test_unsuccessful_get_station_weather_record(self):
-        mock = Mock()
-        mock.json.return_value = self.station_weather_no_data
-        self.mock_get.return_value = mock
-
-        weather_report = get_station_weather_record(
-            self.sample_weather_start_date,
-            self.sample_weather_end_date,
-            self.sample_weather_station
-        )
-
-        self.assertEqual(self.station_weather_no_data.get("data"), weather_report)
-
-    def test_unsuccessful_get_station_weather_record_from_meteostat_exception(self):
-        # When more error-specific behavior is introduced, this needs to be more specific.
-        # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
-        self.mock_get.side_effect = requests.exceptions.RequestException
-
-        self.assertRaises(
-            MeteostatConnectionError,
-            get_station_weather_record,
-            self.sample_weather_start_date,
-            self.sample_weather_end_date,
-            self.sample_weather_station
-        )
+        self.assertEqual(climate_normals.get("data"), weather_data)
