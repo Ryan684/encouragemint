@@ -1,7 +1,7 @@
 import logging
 
 from backend import seasons
-from backend.interfaces.meteostat.meteostat import  get_location_weather_data
+from backend.interfaces.meteostat.meteostat import get_location_weather_data
 
 logger = logging.getLogger("django")
 
