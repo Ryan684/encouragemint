@@ -1,10 +1,9 @@
 import logging
 
+import requests
 from rest_framework import views, status
 from rest_framework.response import Response
 
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
 from backend.exceptions import GeocoderNoResultsError
 from backend.recommender import recommend_plants
 from backend.serializers import RecommendSerializer
@@ -19,7 +18,7 @@ class RecommendView(views.APIView):
 
         try:
             results = recommend_plants(serializer.validated_data)
-        except (TrefleConnectionError, MeteostatConnectionError):
+        except requests.exceptions.RequestException:
             return Response(
                 {"message":
                  "We're unable to recommend plants for you right now, try again later."},

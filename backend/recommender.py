@@ -1,7 +1,7 @@
 from backend import seasons
 from backend.interfaces.trefle.trefle import lookup_plants
 from backend.garden_locator import get_coordinates
-from backend.weather import get_garden_moisture
+from backend.weather import get_garden_temperature
 
 
 def recommend_plants(request_data):
@@ -11,9 +11,12 @@ def recommend_plants(request_data):
     }
 
     latitude, longitude = get_coordinates(request_data["location"])
-    moisture_use = get_garden_moisture(latitude, longitude, request_data["bloom_period"])
+    minimum_temperature, maximum_temperature = get_garden_temperature(latitude, longitude, request_data["bloom_period"])
 
-    if moisture_use:
-        query["moisture_use"] = moisture_use
+    if minimum_temperature:
+        query["minimum_temperature_deg_c"] = minimum_temperature
+
+    if maximum_temperature:
+        query["maximum_temperature_deg_c"] = maximum_temperature
 
     return lookup_plants(query)

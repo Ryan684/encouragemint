@@ -13,9 +13,9 @@ class TestRecommendPlants(TestCase):
         with open(f"{test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.recommend_many_results = json.load(file)
         self.mock_coordinates = (12345, 678910)
+        self.mock_temperatures = (11.1, 15.22)
 
-        weather_patcher = patch(
-            "backend.recommender.get_garden_moisture", return_value="Medium")
+        weather_patcher = patch("backend.recommender.get_garden_temperature")
         self.mock_weather = weather_patcher.start()
         garden_locator_patcher = patch(
             "backend.recommender.get_coordinates", return_value=self.mock_coordinates)
@@ -27,14 +27,23 @@ class TestRecommendPlants(TestCase):
         self.addCleanup(garden_locator_patcher.stop)
         self.addCleanup(trefle_patcher.stop)
 
-    def test_without_moisture_use_parameter(self):
-        self.mock_weather.return_value = None
+    def test_without_both_temperature_parameters(self):
+        self.mock_weather.return_value = None, None
         expected_trefle_payload = self._get_trefle_payload()
-        expected_trefle_payload.pop("moisture_use")
+        expected_trefle_payload.pop("minimum_temperature_deg_c")
+        expected_trefle_payload.pop("maximum_temperature_deg_c")
 
         self._assert_recommendation(expected_trefle_payload)
 
-    def test_with_moisture_use_parameter(self):
+    def test_without_one_temperature_parameters(self):
+        self.mock_weather.return_value = None, self.mock_temperatures[1]
+        expected_trefle_payload = self._get_trefle_payload()
+        expected_trefle_payload.pop("minimum_temperature_deg_c")
+
+        self._assert_recommendation(expected_trefle_payload)
+
+    def test_with_temperature_parameters(self):
+        self.mock_weather.return_value = self.mock_temperatures[0], self.mock_temperatures[1]
         expected_trefle_payload = self._get_trefle_payload()
 
         self._assert_recommendation(expected_trefle_payload)
@@ -54,10 +63,10 @@ class TestRecommendPlants(TestCase):
         self.mock_trefle.assert_called_once_with(expected_trefle_payload)
         self.assertEqual(self.recommend_many_results, plants)
 
-    @staticmethod
-    def _get_trefle_payload():
+    def _get_trefle_payload(self):
         return {
             "bloom_months": seasons.BLOOM_MONTHS[seasons.EARLY_SUMMER],
-            "moisture_use": "Medium",
-            "duration": "Annual"
+            "duration": "Annual",
+            "minimum_temperature_deg_c": self.mock_temperatures[0],
+            "maximum_temperature_deg_c": self.mock_temperatures[1]
         }

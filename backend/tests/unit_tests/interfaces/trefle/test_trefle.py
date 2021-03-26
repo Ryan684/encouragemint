@@ -1,11 +1,9 @@
 import json
 from unittest.mock import patch
 
-import requests
 from django.test import TestCase, override_settings
 
 from backend import seasons
-from backend.interfaces.trefle.exceptions import TrefleConnectionError
 from backend.interfaces.trefle import trefle
 
 
@@ -22,13 +20,6 @@ class TestTrefle(TestCase):
         self.mock_get = patcher.start()
         self.addCleanup(patcher.stop)
         self.trefle_payload = {"duration": "Annual"}
-
-    def test_trefle_unreachable(self):
-        # When more error-specific behavior is introduced, this needs to be more specific.
-        # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
-        self.mock_get.side_effect = requests.exceptions.RequestException
-
-        self.assertRaises(TrefleConnectionError, trefle.lookup_plants, self.trefle_payload)
 
     def test_search_plants_no_results(self):
         self.mock_get.return_value.json.return_value = []

@@ -1,10 +1,8 @@
 import json
 from unittest.mock import patch, Mock
 
-import requests
 from django.test import override_settings, TestCase
 
-from backend.interfaces.meteostat.exceptions import MeteostatConnectionError
 from backend.interfaces.meteostat import meteostat
 
 
@@ -18,18 +16,6 @@ class TestGetLocationWeatherData(TestCase):
         patcher = patch("requests.get")
         self.mock_get = patcher.start()
         self.addCleanup(patcher.stop)
-
-    def test_request_exception(self):
-        # When more error-specific behavior is introduced, this needs to be more specific.
-        # I.E, if retry logic is added, we'll need to define separate tests for valid retry errors & non retry errors.
-        self.mock_get.side_effect = requests.exceptions.RequestException
-
-        self.assertRaises(
-            MeteostatConnectionError,
-            meteostat.get_location_weather_data,
-            self.sample_latitude,
-            self.sample_longitude
-        )
 
     def test_weather_data_found(self):
         self._assert_weather_data(f"{self.test_responses_dir}/climate_normals_response.json")
