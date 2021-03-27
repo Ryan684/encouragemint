@@ -10,7 +10,8 @@ def recommend_plants(request_data):
     }
 
     latitude, longitude = get_coordinates(request_data["location"])
-    minimum_temperature, maximum_temperature = get_garden_temperature(latitude, longitude, request_data["bloom_period"])
+    minimum_temperature, maximum_temperature = get_garden_temperature(
+        latitude, longitude, request_data["bloom_period"])
 
     if minimum_temperature:
         query["minimum_temperature_deg_c"] = minimum_temperature
