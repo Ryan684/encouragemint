@@ -42,3 +42,4 @@ def _append_temperature_for_month(temperatures, months, weather_record, key):
 def _calculate_average(minimum_temperatures):
     if minimum_temperatures:
         return sum(minimum_temperatures) / len(minimum_temperatures)
+    return None
