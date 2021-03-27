@@ -6,8 +6,7 @@ from backend.weather import get_garden_temperature
 
 def recommend_plants(request_data):
     query = {
-        "duration": request_data["duration"].lower().capitalize(),
-        "bloom_months": seasons.BLOOM_MONTHS[request_data["bloom_period"]]
+        "duration": request_data["duration"].lower().capitalize()
     }
 
     latitude, longitude = get_coordinates(request_data["location"])
@@ -18,5 +17,8 @@ def recommend_plants(request_data):
 
     if maximum_temperature:
         query["maximum_temperature_deg_c"] = maximum_temperature
+
+    if request_data["bloom_period"] != "NO PREFERENCE":
+        query["bloom_months"] = seasons.BLOOM_MONTHS[request_data["bloom_period"]]
 
     return lookup_plants(query)

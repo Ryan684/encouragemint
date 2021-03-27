@@ -15,11 +15,16 @@ class TestTrefle(TestCase):
             self.search_many_matches = json.load(file)
         with open(f"{test_responses_dir}/id_search_response.json", "r") as file:
             self.id_search = json.load(file)
+        self.trefle_payload = {
+            "duration": "Annual",
+            "bloom_months": "jan,feb,march",
+            "minimum_temperature_deg_c": "11.1,",
+            "maximum_temperature_deg_c": ",15.22"
+        }
 
         patcher = patch("requests.get")
         self.mock_get = patcher.start()
         self.addCleanup(patcher.stop)
-        self.trefle_payload = {"duration": "Annual"}
 
     def test_search_plants_no_results(self):
         self.mock_get.return_value.json.return_value = []
@@ -48,9 +53,14 @@ class TestTrefle(TestCase):
         self.assertEqual(self.search_many_matches, response)
 
     def _assert_trefle_api_call(self, search_parameters):
-        parameters = {"token": None, "page_size": 100}
-        for parameter in search_parameters:
-            parameters[f"filter[{parameter}]"] = search_parameters[parameter]
+        parameters = {
+            "token": None,
+            "page_size": 100,
+            "filter[duration]": search_parameters["duration"],
+            "filter[bloom_months]": search_parameters["bloom_months"],
+            "range[minimum_temperature_deg_c]": search_parameters['minimum_temperature_deg_c'],
+            "range[maximum_temperature_deg_c]": search_parameters['maximum_temperature_deg_c']
+        }
 
         self.mock_get.assert_called_once_with(
             headers=trefle.HEADERS,

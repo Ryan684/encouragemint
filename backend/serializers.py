@@ -15,7 +15,8 @@ ALLOWED_SEASONS = [
     seasons.LATE_AUTUMN,
     seasons.EARLY_WINTER,
     seasons.LATE_WINTER,
-    seasons.ALL_WINTER
+    seasons.ALL_WINTER,
+    "NO PREFERENCE"
 ]
 ALLOWED_PLANT_DURATIONS = ["PERENNIAL", "ANNUAL", "BIENNIAL"]
 ALLOWED_GARDEN_DIRECTIONS = ["NORTH", "EAST", "SOUTH", "WEST"]
@@ -55,5 +56,5 @@ class RecommendSerializer(serializers.Serializer):
         bloom_period = value.upper()
         if bloom_period not in ALLOWED_SEASONS:
             raise serializers.ValidationError(
-                f"A garden's bloom period can only be one of these periods: {ALLOWED_SEASONS}")
+                f"A garden's bloom period can only be one of these values: {ALLOWED_SEASONS}")
         return bloom_period

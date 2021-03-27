@@ -42,15 +42,22 @@ class TestRecommendPlants(TestCase):
 
         self._assert_recommendation(expected_trefle_payload)
 
+    def test_no_preference_on_bloom_period(self):
+        self.mock_weather.return_value = self.mock_temperatures[0], self.mock_temperatures[1]
+        expected_trefle_payload = self._get_trefle_payload()
+        expected_trefle_payload.pop("bloom_months")
+
+        self._assert_recommendation(expected_trefle_payload, "NO PREFERENCE")
+
     def test_with_temperature_parameters(self):
         self.mock_weather.return_value = self.mock_temperatures[0], self.mock_temperatures[1]
         expected_trefle_payload = self._get_trefle_payload()
 
         self._assert_recommendation(expected_trefle_payload)
 
-    def _assert_recommendation(self, expected_trefle_payload):
+    def _assert_recommendation(self, expected_trefle_payload, bloom_period=seasons.EARLY_SUMMER):
         input_data = {
-            "bloom_period": seasons.EARLY_SUMMER,
+            "bloom_period": bloom_period,
             "location": "Romsey, UK",
             "duration": "Annual"
         }

@@ -76,7 +76,7 @@ class TestValidateBloomPeriod(TestGardenSerializerValidators):
 
         self.assertRaisesMessage(
             serializers.ValidationError,
-            f"A garden's bloom period can only be one of these periods: {backend_serializers.ALLOWED_SEASONS}",
+            f"A garden's bloom period can only be one of these values: {backend_serializers.ALLOWED_SEASONS}",
             self.test_obj.validate_bloom_period,
             bloom_period
         )
