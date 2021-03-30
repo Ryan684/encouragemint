@@ -6,7 +6,7 @@ services:
     image: encouragemint
     container_name: backend
     volumes:
-      - .:/encouragemint/backend
+      - "./:/app/"
     ports:
       - "8000:8000"
     networks:
@@ -23,7 +23,7 @@ services:
     container_name: frontend
     stdin_open: true
     volumes:
-      - .:/encouragemint/frontend
+      - "./:/app/"
     ports:
       - "3000:3000"
     networks:
