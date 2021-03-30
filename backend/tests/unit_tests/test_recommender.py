@@ -1,7 +1,7 @@
 import json
 from unittest.mock import patch
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from backend import seasons
 from backend.recommender import recommend_plants
@@ -55,12 +55,22 @@ class TestRecommendPlants(TestCase):
 
         self._assert_recommendation(expected_trefle_payload)
 
+    @override_settings(WEATHER_DATA_FEATURE_FLAG="False")
+    def test_weather_data_feature_flag_off(self):
+        input_data = self._get_input_data(seasons.EARLY_SUMMER)
+        expected_trefle_payload = self._get_trefle_payload().copy()
+        expected_trefle_payload.pop("minimum_temperature_deg_c")
+        expected_trefle_payload.pop("maximum_temperature_deg_c")
+
+        plants = recommend_plants(input_data)
+
+        self.mock_garden_locator.assert_not_called()
+        self.mock_weather.assert_not_called()
+        self.mock_trefle.assert_called_once_with(expected_trefle_payload)
+        self.assertEqual(self.recommend_many_results, plants)
+
     def _assert_recommendation(self, expected_trefle_payload, bloom_period=seasons.EARLY_SUMMER):
-        input_data = {
-            "bloom_period": bloom_period,
-            "location": "Romsey, UK",
-            "duration": "Annual"
-        }
+        input_data = self._get_input_data(bloom_period)
 
         plants = recommend_plants(input_data)
 
@@ -70,10 +80,17 @@ class TestRecommendPlants(TestCase):
         self.mock_trefle.assert_called_once_with(expected_trefle_payload)
         self.assertEqual(self.recommend_many_results, plants)
 
+    def _get_input_data(self, bloom_period):
+        return {
+            "bloom_period": bloom_period,
+            "location": "Romsey, UK",
+            "duration": "Annual"
+        }
+
     def _get_trefle_payload(self):
         return {
             "bloom_months": seasons.BLOOM_MONTHS[seasons.EARLY_SUMMER],
             "duration": "Annual",
-            "minimum_temperature_deg_c": self.mock_temperatures[0],
+            "minimum_temperature_deg_c": f",{self.mock_temperatures[0]}",
             "maximum_temperature_deg_c": self.mock_temperatures[1]
         }

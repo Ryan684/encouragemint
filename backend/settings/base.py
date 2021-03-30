@@ -120,3 +120,5 @@ LOGGING = {
         }
     }
 }
+
+WEATHER_DATA_FEATURE_FLAG = os.getenv("WEATHER_DATA_FEATURE_FLAG", "True")

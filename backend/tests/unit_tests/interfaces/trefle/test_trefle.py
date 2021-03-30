@@ -58,8 +58,8 @@ class TestTrefle(TestCase):
             "page_size": 100,
             "filter[duration]": search_parameters["duration"],
             "filter[bloom_months]": search_parameters["bloom_months"],
-            "range[minimum_temperature_deg_c]": search_parameters['minimum_temperature_deg_c'],
-            "range[maximum_temperature_deg_c]": search_parameters['maximum_temperature_deg_c']
+            "range[minimum_temperature_deg_c]": search_parameters["minimum_temperature_deg_c"],
+            "range[maximum_temperature_deg_c]": search_parameters["maximum_temperature_deg_c"]
         }
 
         self.mock_get.assert_called_once_with(
