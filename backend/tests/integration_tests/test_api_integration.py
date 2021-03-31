@@ -48,6 +48,8 @@ class TestApiIntegration(TestCase):
         response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            {"message": "We couldn't find your location. Please try and be more specific."}, response.json())
 
     def test_recommendations_found(self):
         with open(f"{self.trefle_responses_dir}/plant_search_many_matches.json", "r") as file:
@@ -57,13 +59,17 @@ class TestApiIntegration(TestCase):
         response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(trefle_response, response.json())
 
     def test_no_recommendations_found(self):
-        self._prime_get_rest_mocks([])
+        with open(f"{self.trefle_responses_dir}/plant_search_no_matches.json", "r") as file:
+            trefle_response = json.load(file)
+        self._prime_get_rest_mocks(trefle_response)
 
         response = self.client.post(f"{self.url}", content_type="application/json", data=self.data)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(trefle_response, response.json())
 
     def _prime_get_rest_mocks(self, trefle_response):
         mock_meteostat_responses = [Mock(), Mock()]
