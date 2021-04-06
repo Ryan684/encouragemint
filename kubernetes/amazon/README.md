@@ -27,3 +27,6 @@ instead?</p>
 
 <h3>Deploying Image to Cluster</h3>
 TODO
+
+<h3>Future Enhancements</h3>
+Look into using CircleCI orbs to automate once working manually.
