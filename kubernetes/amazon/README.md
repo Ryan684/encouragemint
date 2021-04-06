@@ -29,4 +29,4 @@ instead?</p>
 TODO
 
 <h3>Future Enhancements</h3>
-Look into using CircleCI orbs to automate once working manually.
+<p>Look into using CircleCI orbs to automate once working manually.</p>
