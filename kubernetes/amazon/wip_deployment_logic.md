@@ -2,7 +2,8 @@
 <p>Work in progress - procedure for deploying to AWS and configuring the infrastructure.</p>
 
 <h3>Creating an IAM Policy</h3>
-<p>eks_encouragemint_iam_policy.json applied uploaded to UI. TODO: Look into creating this policy via the CLI.</p>
+<p>eks_encouragemint_iam_policy.json applied uploaded to UI. TODO: Look into creating this policy via the CLI. Also, 
+work on minimising access in policy. Not sure this is as low entitlements as it can be yet.</p>
 
 <h3>Creating an IAM Group</h3>
 <p>Created via console. TODO: Look into storing in a json file and creating via the CLI.</p>
