@@ -14,10 +14,7 @@ work on minimising access in policy. Not sure this is as low entitlements as it 
 <h3>Deploying A Cluster</h3>
 <p>Currently just using all the defaults - so this can be executed:</p>
 
-<p>eksctl create cluster \
---name encouragemint-cluster \
---region eu-west-1 \
---fargate</p>
+<p>eksctl create cluster --name encouragemint-cluster --region eu-west-1 --fargate</p>
 
 <p>TODO: Consider keeping a json copy of this config for version control if worthwhile and using that via the CLI 
 instead?</p>
