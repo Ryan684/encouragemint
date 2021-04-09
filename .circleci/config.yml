@@ -1,6 +1,8 @@
-version: 2
+version: 2.1
+orbs:
+  react: thefrontside/react@0.2.0
 jobs:
-  build:
+  build-python:
     docker:
       - image: circleci/python:3.7.3
 
@@ -13,14 +15,31 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r build/requirements.txt
-            pip install -r encouragemint/requirements.txt
+            pip install -r backend/requirements.txt
             sudo pip install pylint==2.4.4
+
       - run:
           name: run pylint
-          command: pylint encouragemint/ --disable=E0401,C0103,C0114,C0115,C0116,R0903 --ignore=migrations,settings,tests
+          command: pylint backend/ --disable=E0401,C0103,C0114,C0115,C0116,R0903 --ignore=migrations,settings,tests
 
       - run:
           name: run tests
           command: |
             . venv/bin/activate
-            python manage.py test --settings=encouragemint.settings.local
+            python manage.py test --settings=backend.settings.local
+
+workflows:
+  build-and-test:
+    jobs:
+      - build-python
+
+      - react/install:
+          before_install:
+            - checkout
+            - run:
+                name: Copy package.json into folder root
+                command: cp frontend/package.json .
+
+      - react/eslint:
+          requires:
+            - react/install

@@ -1,0 +1,11 @@
+{
+  "data": [],
+  "links": {
+    "self": "/api/v1/plants?filter%5Bbloom_months%5D=jun%2Cjul%2Caug",
+    "first": "/api/v1/plants?filter%5Bbloom_months%5D=jun%2Cjul%2Caug",
+    "last": "/api/v1/plants?filter%5Bbloom_months%5D=jun%2Cjul%2Caug"
+  },
+  "meta": {
+    "total": 0
+  }
+}
