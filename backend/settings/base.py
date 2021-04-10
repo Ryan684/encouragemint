@@ -9,7 +9,9 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 
 CURRENT_HOST = os.getenv("NODE_IP", "127.0.0.1")
-ALLOWED_HOSTS = [CURRENT_HOST]
+
+# minimize this
+ALLOWED_HOSTS = ["*"]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
