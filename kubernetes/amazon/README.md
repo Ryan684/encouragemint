@@ -31,5 +31,18 @@ instead?</p>
 <h3>Deploying Image to Cluster</h3>
 TODO
 
+<h3>Deploy an Application Load Balancer</h3>
+<li>kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"</li>
+<li>helm repo add eks https://aws.github.io/eks-charts</li>
+<li>aws ec2 describe-vpcs (extract the vpcId for the encouragemint vpc)</li>
+<li>helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
+    --set clusterName=encouragemint-cluster \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    --set region=eu-west-1 \
+    --set vpcId=(VPC from before) \
+    -n default</li>
+<li>kubectl get deployment -n kube-system aws-load-balancer-controller</li>
+
 <h3>Future Enhancements</h3>
 <p>Look into using CircleCI orbs to automate once working manually.</p>
