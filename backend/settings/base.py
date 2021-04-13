@@ -1,8 +1,6 @@
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from socket import gethostname, gethostbyname
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Import external API keys.
@@ -12,9 +10,9 @@ METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 
 CURRENT_HOST = os.getenv("NODE_IP", "127.0.0.1")
 ALLOWED_HOSTS = [
-    gethostname(),
-    gethostbyname(gethostname()),
-    "k8s-default-encourag-2de4028547-2085861810.eu-west-1.elb.amazonaws.com"]
+    CURRENT_HOST,
+    "*.elb.amazonaws.com"
+]
 
 
 # Application definition
