@@ -25,7 +25,9 @@
         "iam:PassRole",
         "iam:PutRolePolicy",
         "iam:RemoveRoleFromInstanceProfile",
-        "iam:ListRoleTags"
+        "iam:ListRoleTags",
+        "iam:CreateOpenIDConnectProvider",
+        "iam:DeleteOpenIDConnectProvider"
       ],
       "Resource": "*"
     },

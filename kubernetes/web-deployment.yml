@@ -20,7 +20,7 @@ spec:
         image: ryan684/encouragemint:latest
         command:
           - ./start_web.sh
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: NODE_IP
           valueFrom:
