@@ -48,7 +48,7 @@ TODO: Look into minimising access in policies. Not sure this is as low as entitl
     --set region=eu-west-1 \
     --set vpcId=(VPC id from last step) \
     -n default</li>
-<li>kubectl apply -f web-ingress.yaml
+<li>kubectl apply -f api-ingress.yaml
 
 <h3>Tear Down Cluster</h3>
 <li>eksctl delete cluster --name encouragemint-cluster --region eu-west-1</li>
