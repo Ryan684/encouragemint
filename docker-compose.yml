@@ -30,7 +30,7 @@ services:
       - encouragemint
     env_file:
       - .env
-    command: /bin/bash -c "cd frontend && npm start"
+    command: /bin/bash -c "./start_ui.sh"
 
 networks:
   encouragemint:
