@@ -21,6 +21,8 @@ spec:
           command:
             - ./start_ui.sh
           imagePullPolicy: Always
+          stdin: true
+          tty: true
           ports:
             - containerPort: 3000
       imagePullSecrets:
