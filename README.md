@@ -3,15 +3,16 @@ This API makes recommendations on plants that will thrive in your garden based o
 gleaned from public APIs and databases. For example, it can make recommendations on plants for specific seasons 
 based on:</br></br>
 <ul>
-    <li>Average rainfall for your garden</li>
+    <li>The average temperature of your garden</li>
     <li>The desired bloom period</li>
     <li>The desired duration (Perennial, Annual, Biennial)</li>
 </ul>
 
 <h2>Features in the pipeline</h2>
-<li>More intelligent garden recommendations (Soil toxicity, temperatures etc).</li>
+<li>More intelligent garden recommendations (Soil toxicity, rainfall etc).</li>
 <li>More optional filters for plant attributes as part of garden recommendations.</li>
-<li>Integration of Amazon Lookup API for recommended plants, so users can choose to buy the plant.</li>
+<li>Integration of Amazon Lookup API for recommended plants, so users can choose to buy the plant they've been 
+recommended.</li>
 
 <h2>Endpoints</h2>
 <li>/recommend [POST]</li>
