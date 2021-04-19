@@ -51,7 +51,7 @@ Currently, the app writes its logs both to a console and a debug.log file in the
 <h2>Deployment</h2>
 To run this app locally, you can use manage.py runserver or docker-compose to run it locally in a container using
 'docker-compose up' from the root directory of the project. In either case, the API will run locally at
-http://127.0.0.1:8000/</br></br>
+http://127.0.0.1:8000/
 
 The UI will run at http://127.0.0.1:3000
 
