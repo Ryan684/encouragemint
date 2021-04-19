@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import MenuItem from '@material-ui/core/MenuItem';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import EcoIcon from '@material-ui/icons/Eco';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Copyright from './Copyright'
@@ -119,7 +119,7 @@ class RecommendForm extends React.Component {
           <CssBaseline />
           <div className={this.props.classes.paper}>
             <Avatar className={this.props.classes.avatar}>
-              <LockOutlinedIcon />
+              <EcoIcon />
             </Avatar>
             <Typography component='h1' variant='h5'>
               Tell us about your garden and your preferences
