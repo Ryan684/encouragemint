@@ -46,6 +46,11 @@ spec:
             secretKeyRef:
               name: keys
               key: meteostat-api-key
+        - name: WEATHER_DATA_FEATURE_FLAG
+          valueFrom:
+            secretKeyRef:
+              name: keys
+              key: weather-data-feature-flag
         - name: DJANGO_SETTINGS_MODULE
           value: "backend.settings.production"
         ports:
