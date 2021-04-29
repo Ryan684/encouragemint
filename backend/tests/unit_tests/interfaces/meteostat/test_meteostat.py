@@ -11,7 +11,7 @@ class TestGetLocationWeatherData(TestCase):
     def setUp(self):
         self.sample_latitude = 50.98893
         self.sample_longitude = -1.49658
-        self.test_responses_dir = "backend/tests/unit_tests/interfaces/meteostat/test_responses"
+        self.test_responses_dir = "tests/unit_tests/interfaces/meteostat/test_responses"
 
         patcher = patch("requests.get")
         self.mock_get = patcher.start()

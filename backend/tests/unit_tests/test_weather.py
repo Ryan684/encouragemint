@@ -8,7 +8,7 @@ from backend import weather, seasons
 
 class TestGetGardenTemperature(TestCase):
     def setUp(self):
-        meteostat_responses_dir = "backend/tests/unit_tests/interfaces/meteostat/test_responses"
+        meteostat_responses_dir = "tests/unit_tests/interfaces/meteostat/test_responses"
         with open(f"{meteostat_responses_dir}/climate_normals_response.json", "r") as file:
             self.weather_record_with_data = json.load(file)["data"]
         self.sample_latitude = 123456
