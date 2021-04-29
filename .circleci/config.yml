@@ -26,7 +26,8 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python manage.py test --settings=backend.settings.local
+            pwd
+            python manage.py test backend --settings=backend.settings.local
 
 workflows:
   build-and-test:
