@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   namespace: default
-  name: encouragemint-api-ingress
+  name: encouragemint-ui-ingress
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -13,5 +13,5 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: encouragemint-backend-service
-              servicePort: 8000
+              serviceName: encouragemint-frontend-service
+              servicePort: 3000
