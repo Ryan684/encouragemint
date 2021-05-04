@@ -26,10 +26,8 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            ls /
-            pwd
             cd backend
-            python ../manage.py test backend --settings=backend.settings.local
+            python /home/circleci/project/manage.py test backend --settings=backend.settings.local
 
 workflows:
   build-and-test:
