@@ -26,8 +26,8 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
+            ls /
             cd backend
-            ls
             python ../manage.py test backend --settings=backend.settings.local
 
 workflows:
