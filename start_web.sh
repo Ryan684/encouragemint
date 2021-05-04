@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
+python backend/manage.py makemigrations
+python backend/manage.py migrate
+python backend/manage.py runserver 0.0.0.0:8000

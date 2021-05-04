@@ -27,7 +27,7 @@ jobs:
           command: |
             . venv/bin/activate
             cd backend
-            python ../manage.py test backend --settings=backend.settings.local
+            python manage.py test backend --settings=backend.settings.local
 
 workflows:
   build-and-test:
