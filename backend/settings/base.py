@@ -8,11 +8,12 @@ TREFLE_API_KEY = os.getenv("TREFLE_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 
-CURRENT_HOST = os.getenv("NODE_IP", "127.0.0.1")
+LOCALHOST = "127.0.0.1"
+CURRENT_HOST = os.getenv("NODE_IP", LOCALHOST)
 ALLOWED_HOSTS = [
     CURRENT_HOST,
     ".elb.amazonaws.com",
-    "127.0.0.1"
+    LOCALHOST
 ]
 
 
