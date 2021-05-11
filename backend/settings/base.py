@@ -9,19 +9,23 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 METEOSTAT_API_KEY = os.getenv("METEOSTAT_API_KEY")
 
 LOCALHOST = "127.0.0.1"
-CURRENT_HOST = os.getenv("NODE_IP", LOCALHOST)
 ALLOWED_HOSTS = [
-    CURRENT_HOST,
     ".elb.amazonaws.com",
     LOCALHOST
 ]
+
+if os.getenv("NODE_IP"):
+    ALLOWED_HOSTS += [
+        os.getenv("NODE_IP"),
+        os.getenv("POD_IP")
+    ]
 
 
 # Application definition
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:8000",
+    f"http://{LOCALHOST}:3000",
+    f"http://{LOCALHOST}:8000",
 ]
 
 # Application definition

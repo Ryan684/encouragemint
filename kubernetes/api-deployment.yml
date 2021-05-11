@@ -21,11 +21,25 @@ spec:
         command:
           - ./start_web.sh
         imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /recommend/
+            port: encouragemint
+          initialDelaySeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /recommend/
+            port: encouragemint
+          initialDelaySeconds: 3
         env:
         - name: NODE_IP
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
@@ -55,5 +69,6 @@ spec:
           value: "backend.settings.production"
         ports:
           - containerPort: 8000
+            name: encouragemint
       imagePullSecrets:
         - name: docker-hub-credentials
