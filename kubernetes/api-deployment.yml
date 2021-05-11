@@ -23,12 +23,12 @@ spec:
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
-            path: /recommend/
+            path: /
             port: encouragemint
           initialDelaySeconds: 5
         readinessProbe:
           httpGet:
-            path: /recommend/
+            path: /
             port: encouragemint
           initialDelaySeconds: 3
         env:
