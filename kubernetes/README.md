@@ -11,7 +11,7 @@ Once you have completed the above steps, you'll need to complete the following o
 run Encouragemint:<br>
 
 <li>Firstly create a secret for your dockerhub credentials (see
-https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually). Label this .yml file
+https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually). Label this .yaml file
 'docker-hub-credentials' with a matching metadata name.</li>
 <li>Secondly, create an opaque secret yml file for your api keys named 'keys'
 (see https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually, note that you'll need
