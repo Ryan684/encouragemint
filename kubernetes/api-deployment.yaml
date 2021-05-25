@@ -31,6 +31,11 @@ spec:
             path: /
             port: encouragemint
           initialDelaySeconds: 3
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
         env:
         - name: NODE_IP
           valueFrom:
