@@ -13,5 +13,5 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: encouragemint-backend-service
+              serviceName: encouragemint-api-service
               servicePort: 8000

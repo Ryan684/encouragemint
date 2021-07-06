@@ -13,7 +13,7 @@ run Encouragemint:<br>
 <li>Firstly create a secret for your dockerhub credentials (see
 https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually). Label this .yaml file
 'docker-hub-credentials' with a matching metadata name.</li>
-<li>Secondly, create an opaque secret yml file for your api keys named 'keys'
+<li>Secondly, create an opaque secret yml file for your api keys named 'secrets'
 (see https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually, note that you'll need
 to base64 your keys just like they do for the example with credentials). This will need to contain the encoded
 secrets for the email account password for Encouragemint, the API keys for Trefle, Meteostat and Google Geocoder. NOTE:

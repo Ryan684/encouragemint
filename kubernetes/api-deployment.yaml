@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: encouragemint
+  name: encouragemint-api
   namespace: default
   labels:
     app.kubernetes.io/name: backend
@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: backend
     spec:
       containers:
-      - name: encouragemint
+      - name: encouragemint-api
         image: ryan684/encouragemint:latest
         command:
           - ./start_web.sh
@@ -24,13 +24,13 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: encouragemint
+            port: api-port
           initialDelaySeconds: 5
           periodSeconds: 5
         readinessProbe:
           httpGet:
             path: /
-            port: encouragemint
+            port: api-port
           initialDelaySeconds: 3
           periodSeconds: 3
         resources:
@@ -52,22 +52,22 @@ spec:
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: keys
+              name: secrets
               key: django-secret-key
         - name: TREFLE_API_KEY
           valueFrom:
             secretKeyRef:
-              name: keys
+              name: secrets
               key: trefle-api-key
         - name: GOOGLE_API_KEY
           valueFrom:
             secretKeyRef:
-              name: keys
+              name: secrets
               key: google-api-key
         - name: METEOSTAT_API_KEY
           valueFrom:
             secretKeyRef:
-              name: keys
+              name: secrets
               key: meteostat-api-key
         - name: WEATHER_DATA_FEATURE_FLAG
           valueFrom:
@@ -81,6 +81,6 @@ spec:
               key: django-settings-module
         ports:
           - containerPort: 8000
-            name: encouragemint
+            name: api-port
       imagePullSecrets:
         - name: docker-hub-credentials

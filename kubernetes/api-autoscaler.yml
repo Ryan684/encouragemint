@@ -2,7 +2,7 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   creationTimestamp: null
-  name: encouragemint
+  name: encouragemint-api-autoscaler
   namespace: default
 spec:
   maxReplicas: 2
@@ -10,5 +10,5 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: encouragemint
+    name: encouragemint-api
   targetCPUUtilizationPercentage: 80
