@@ -26,11 +26,13 @@ spec:
             path: /
             port: encouragemint
           initialDelaySeconds: 5
+          periodSeconds: 5
         readinessProbe:
           httpGet:
             path: /
             port: encouragemint
           initialDelaySeconds: 3
+          periodSeconds: 3
         resources:
           limits:
             cpu: 500m
@@ -69,11 +71,14 @@ spec:
               key: meteostat-api-key
         - name: WEATHER_DATA_FEATURE_FLAG
           valueFrom:
-            secretKeyRef:
-              name: keys
+            configMapKeyRef:
+              name: api-config
               key: weather-data-feature-flag
         - name: DJANGO_SETTINGS_MODULE
-          value: "backend.settings.production"
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: django-settings-module
         ports:
           - containerPort: 8000
             name: encouragemint
