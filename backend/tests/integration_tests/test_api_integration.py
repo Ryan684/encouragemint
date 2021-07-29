@@ -26,7 +26,7 @@ class TestApiIntegration(TestCase):
         self.mock_get = get_patcher.start()
         self.addCleanup(get_patcher.stop)
 
-        interface_tests_dir = "backend/tests/unit_tests/interfaces"
+        interface_tests_dir = "tests/unit_tests/interfaces"
         self.trefle_responses_dir = f"{interface_tests_dir}/trefle/test_responses"
         self.meteostat_responses_dir = f"{interface_tests_dir}/meteostat/test_responses"
 

@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import MenuItem from '@material-ui/core/MenuItem';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import EcoIcon from '@material-ui/icons/Eco';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Copyright from './Copyright'
@@ -16,10 +16,8 @@ class RecommendForm extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-         season: '', seasonValid: false,
          location: '', locationValid: false,
          duration: '', durationValid: false,
-         direction: '', directionValid: false,
          bloomPeriod: '', bloomPeriodValid: false,
          formValid: false,
          errorMsg: {}
@@ -28,27 +26,10 @@ class RecommendForm extends React.Component {
   }
 
   validateForm = () => {
-    const {durationValid, bloomPeriodValid, seasonValid, locationValid, directionValid} = this.state;
+    const {durationValid, bloomPeriodValid, locationValid} = this.state;
     this.setState({
-      formValid: durationValid && bloomPeriodValid && seasonValid && locationValid && directionValid
+      formValid: durationValid && bloomPeriodValid && locationValid
     })
-  }
-
-  updateSeason = (season) => {
-    this.setState({season}, this.validateSeason)
-  }
-
-  validateSeason = () => {
-    const {season} = this.state;
-    let seasonValid = true;
-    let errorMsg = {...this.state.errorMsg}
-
-    if (!['SPRING', 'SUMMER', 'AUTUMN', 'WINTER'].includes(season.toUpperCase())) {
-      seasonValid = false;
-      errorMsg.season = 'A garden\'s season can only be spring, summer, autumn or winter.'
-    }
-
-    this.setState({seasonValid, errorMsg}, this.validateForm)
   }
 
   updateLocation = (location) => {
@@ -87,23 +68,6 @@ class RecommendForm extends React.Component {
     this.setState({durationValid, errorMsg}, this.validateForm)
   }
 
-  updateDirection = (direction) => {
-    this.setState({direction}, this.validateDirection)
-  }
-
-  validateDirection = () => {
-    const {direction} = this.state;
-    let directionValid = true;
-    let errorMsg = {...this.state.errorMsg}
-
-    if (!['NORTH', 'EAST', 'SOUTH', 'WEST'].includes(direction.toUpperCase())) {
-      directionValid = false;
-      errorMsg.direction = 'A garden\'s direction can only be north, east, south or west.'
-    }
-
-    this.setState({directionValid, errorMsg}, this.validateForm)
-  }
-
   updateBloomPeriod = (bloomPeriod) => {
     this.setState({bloomPeriod}, this.validateBloomPeriod);
   }
@@ -113,7 +77,8 @@ class RecommendForm extends React.Component {
     let bloomPeriodValid = true;
     let errorMsg = {...this.state.errorMsg}
 
-    if (!['SPRING', 'SUMMER', 'AUTUMN', 'WINTER'].includes(bloomPeriod.toUpperCase())) {
+    if (!['EARLY SPRING', 'LATE SPRING', 'ALL SPRING', 'EARLY SUMMER', 'LATE SUMMER', 'ALL SUMMER', 'EARLY AUTUMN',
+    'LATE AUTUMN', 'ALL AUTUMN', 'EARLY WINTER', 'LATE WINTER', 'ALL WINTER'].includes(bloomPeriod.toUpperCase())) {
       bloomPeriodValid = false;
       errorMsg.bloomPeriod = 'A garden\'s bloom period can only be spring, summer, autumn or winter.';
     }
@@ -128,10 +93,8 @@ class RecommendForm extends React.Component {
         let response = await fetch('http://127.0.0.1:8000/recommend/', {
             method: 'POST',
             body: JSON.stringify({
-                'season': this.state.season,
                 'location': this.state.location,
                 'duration': this.state.duration,
-                'direction': this.state.direction,
                 'bloom_period': this.state.bloomPeriod
             }),
             headers: {
@@ -156,7 +119,7 @@ class RecommendForm extends React.Component {
           <CssBaseline />
           <div className={this.props.classes.paper}>
             <Avatar className={this.props.classes.avatar}>
-              <LockOutlinedIcon />
+              <EcoIcon />
             </Avatar>
             <Typography component='h1' variant='h5'>
               Tell us about your garden and your preferences
@@ -178,50 +141,6 @@ class RecommendForm extends React.Component {
                     error={!this.state.locationValid && this.state.location.length >= 1 ? true : false}
                     helperText={this.state.locationValid ? null : this.state.errorMsg.location}
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <p>What season do you want plant recommendations for?</p>
-                  <TextField
-                    autoComplete='season'
-                    name='season'
-                    variant='outlined'
-                    required
-                    fullWidth
-                    id='season'
-                    label='Season'
-                    autoFocus
-                    value={this.state.season}
-                    onChange={(e) => this.updateSeason(e.target.value)}
-                    error={!this.state.seasonValid && this.state.season.length >= 1 ? true : false}
-                    helperText={this.state.seasonValid ? null : this.state.errorMsg.season}
-                    select
-                  >
-                    <MenuItem value="Spring">Spring</MenuItem>
-                    <MenuItem value="Summer">Summer</MenuItem>
-                    <MenuItem value="Autumn">Autumn</MenuItem>
-                    <MenuItem value="Winter">Winter</MenuItem>
-                  </TextField>
-                </Grid>
-                <Grid item xs={12}>
-                  <p>What direction does your garden face?</p>
-                  <TextField
-                    variant='outlined'
-                    required
-                    fullWidth
-                    id='direction'
-                    label='Direction'
-                    name='direction'
-                    value={this.state.direction}
-                    onChange={(e) => this.updateDirection(e.target.value)}
-                    error={!this.state.directionValid && this.state.direction.length >= 1 ? true : false}
-                    helperText={this.state.directionValid ? null : this.state.errorMsg.direction}
-                    select
-                  >
-                    <MenuItem value="North">North</MenuItem>
-                    <MenuItem value="East">East</MenuItem>
-                    <MenuItem value="South">South</MenuItem>
-                    <MenuItem value="West">West</MenuItem>
-                  </TextField>
                 </Grid>
                 <Grid item xs={12}>
                   <p>How hardy do the plants need to be?</p>
@@ -259,10 +178,18 @@ class RecommendForm extends React.Component {
                     helperText={this.state.bloomPeriodValid ? null : this.state.errorMsg.bloomPeriod}
                     select
                   >
-                    <MenuItem value="Spring">Spring</MenuItem>
-                    <MenuItem value="Summer">Summer</MenuItem>
-                    <MenuItem value="Autumn">Autumn</MenuItem>
-                    <MenuItem value="Winter">Winter</MenuItem>
+                    <MenuItem value="Early Spring">Early Spring</MenuItem>
+                    <MenuItem value="Late Spring">Late Spring</MenuItem>
+                    <MenuItem value="All Spring">All Spring</MenuItem>
+                    <MenuItem value="Early Summer">Early Summer</MenuItem>
+                    <MenuItem value="Late Summer">Late Summer</MenuItem>
+                    <MenuItem value="All Summer">All Summer</MenuItem>
+                    <MenuItem value="Early Autumn">Early Autumn</MenuItem>
+                    <MenuItem value="Late Autumn">Late Autumn</MenuItem>
+                    <MenuItem value="All Autumn">All Autumn</MenuItem>
+                    <MenuItem value="Early Winter">Early Winter</MenuItem>
+                    <MenuItem value="Late Winter">Late Winter</MenuItem>
+                    <MenuItem value="All Winter">All Winter</MenuItem>
                   </TextField>
                 </Grid>
                 <Grid item xs={12}>

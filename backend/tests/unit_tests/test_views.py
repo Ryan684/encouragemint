@@ -57,7 +57,7 @@ class TestRecommendView(TestCase):
 
     @patch("backend.views.recommend_plants")
     def test_valid_recommendation_request(self, mock_recommendations):
-        trefle_responses_dir = "backend/tests/unit_tests/interfaces/trefle/test_responses"
+        trefle_responses_dir = "tests/unit_tests/interfaces/trefle/test_responses"
         with open(f"{trefle_responses_dir}/plant_search_many_matches.json", "r") as file:
             recommend_one_result = json.load(file)
         mock_recommendations.return_value = recommend_one_result

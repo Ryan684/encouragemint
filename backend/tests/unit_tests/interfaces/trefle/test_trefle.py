@@ -10,7 +10,7 @@ from backend.interfaces.trefle import trefle
 @override_settings(TREFLE_API_KEY="Foo")
 class TestTrefle(TestCase):
     def setUp(self):
-        self.test_responses_dir = "backend/tests/unit_tests/interfaces/trefle/test_responses"
+        self.test_responses_dir = "tests/unit_tests/interfaces/trefle/test_responses"
         with open(f"{self.test_responses_dir}/plant_search_many_matches.json", "r") as file:
             self.search_many_matches = json.load(file)
         self.trefle_payload = {

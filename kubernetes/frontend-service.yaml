@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: encouragemint-backend-service
+  name: encouragemint-frontend-service
   namespace: default
 spec:
   type: NodePort
   ports:
     - protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 3000
+      targetPort: 3000
   selector:
-    app: backend
+    app.kubernetes.io/name: frontend

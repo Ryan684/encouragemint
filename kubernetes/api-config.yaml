@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  django-settings-module: backend.settings.production
+  weather-data-feature-flag: "False"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: api-config
+  namespace: default
