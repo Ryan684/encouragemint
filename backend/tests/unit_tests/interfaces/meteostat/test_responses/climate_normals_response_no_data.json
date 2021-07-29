@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "source": "WorldClim",
+    "start": 1960,
+    "end": 1990,
+    "exec_time": 0.032,
+    "generated": "2021-03-25 21:23:09"
+  },
+  "data": []
+}

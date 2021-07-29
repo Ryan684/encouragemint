@@ -1,0 +1,46 @@
+version: 2.1
+orbs:
+  react: thefrontside/react@0.2.0
+jobs:
+  build-python:
+    docker:
+      - image: circleci/python:3.7.3
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r build/requirements.txt
+            pip install -r backend/requirements.txt
+            sudo pip install pylint==2.4.4
+
+      - run:
+          name: run pylint
+          command: pylint backend/ --disable=E0401,C0103,C0114,C0115,C0116,R0903 --ignore=migrations,settings,tests
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            cd backend
+            python /home/circleci/project/manage.py test backend --settings=backend.settings.local
+
+workflows:
+  build-and-test:
+    jobs:
+      - build-python
+
+      - react/install:
+          before_install:
+            - checkout
+            - run:
+                name: Copy package.json into folder root
+                command: cp frontend/package.json .
+
+      - react/eslint:
+          requires:
+            - react/install

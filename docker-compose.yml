@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  backend:
+    build: .
+    image: encouragemint
+    container_name: backend
+    volumes:
+      - "./:/app/"
+    ports:
+      - "8000:8000"
+    networks:
+      - encouragemint
+    env_file:
+      - .env
+    command: /bin/bash -c "./start_web.sh"
+    stdin_open: true
+    tty: true
+
+  frontend:
+    build: .
+    image: encouragemint
+    container_name: frontend
+    stdin_open: true
+    volumes:
+      - "./:/app/"
+    ports:
+      - "3000:3000"
+    networks:
+      - encouragemint
+    env_file:
+      - .env
+    command: /bin/bash -c "./start_ui.sh"
+
+networks:
+  encouragemint:

@@ -1,0 +1,1135 @@
+{
+  "data": {
+    "id": 129212,
+    "common_name": "common woolly sunflower",
+    "slug": "eriophyllum-lanatum",
+    "scientific_name": "Eriophyllum lanatum",
+    "main_species_id": 134845,
+    "image_url": "https://bs.floristic.org/image/o/15341ae1d82ce5abf39d127fae958c4cb6ce541e",
+    "year": 1833,
+    "bibliography": "Hort. Woburn.: 183 (1833)",
+    "author": "(Pursh) J.Forbes",
+    "family_common_name": "Aster family",
+    "genus_id": 494,
+    "observations": "NW. U.S.A.",
+    "vegetable": false,
+    "links": {
+      "self": "/api/v1/plants/eriophyllum-lanatum",
+      "species": "/api/v1/plants/eriophyllum-lanatum/species",
+      "genus": "/api/v1/genus/eriophyllum"
+    },
+    "main_species": {
+      "id": 134845,
+      "common_name": "Common woolly sunflower",
+      "slug": "eriophyllum-lanatum",
+      "scientific_name": "Eriophyllum lanatum",
+      "year": 1833,
+      "bibliography": "Hort. Woburn.: 183 (1833)",
+      "author": "(Pursh) J.Forbes",
+      "status": "accepted",
+      "rank": "species",
+      "family_common_name": "Aster family",
+      "genus_id": 494,
+      "observations": "NW. U.S.A.",
+      "vegetable": false,
+      "image_url": "https://bs.floristic.org/image/o/15341ae1d82ce5abf39d127fae958c4cb6ce541e",
+      "genus": "Eriophyllum",
+      "family": "Asteraceae",
+      "duration": null,
+      "edible_part": null,
+      "edible": false,
+      "images": {
+        "flower": [],
+        "leaf": [
+          {
+            "id": 3547514,
+            "image_url": "https://bs.floristic.org/image/o/15341ae1d82ce5abf39d127fae958c4cb6ce541e",
+            "copyright": "Taken Jun 23, 2020 by Zsolt Istvan (cc-by-sa)"
+          }
+        ],
+        "habit": [],
+        "fruit": [],
+        "bark": [],
+        "other": []
+      },
+      "common_names": {
+        "sv": [
+          "Ullblad"
+        ],
+        "de": [
+          "Großköpfiges Wollblatt"
+        ],
+        "fr": [
+          "Ériophylle laineux"
+        ],
+        "en": [
+          "Wooly Sunflower",
+          "Oregon Sunshine",
+          "Woolly eriophyllum",
+          "Common woolly-sunflower",
+          "Common woolly sunflower"
+        ],
+        "fra": [
+          "ériophylle laineux"
+        ],
+        "swe": [
+          "ullblad"
+        ],
+        "eng": [
+          "woolly eriophyllum",
+          "common woolly-sunflower",
+          "common woolly sunflower"
+        ],
+        "deu": [
+          "großköpfiges wollblatt"
+        ]
+      },
+      "distribution": {
+        "native": [
+          "Washington",
+          "Oregon",
+          "Idaho",
+          "Montana"
+        ]
+      },
+      "distributions": {
+        "native": [
+          {
+            "id": 302,
+            "name": "Washington",
+            "slug": "was",
+            "tdwg_code": "WAS",
+            "tdwg_level": 3,
+            "species_count": 3216,
+            "links": {
+              "self": "/api/v1/distributions/was",
+              "plants": "/api/v1/distributions/was/plants",
+              "species": "/api/v1/distributions/was/species"
+            }
+          },
+          {
+            "id": 315,
+            "name": "Oregon",
+            "slug": "ore",
+            "tdwg_code": "ORE",
+            "tdwg_level": 3,
+            "species_count": 4055,
+            "links": {
+              "self": "/api/v1/distributions/ore",
+              "plants": "/api/v1/distributions/ore/plants",
+              "species": "/api/v1/distributions/ore/species"
+            }
+          },
+          {
+            "id": 327,
+            "name": "Idaho",
+            "slug": "ida",
+            "tdwg_code": "IDA",
+            "tdwg_level": 3,
+            "species_count": 2848,
+            "links": {
+              "self": "/api/v1/distributions/ida",
+              "plants": "/api/v1/distributions/ida/plants",
+              "species": "/api/v1/distributions/ida/species"
+            }
+          },
+          {
+            "id": 328,
+            "name": "Montana",
+            "slug": "mnt",
+            "tdwg_code": "MNT",
+            "tdwg_level": 3,
+            "species_count": 2638,
+            "links": {
+              "self": "/api/v1/distributions/mnt",
+              "plants": "/api/v1/distributions/mnt/plants",
+              "species": "/api/v1/distributions/mnt/species"
+            }
+          }
+        ]
+      },
+      "flower": {
+        "color": null,
+        "conspicuous": null
+      },
+      "foliage": {
+        "texture": null,
+        "color": null,
+        "leaf_retention": null
+      },
+      "fruit_or_seed": {
+        "conspicuous": null,
+        "color": null,
+        "shape": null,
+        "seed_persistence": null
+      },
+      "specifications": {
+        "ligneous_type": null,
+        "growth_form": null,
+        "growth_habit": "Subshrub, Forb/herb",
+        "growth_rate": null,
+        "average_height": {
+          "cm": null
+        },
+        "maximum_height": {
+          "cm": null
+        },
+        "nitrogen_fixation": null,
+        "shape_and_orientation": null,
+        "toxicity": null
+      },
+      "growth": {
+        "description": null,
+        "sowing": null,
+        "days_to_harvest": null,
+        "row_spacing": {
+          "cm": null
+        },
+        "spread": {
+          "cm": null
+        },
+        "ph_maximum": null,
+        "ph_minimum": null,
+        "light": null,
+        "atmospheric_humidity": null,
+        "growth_months": null,
+        "bloom_months": null,
+        "fruit_months": null,
+        "minimum_precipitation": {
+          "mm": null
+        },
+        "maximum_precipitation": {
+          "mm": null
+        },
+        "minimum_root_depth": {
+          "cm": null
+        },
+        "minimum_temperature": {
+          "deg_f": null,
+          "deg_c": null
+        },
+        "maximum_temperature": {
+          "deg_f": null,
+          "deg_c": null
+        },
+        "soil_nutriments": null,
+        "soil_salinity": null,
+        "soil_texture": null,
+        "soil_humidity": null
+      },
+      "links": {
+        "self": "/api/v1/species/eriophyllum-lanatum",
+        "plant": "/api/v1/plants/eriophyllum-lanatum",
+        "genus": "/api/v1/genus/eriophyllum"
+      },
+      "synonyms": [
+        {
+          "id": 636401,
+          "name": "Eriophyllum lanatum var. typicum",
+          "author": "Constance, 1934",
+          "sources": [
+            {
+              "last_update": "2020-07-02T07:15:53.197Z",
+              "id": "4209333",
+              "name": "GBIF",
+              "url": "https://www.gbif.org/species/4209333",
+              "citation": null
+            }
+          ]
+        },
+        {
+          "id": 145336,
+          "name": "Actinea lanigera",
+          "author": "Daniels",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.461Z",
+              "id": "urn:lsid:ipni.org:names:3944-2",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:3944-2",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145335,
+          "name": "Eriophyllum caespitosum",
+          "author": "Douglas ex Lindl.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.440Z",
+              "id": "urn:lsid:ipni.org:names:204845-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:204845-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145334,
+          "name": "Helenium caespitosum",
+          "author": "Steud.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.396Z",
+              "id": "urn:lsid:ipni.org:names:211769-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:211769-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145333,
+          "name": "Bahia lanata",
+          "author": "(Pursh) DC.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.374Z",
+              "id": "urn:lsid:ipni.org:names:30023737-2",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30023737-2",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145332,
+          "name": "Trichophyllum multiflorum",
+          "author": "Nutt.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.275Z",
+              "id": "urn:lsid:ipni.org:names:257498-2",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:257498-2",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145331,
+          "name": "Eriophyllum multiflorum",
+          "author": "(Nutt.) Rydb.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.249Z",
+              "id": "urn:lsid:ipni.org:names:95831-2",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95831-2",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145330,
+          "name": "Bahia latifolia",
+          "author": "Benth.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.227Z",
+              "id": "urn:lsid:ipni.org:names:183975-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:183975-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145329,
+          "name": "Bahia multiflora",
+          "author": "(Nutt.) Nutt.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.181Z",
+              "id": "urn:lsid:ipni.org:names:183979-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:183979-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145328,
+          "name": "Egletes californica",
+          "author": "Kellogg",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.163Z",
+              "id": "urn:lsid:ipni.org:names:202831-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:202831-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 145327,
+          "name": "Phialis caespitosa",
+          "author": "Spreng.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.143Z",
+              "id": "urn:lsid:ipni.org:names:237666-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:237666-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            }
+          ]
+        },
+        {
+          "id": 72428,
+          "name": "Helenium lanatum",
+          "author": "Spreng.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.199Z",
+              "id": "urn:lsid:ipni.org:names:211837-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:211837-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            },
+            {
+              "last_update": "2019-01-12T09:50:52.599Z",
+              "id": "2745247",
+              "name": "Tropicos",
+              "url": "http://legacy.tropicos.org/Name/2745247",
+              "citation": "Tropicos, botanical information system at the Missouri Botanical Garden - www.tropicos.org"
+            }
+          ]
+        },
+        {
+          "id": 69367,
+          "name": "Trichophyllum lanatum",
+          "author": "(Pursh) Nutt.",
+          "sources": [
+            {
+              "last_update": "2020-06-17T01:24:26.418Z",
+              "id": "urn:lsid:ipni.org:names:256346-1",
+              "name": "POWO",
+              "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:256346-1",
+              "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+            },
+            {
+              "last_update": "2019-01-12T08:46:55.926Z",
+              "id": "2734255",
+              "name": "Tropicos",
+              "url": "http://legacy.tropicos.org/Name/2734255",
+              "citation": "Tropicos, botanical information system at the Missouri Botanical Garden - www.tropicos.org"
+            }
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "last_update": "2020-09-24T10:16:36.458Z",
+          "id": "Eriophyllum lanatum",
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum",
+          "citation": null
+        },
+        {
+          "last_update": "2020-07-18T04:29:34.037Z",
+          "id": "Eriophyllum lanatum (Pursh) J.Forbes",
+          "name": "PlantNet",
+          "url": "https://identify.plantnet.org/species/the-plant-list/Eriophyllum lanatum (Pursh) J.Forbes",
+          "citation": null
+        },
+        {
+          "last_update": "2020-07-02T07:15:33.413Z",
+          "id": "3130472",
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3130472",
+          "citation": null
+        },
+        {
+          "last_update": "2020-06-21T20:22:55.928Z",
+          "id": "ERLA6",
+          "name": "USDA",
+          "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+          "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+        },
+        {
+          "last_update": "2020-06-17T01:24:26.119Z",
+          "id": "urn:lsid:ipni.org:names:1105505-2",
+          "name": "POWO",
+          "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1105505-2",
+          "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+        }
+      ]
+    },
+    "genus": {
+      "id": 494,
+      "name": "Eriophyllum",
+      "slug": "eriophyllum",
+      "links": {
+        "self": "/api/v1/genus/eriophyllum",
+        "plants": "/api/v1/genus/eriophyllum/plants",
+        "species": "/api/v1/genus/eriophyllum/species",
+        "family": "/api/v1/families/asteraceae"
+      }
+    },
+    "family": {
+      "id": 13,
+      "name": "Asteraceae",
+      "common_name": "Aster family",
+      "slug": "asteraceae",
+      "links": {
+        "self": "/api/v1/families/asteraceae",
+        "division_order": "/api/v1/division_orders/asterales",
+        "genus": "/api/v1/families/asteraceae/genus"
+      }
+    },
+    "species": [
+      {
+        "id": 134845,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum",
+        "scientific_name": "Eriophyllum lanatum",
+        "year": 1833,
+        "bibliography": "Hort. Woburn.: 183 (1833)",
+        "author": "(Pursh) J.Forbes",
+        "status": "accepted",
+        "rank": "species",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": "https://bs.floristic.org/image/o/15341ae1d82ce5abf39d127fae958c4cb6ce541e",
+        "synonyms": [
+          "Eriophyllum lanatum var. typicum",
+          "Actinea lanigera",
+          "Eriophyllum caespitosum",
+          "Helenium caespitosum",
+          "Bahia lanata",
+          "Trichophyllum multiflorum",
+          "Eriophyllum multiflorum",
+          "Bahia latifolia",
+          "Bahia multiflora",
+          "Egletes californica",
+          "Phialis caespitosa",
+          "Helenium lanatum",
+          "Trichophyllum lanatum"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      }
+    ],
+    "subspecies": [],
+    "varieties": [
+      {
+        "id": 390816,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-achilleoides",
+        "scientific_name": "Eriophyllum lanatum var. achilleoides",
+        "year": 1925,
+        "bibliography": "Man. fl. pl. Calif. 1118.  1925",
+        "author": "Jeps. (DC.)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Eriophyllum achilleoides",
+          "Bahia achilleoides",
+          "Eriophyllum lanatum var. aphanactis"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-achilleoides",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134860,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-obovatum",
+        "scientific_name": "Eriophyllum lanatum var. obovatum",
+        "year": 1907,
+        "bibliography": "(1907). Univ. Calif. Publ. Bot. 3",
+        "author": "H.M.Hall",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Eriophyllum obovatum"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-obovatum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134858,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-lanceolatum",
+        "scientific_name": "Eriophyllum lanatum var. lanceolatum",
+        "year": 1925,
+        "bibliography": "(1925). Man. Fl. Pl. Calif. [Jepson]",
+        "author": "Jeps.",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Eriophyllum lanceolatum"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-lanceolatum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134856,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-lanatum",
+        "scientific_name": "Eriophyllum lanatum var. lanatum",
+        "year": 1833,
+        "bibliography": "Hort. Woburn.: 183 (1833)",
+        "author": "Forbes (Pursh)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-lanatum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134859,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-leucophyllum",
+        "scientific_name": "Eriophyllum lanatum var. leucophyllum",
+        "year": 1921,
+        "bibliography": "Prelim. Cat. Fl. Vancouver",
+        "author": "W.R.Carter & C.F.Newc. (DC.)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Bahia leucophylla",
+          "Eriophyllum watsonii",
+          "Eriophyllum leucophyllum"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-leucophyllum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134853,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-integrifolium",
+        "scientific_name": "Eriophyllum lanatum var. integrifolium",
+        "year": 1921,
+        "bibliography": "Univ. Calif. Publ. Bot. 9: 378 (1921)",
+        "author": "Sailey (Hook.)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Eriophyllum monoense",
+          "Eriophyllum cuneatum",
+          "Bahia cuneata",
+          "Trichophyllum integrifolium",
+          "Eriophyllum lanatum var. monoense",
+          "Eriophyllum integrifolium",
+          "Eriophyllum lanatum var. cuneatum"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-integrifolium",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134852,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-hallii",
+        "scientific_name": "Eriophyllum lanatum var. hallii",
+        "year": 1934,
+        "bibliography": "(1934). Proc. Natl. Acad. Sci. U.S.A. 20",
+        "author": "Constance",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-hallii",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134846,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-achillaeoides",
+        "scientific_name": "Eriophyllum lanatum var. achillaeoides",
+        "year": 1833,
+        "bibliography": "Hort. Woburn.: 183 (1833)",
+        "author": "Jepson (DC.)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-achillaeoides",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134851,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-grandiflorum",
+        "scientific_name": "Eriophyllum lanatum var. grandiflorum",
+        "year": 1901,
+        "bibliography": "(1901). Fl. W. Calif. [Jepson]",
+        "author": "Jeps. (A.Gray)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Bahia lanata var. grandiflora",
+          "Eriophyllum grandiflorum"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-grandiflorum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134848,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-arachnoideum",
+        "scientific_name": "Eriophyllum lanatum var. arachnoideum",
+        "year": 1925,
+        "bibliography": "(1925). Man. Fl. Pl. Calif. [Jepson]",
+        "author": "Jeps. (Fisch. & Avé-Lall.)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Bahia trolliifolia",
+          "Helenium trollifolium",
+          "Eriophyllum trolliifolium",
+          "Eriophyllum arachnoideum",
+          "Bahia arachnoidea"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-arachnoideum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      },
+      {
+        "id": 134849,
+        "common_name": "Common woolly sunflower",
+        "slug": "eriophyllum-lanatum-var-croceum",
+        "scientific_name": "Eriophyllum lanatum var. croceum",
+        "year": 1925,
+        "bibliography": "(1925). Man. Fl. Pl. Calif. [Jepson]",
+        "author": "Jeps. (Greene)",
+        "status": "accepted",
+        "rank": "var",
+        "family_common_name": "Aster family",
+        "genus_id": 494,
+        "image_url": null,
+        "synonyms": [
+          "Eriophyllum croceum"
+        ],
+        "genus": "Eriophyllum",
+        "family": "Asteraceae",
+        "links": {
+          "self": "/api/v1/species/eriophyllum-lanatum-var-croceum",
+          "plant": "/api/v1/plants/eriophyllum-lanatum",
+          "genus": "/api/v1/genus/eriophyllum"
+        }
+      }
+    ],
+    "hybrids": [],
+    "forms": [],
+    "subvarieties": [],
+    "sources": [
+      {
+        "last_update": "2020-09-24T22:17:52.571Z",
+        "id": "Eriophyllum lanatum var. achilleoides",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. achilleoides",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-18T19:33:07.693Z",
+        "id": "4209417",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209417",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:50:57.394Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:27.766Z",
+        "id": "urn:lsid:ipni.org:names:95812-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95812-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:44.243Z",
+        "id": "Eriophyllum lanatum var. obovatum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. obovatum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:16:02.691Z",
+        "id": "4209339",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209339",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.435Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:27.930Z",
+        "id": "urn:lsid:ipni.org:names:95822-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95822-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:42.764Z",
+        "id": "Eriophyllum lanatum var. lanceolatum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. lanceolatum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:56.791Z",
+        "id": "4209362",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209362",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.356Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:28.055Z",
+        "id": "urn:lsid:ipni.org:names:95820-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95820-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:40.860Z",
+        "id": "Eriophyllum lanatum var. lanatum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. lanatum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:52.439Z",
+        "id": "7065881",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/7065881",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.279Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-09-24T10:16:42.941Z",
+        "id": "Eriophyllum lanatum var. leucophyllum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. leucophyllum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:59.650Z",
+        "id": "4209357",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209357",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.405Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:27.540Z",
+        "id": "urn:lsid:ipni.org:names:1182158-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1182158-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:43.448Z",
+        "id": "Eriophyllum lanatum var. integrifolium",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. integrifolium",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:50.029Z",
+        "id": "9344301",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/9344301",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.234Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:26.569Z",
+        "id": "urn:lsid:ipni.org:names:95819-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95819-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:40.557Z",
+        "id": "Eriophyllum lanatum var. hallii",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. hallii",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:47.789Z",
+        "id": "4209374",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209374",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.191Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:26.829Z",
+        "id": "urn:lsid:ipni.org:names:95818-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95818-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:38.046Z",
+        "id": "Eriophyllum lanatum var. achillaeoides",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. achillaeoides",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:35.595Z",
+        "id": "4273939",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4273939",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:55.990Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-09-24T10:16:40.456Z",
+        "id": "Eriophyllum lanatum var. grandiflorum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. grandiflorum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:46.160Z",
+        "id": "4209381",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209381",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.141Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:26.922Z",
+        "id": "urn:lsid:ipni.org:names:95817-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95817-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:38.399Z",
+        "id": "Eriophyllum lanatum var. arachnoideum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. arachnoideum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:40.962Z",
+        "id": "4209408",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209408",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.070Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:27.291Z",
+        "id": "urn:lsid:ipni.org:names:95814-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95814-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:38.581Z",
+        "id": "Eriophyllum lanatum var. croceum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum var. croceum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:42.866Z",
+        "id": "4209402",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/4209402",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:56.109Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:27.124Z",
+        "id": "urn:lsid:ipni.org:names:95815-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:95815-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      },
+      {
+        "last_update": "2020-09-24T10:16:36.458Z",
+        "id": "Eriophyllum lanatum",
+        "name": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Eriophyllum lanatum",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-18T04:29:34.037Z",
+        "id": "Eriophyllum lanatum (Pursh) J.Forbes",
+        "name": "PlantNet",
+        "url": "https://identify.plantnet.org/species/the-plant-list/Eriophyllum lanatum (Pursh) J.Forbes",
+        "citation": null
+      },
+      {
+        "last_update": "2020-07-02T07:15:33.413Z",
+        "id": "3130472",
+        "name": "GBIF",
+        "url": "https://www.gbif.org/species/3130472",
+        "citation": null
+      },
+      {
+        "last_update": "2020-06-21T20:22:55.928Z",
+        "id": "ERLA6",
+        "name": "USDA",
+        "url": "https://plants.usda.gov/core/profile?symbol=ERLA6",
+        "citation": "https://plants.sc.egov.usda.gov/core/profile?symbol=ERLA6"
+      },
+      {
+        "last_update": "2020-06-17T01:24:26.119Z",
+        "id": "urn:lsid:ipni.org:names:1105505-2",
+        "name": "POWO",
+        "url": "http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1105505-2",
+        "citation": "POWO (2019). Plants of the World Online. Facilitated by the Royal Botanic Gardens, Kew. Published on the Internet; http://www.plantsoftheworldonline.org/ Retrieved 2020-06-17"
+      }
+    ]
+  },
+  "meta": {
+    "last_modified": "2020-10-03T00:47:11.454Z"
+  }
+}

@@ -1,0 +1,14 @@
+encouragemint.iml
+.idea/
+db.sqlite3
+.coverage
+.coveragerc
+.gitignore
+.env
+*/README.md
+.circleci/
+encouragemint/backend/tests/
+encouragemint/backend/interfaces/trefle/tests/
+encouragemint/backend/interfaces/meteostat/tests/
+build/
+kubernetes/
